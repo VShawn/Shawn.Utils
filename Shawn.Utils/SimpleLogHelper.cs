@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
@@ -64,13 +63,13 @@ namespace Shawn.Utils
         //    set => _simpleLogHelper.FatalFileName = value;
         //}
 
-        public static EnumLogLevel PrintLogLevel
+        public static EnumLogLevel PrintLogEnumLogLevel
         {
             get => _simpleLogHelper.PrintLogLevel;
             set => _simpleLogHelper.PrintLogLevel = value;
         }
 
-        public static EnumLogLevel WriteLogLevel
+        public static EnumLogLevel WriteLogEnumLogLevel
         {
             get => _simpleLogHelper.WriteLogLevel;
             set => _simpleLogHelper.WriteLogLevel = value;
@@ -89,6 +88,7 @@ namespace Shawn.Utils
         }
 
         private static SimpleLogHelperObject _simpleLogHelper = new SimpleLogHelperObject();
+        public static SimpleLogHelperObject StaticInstance => _simpleLogHelper;
 
         public static void SetLogger(SimpleLogHelperObject logger)
         {

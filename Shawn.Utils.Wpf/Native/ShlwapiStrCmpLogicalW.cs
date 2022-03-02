@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Runtime.InteropServices;
 
-namespace Shawn.Utils.Wpf
+namespace Shawn.Utils.Wpf.Native
 {
     public class ShlwapiStrCmpLogicalW : IComparer
     {

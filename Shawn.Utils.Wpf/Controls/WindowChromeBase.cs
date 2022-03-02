@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Shawn.Utils.Wpf
+namespace Shawn.Utils.Wpf.Controls
 {
     public abstract class WindowChromeBase : Window, INotifyPropertyChanged
     {
@@ -60,7 +60,6 @@ namespace Shawn.Utils.Wpf
             if (e.ClickCount == 2)
             {
                 this.WindowState = (this.WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
-                e.Handled = true;
             }
             else
             {

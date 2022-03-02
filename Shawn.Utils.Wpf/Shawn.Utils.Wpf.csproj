@@ -19,6 +19,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="Controls\ColorPickerWPF\colorpicker1.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
@@ -31,6 +35,22 @@
 		<Reference Include="PresentationFramework">
 			<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5.2\PresentationFramework.dll</HintPath>
 		</Reference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Controls\ColorPickerWPF\colorpicker1.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Controls\ColorPickerWPF\ColorPickerControl4Popup.xaml">
+	    <SubType>Designer</SubType>
+	  </Page>
+	  <Page Update="Controls\ColorPickerWPF\ColorPickRowPopup.xaml">
+	    <SubType>Designer</SubType>
+	  </Page>
+	  <Page Update="Controls\ColorPickerWPF\SliderRow.xaml">
+	    <SubType>Designer</SubType>
+	  </Page>
 	</ItemGroup>
 
 </Project>

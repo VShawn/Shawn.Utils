@@ -1,9 +1,53 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Media;
+using Shawn.Utils.Wpf.Image;
 
 namespace Shawn.Utils.Wpf
 {
     public static class ColorAndBrushHelper
     {
+
+        private static readonly object Obj = new object();
+        private static readonly Dictionary<int, ImageBrush> ChessboardBrushes = new Dictionary<int, ImageBrush>();
+        public static ImageBrush ChessboardBrush(int blockPixSize = 32)
+        {
+            lock (Obj)
+            {
+                if (ChessboardBrushes.ContainsKey(blockPixSize))
+                    return ChessboardBrushes[blockPixSize];
+                // 绘制透明背景
+                var wpen = System.Drawing.Brushes.White;
+                var gpen = System.Drawing.Brushes.LightGray;
+                int span = blockPixSize;
+                var bg = new System.Drawing.Bitmap(span * 2, span * 2);
+                using (var g = System.Drawing.Graphics.FromImage(bg))
+                {
+                    g.FillRectangle(wpen, new System.Drawing.Rectangle(0, 0, bg.Width, bg.Height));
+                    for (var v = 0; v < span * 2; v += span)
+                    {
+                        for (int h = (v / (span)) % 2 == 0 ? 0 : span; h < span * 2; h += span * 2)
+                        {
+                            g.FillRectangle(gpen, new System.Drawing.Rectangle(h, v, span, span));
+                        }
+                    }
+                }
+
+                var b = new ImageBrush(NetImageProcessHelper.ToBitmapImage(bg))
+                {
+                    Stretch = Stretch.None,
+                    TileMode = TileMode.Tile,
+                    AlignmentX = AlignmentX.Left,
+                    AlignmentY = AlignmentY.Top,
+                    Viewport = new Rect(new Point(0, 0), new Point(span * 2, span * 2)),
+                    ViewportUnits = BrushMappingMode.Absolute
+                };
+                ChessboardBrushes.Add(blockPixSize, b);
+                return b;
+            }
+        }
+
         /// <summary>
         /// color in hex string to (a,r,g,b);
         /// #FFFEFDFC   ->  Tuple(255,254,253,252),
@@ -70,22 +114,14 @@ namespace Shawn.Utils.Wpf
 
         public static System.Windows.Media.Color HexColorToMediaColor(string hexColor)
         {
-            var tmp = HexColorToArgb(hexColor);
-            var a = tmp.Item1;
-            var r = tmp.Item2;
-            var g = tmp.Item3;
-            var b = tmp.Item4;
-            return System.Windows.Media.Color.FromArgb(a, r, g, b);
+            var t = HexColorToArgb(hexColor);
+            return System.Windows.Media.Color.FromArgb(t.Item1, t.Item2, t.Item3, t.Item4);
         }
 
         public static System.Drawing.Color HexColorToDrawingColor(string hexColor)
         {
-            var tmp = HexColorToArgb(hexColor);
-            var a = tmp.Item1;
-            var r = tmp.Item2;
-            var g = tmp.Item3;
-            var b = tmp.Item4;
-            return System.Drawing.Color.FromArgb(a, r, g, b);
+            var t = HexColorToArgb(hexColor);
+            return System.Drawing.Color.FromArgb(t.Item1, t.Item2, t.Item3, t.Item4);
         }
 
         public static string ColorToHexColor(this System.Windows.Media.Color color, bool showAlpha = false)
@@ -148,6 +184,29 @@ namespace Shawn.Utils.Wpf
             var color = HexColorToMediaColor(hexColor);
             var b = new System.Windows.Media.SolidColorBrush(color);
             return b;
+        }
+
+
+
+        public static bool ColorIsTransparent(this System.Windows.Media.Color color)
+        {
+            return color.A < 20;
+        }
+        public static bool ColorIsTransparent(this System.Drawing.Color color)
+        {
+            return color.A < 20;
+        }
+        public static bool ColorIsTransparent(string hexColor)
+        {
+            try
+            {
+                var color = ColorAndBrushHelper.HexColorToMediaColor(hexColor);
+                return color.A < 20;
+            }
+            catch (Exception e)
+            {
+                return true;
+            }
         }
     }
 }

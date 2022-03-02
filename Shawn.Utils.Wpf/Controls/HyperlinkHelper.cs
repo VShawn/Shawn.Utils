@@ -1,18 +1,7 @@
-using System.Diagnostics;
 using System.Windows;
 
 namespace Shawn.Utils.Wpf.Controls
 {
-    /**
-     *
-     *      Demo
-
-            <TextBlock>
-                <Hyperlink NavigateUri="https://github.com/VShawn/PRemoteM" TextDecorations="{x:Null}" utils:HyperlinkHelper.IsOpenExternal="True">
-                    How to use
-                </Hyperlink>
-            </TextBlock>
-     */
     public static class HyperlinkHelper
     {
         public static bool GetIsOpenExternal(DependencyObject obj)
@@ -44,13 +33,7 @@ namespace Shawn.Utils.Wpf.Controls
 
         private static void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
-            var ps = new ProcessStartInfo(e.Uri.AbsoluteUri)
-            {
-                UseShellExecute = true,
-                Verb = "open"
-            };
-            Process.Start(ps);
-            //System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri));
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri));
             e.Handled = true;
         }
     }

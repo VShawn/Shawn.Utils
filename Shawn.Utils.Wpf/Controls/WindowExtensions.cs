@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace Shawn.Utils.Wpf
+namespace Shawn.Utils.Wpf.Controls
 {
     public static class WindowExtensions
     {

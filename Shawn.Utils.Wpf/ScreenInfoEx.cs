@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
 
-namespace Shawn.Utils.Wpf
+namespace Shawn.Utils
 {
     /*How to use:
 

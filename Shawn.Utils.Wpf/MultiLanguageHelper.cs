@@ -8,12 +8,12 @@ using System.Windows;
 using System.Windows.Markup;
 using Newtonsoft.Json;
 
-namespace Shawn.Utils
+namespace Shawn.Utils.Wpf
 {
-    public static class MultiLangHelper
+    public static class MultiLanguageHelper
     {
         /// <summary>
-        /// get lang file path by this key: VarResourceDictionary[MultiLangHelper.LangFilePathKey]
+        /// get lang file path by this key: VarResourceDictionary[MultiLanguageHelper.LangFilePathKey]
         /// to determine which lang it is
         /// </summary>
         public const string LangFilePathKey = "__Lang_File_Path_Key";

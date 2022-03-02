@@ -1,0 +1,64 @@
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+namespace Shawn.Utils
+{
+    public class PropertyChangedEventArgsEx : PropertyChangedEventArgs
+    {
+        public PropertyChangedEventArgsEx(string? propertyName, object? arg) : base(propertyName)
+        {
+            Arg = arg;
+        }
+        public object? Arg { get; }
+    }
+
+
+    public class NotifyPropertyChangedBase : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        #region INotifyPropertyChanged
+
+        protected bool NotifyPropertyChangedEnabled = true;
+
+        public void SetNotifyPropertyChangedEnabled(bool isEnabled)
+        {
+            NotifyPropertyChangedEnabled = isEnabled;
+        }
+
+        public void RaisePropertyChanged([CallerMemberName] string propertyName = null, object? arg = null)
+        {
+            if (NotifyPropertyChangedEnabled)
+            {
+                if (arg != null)
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgsEx(propertyName, arg));
+                else
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private bool SetAndNotifyIfChanged<T>(string propertyName, ref T oldValue, T newValue, object? arg = null)
+        {
+            if (oldValue == null && newValue == null) return false;
+            if (oldValue != null && oldValue.Equals(newValue)) return false;
+            if (newValue != null && newValue.Equals(oldValue)) return false;
+            oldValue = newValue;
+            RaisePropertyChanged(propertyName, arg);
+            return true;
+        }
+
+        protected virtual bool SetAndNotifyIfChanged<T>(ref T oldValue, T newValue, [CallerMemberName] string propertyName = null)
+        {
+            return SetAndNotifyIfChanged(propertyName, ref oldValue, newValue);
+        }
+
+
+
+        protected virtual bool SetAndNotifyIfChangedWithArg<T>(ref T oldValue, T newValue, object arg, [CallerMemberName] string propertyName = null)
+        {
+            return SetAndNotifyIfChanged(propertyName, ref oldValue, newValue, arg);
+        }
+
+        #endregion INotifyPropertyChanged
+    }
+}

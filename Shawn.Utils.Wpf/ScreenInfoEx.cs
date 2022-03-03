@@ -25,7 +25,7 @@ namespace Shawn.Utils
 
     public class ScreenInfoEx
     {
-        public static ScreenInfoEx GetCurrentScreen(int screenIndex)
+        public static ScreenInfoEx? GetCurrentScreen(int screenIndex)
         {
             if (screenIndex < 0
                 || screenIndex >= System.Windows.Forms.Screen.AllScreens.Length)

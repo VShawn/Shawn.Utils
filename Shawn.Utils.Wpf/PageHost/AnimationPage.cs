@@ -13,7 +13,7 @@ namespace Shawn.Utils.Wpf.PageHost
 
         public InOutAnimationType InAnimationType { get; set; } = InOutAnimationType.None;
         public InOutAnimationType OutAnimationType { get; set; } = InOutAnimationType.None;
-        public ContentControl Content { get; set; } = null;
+        public ContentControl? Content { get; set; } = null;
 
         private const double AnimationSeconds = 0.3;
         private const float AnimationDecelerationRatio = 0.9f;

@@ -55,7 +55,7 @@ namespace Shawn.Utils.Wpf.FileSystem
         protected readonly string Directory;
         private readonly Timer _existenceCheckingTimer;
 
-        private FileSystemWatcher _watcher;
+        private FileSystemWatcher? _watcher;
 
         public event EventHandler<PathChangedEventArgs> PathChanged;
 
@@ -76,7 +76,7 @@ namespace Shawn.Utils.Wpf.FileSystem
             _existenceCheckingTimer.Elapsed += (o, e) => CheckExistence();
         }
 
-        private FileSystemWatcher TryToCreateWatcher(string directory)
+        private FileSystemWatcher? TryToCreateWatcher(string directory)
         {
             try
             {

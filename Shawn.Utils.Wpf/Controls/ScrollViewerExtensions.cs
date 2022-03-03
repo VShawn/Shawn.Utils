@@ -30,20 +30,20 @@ namespace Shawn.Utils.Wpf.Controls
 
         private static void OnIsHorizontalScrollOnWheelEnabledChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ScrollViewer sv = d as ScrollViewer;
-            if ((bool)e.NewValue)
-                sv.PreviewMouseWheel += sv_PreviewMouseWheel;
-            else
-                sv.PreviewMouseWheel -= sv_PreviewMouseWheel;
+            if (d is ScrollViewer sv)
+                if ((bool)e.NewValue)
+                    sv.PreviewMouseWheel += sv_PreviewMouseWheel;
+                else
+                    sv.PreviewMouseWheel -= sv_PreviewMouseWheel;
         }
 
         private static void sv_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            ScrollViewer scrollviewer = sender as ScrollViewer;
-            if (e.Delta > 0)
-                scrollviewer.LineLeft();
-            else
-                scrollviewer.LineRight();
+            if (sender is ScrollViewer scrollViewer)
+                if (e.Delta > 0)
+                    scrollViewer.LineLeft();
+                else
+                    scrollViewer.LineRight();
             e.Handled = true;
         }
     }

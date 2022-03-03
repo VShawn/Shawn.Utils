@@ -16,7 +16,7 @@ namespace Shawn.Utils.Wpf.FileSystem
         /// <param name="filterIndex">default filter index when filter have multiple values</param>
         /// <param name="checkFileExists"></param>
         /// <returns></returns>
-        public static string OpenFile(string title = null, string selectedFileName = null, string initialDirectory = null, string filter = null, string currentDirectoryForShowingRelativePath = null, int filterIndex = -1, bool checkFileExists = true)
+        public static string? OpenFile(string? title = null, string? selectedFileName = null, string? initialDirectory = null, string? filter = null, string? currentDirectoryForShowingRelativePath = null, int filterIndex = -1, bool checkFileExists = true)
         {
             var dlg = new OpenFileDialog
             {
@@ -53,7 +53,7 @@ namespace Shawn.Utils.Wpf.FileSystem
         /// <param name="filterIndex">default filter index when filter have multiple values</param>
         /// <param name="checkFileExists"></param>
         /// <returns></returns>
-        public static string SaveFile(string title = null, string selectedFileName = null, string initialDirectory = null, string filter = null, string currentDirectoryForShowingRelativePath = null, int filterIndex = -1, bool checkFileExists = false)
+        public static string? SaveFile(string? title = null, string? selectedFileName = null, string? initialDirectory = null, string? filter = null, string? currentDirectoryForShowingRelativePath = null, int filterIndex = -1, bool checkFileExists = false)
         {
             var dlg = new SaveFileDialog()
             {
@@ -85,14 +85,14 @@ namespace Shawn.Utils.Wpf.FileSystem
         /// <summary>
         /// pop a file select dialog and return file path or null
         /// </summary>
+        /// <param name="title"></param>
         /// <param name="initialDirectory"></param>
         /// <param name="filter">e.g. txt files (*.txt)|*.txt|All files (*.*)|*.*</param>
         /// <param name="currentDirectoryForShowingRelativePath"></param>
         /// <param name="filterIndex">default filter index when filter have multiple values</param>
         /// <param name="checkFileExists"></param>
         /// <returns></returns>
-        public static string[] OpenFiles
-            (string title = null, string initialDirectory = null, string filter = null, string currentDirectoryForShowingRelativePath = null, int filterIndex = -1, bool checkFileExists = true)
+        public static string[] OpenFiles(string? title = null, string? initialDirectory = null, string? filter = null, string? currentDirectoryForShowingRelativePath = null, int filterIndex = -1, bool checkFileExists = true)
         {
             var dlg = new OpenFileDialog
             {

@@ -24,7 +24,7 @@ namespace Shawn.Utils.Wpf.Controls
         private static readonly DependencyProperty VerticalScrollBindingProperty = DependencyProperty.RegisterAttached("VerticalScrollBinding", typeof(bool?), typeof(ScrollViewerBinding));
         public static readonly DependencyProperty VerticalOffsetProperty =
             DependencyProperty.RegisterAttached(
-                "VerticalOffset", 
+                "VerticalOffset",
                 typeof(double),
                 typeof(ScrollViewerBinding),
                 new FrameworkPropertyMetadata(
@@ -41,13 +41,13 @@ namespace Shawn.Utils.Wpf.Controls
         }
         private static void OnVerticalOffsetPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ScrollViewer scrollViewer = d as ScrollViewer;
+            var scrollViewer = d as ScrollViewer;
             if (scrollViewer == null)
                 return;
             BindVerticalOffset(scrollViewer);
             scrollViewer.ScrollToVerticalOffset((double)e.NewValue);
         }
-        private static void BindVerticalOffset(ScrollViewer scrollViewer)
+        private static void BindVerticalOffset(ScrollViewer? scrollViewer)
         {
             if (scrollViewer.GetValue(VerticalScrollBindingProperty) != null)
                 return;
@@ -85,8 +85,7 @@ namespace Shawn.Utils.Wpf.Controls
         }
         private static void OnHorizontalOffsetPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ScrollViewer scrollViewer = d as ScrollViewer;
-            if (scrollViewer == null)
+            if (d is not ScrollViewer scrollViewer)
                 return;
             BindHorizontalOffset(scrollViewer);
             scrollViewer.ScrollToHorizontalOffset((double)e.NewValue);

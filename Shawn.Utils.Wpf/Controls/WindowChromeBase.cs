@@ -17,7 +17,7 @@ namespace Shawn.Utils.Wpf.Controls
             NotifyPropertyChangedEnabled = isEnabled;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public void RaisePropertyChanged(string propertyName)
         {

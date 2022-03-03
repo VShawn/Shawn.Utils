@@ -239,14 +239,14 @@ namespace com.github.xiangyuecn.rsacsharp {
             }
             return EnumRsaStatus.NoError;
         }
-        public static EnumRsaStatus KeyFileCheck(string keyPath, bool isPrivateKey)
+        public static EnumRsaStatus KeyFileCheck(string? keyPath, bool isPrivateKey)
         {
             if (File.Exists(keyPath) == false)
                 return EnumRsaStatus.CannotReadPrivateKeyFile;
             return KeyCheck(File.ReadAllText(keyPath, Encoding.UTF8), isPrivateKey);
         }
 
-        public static EnumRsaStatus CheckPrivatePublicKeyMatch(string privateKeyPath, string publicKey)
+        public static EnumRsaStatus CheckPrivatePublicKeyMatch(string? privateKeyPath, string publicKey)
         {
             if (File.Exists(privateKeyPath) == false)
                 return EnumRsaStatus.CannotReadPrivateKeyFile;

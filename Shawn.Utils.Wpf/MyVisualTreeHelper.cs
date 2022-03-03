@@ -9,7 +9,7 @@ namespace Shawn.Utils.Wpf
     {
         #region Static Func
 
-        public static T FindAncestor<T>(DependencyObject obj) where T : DependencyObject
+        public static T? FindAncestor<T>(DependencyObject obj) where T : DependencyObject
         {
             while (obj != null)
             {
@@ -29,7 +29,7 @@ namespace Shawn.Utils.Wpf
         /// <param name="lvSender"></param>
         /// <param name="position"></param>
         /// <returns></returns>
-        public static ListViewItem GetItemOnPosition(ScrollContentPresenter lvSender, Point position)
+        public static ListViewItem? GetItemOnPosition(ScrollContentPresenter lvSender, Point position)
         {
             HitTestResult r = VisualTreeHelper.HitTest(lvSender, position);
             if (r == null)
@@ -48,7 +48,7 @@ namespace Shawn.Utils.Wpf
             return null;
         }
 
-        public static DependencyObject VisualUpwardSearch<T>(DependencyObject source)
+        public static DependencyObject? VisualUpwardSearch<T>(DependencyObject? source)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace Shawn.Utils.Wpf
         }
 
         //http://stackoverflow.com/questions/665719/wpf-animate-listbox-scrollviewer-horizontaloffset
-        public static T FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
+        public static T? FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
         {
             // Search immediate children first (breadth-first)
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
@@ -76,7 +76,7 @@ namespace Shawn.Utils.Wpf
                 }
                 else
                 {
-                    T childOfChild = FindVisualChild<T>(child);
+                    T? childOfChild = FindVisualChild<T>(child);
                     if (childOfChild != null)
                     {
                         return childOfChild;

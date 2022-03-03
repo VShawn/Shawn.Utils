@@ -59,9 +59,9 @@ namespace Shawn.Utils.Wpf.Image
             }
         }
 
-        public static Bitmap Roi<T>(this T source, Rectangle section) where T : BitmapSource
+        public static Bitmap? Roi<T>(this T source, Rectangle section) where T : BitmapSource
         {
-            return source.ToBitmap().Roi((section));
+            return source.ToBitmap()?.Roi((section));
         }
 
         public static Bitmap RoiClone(this Bitmap image, Rectangle section)
@@ -82,12 +82,12 @@ namespace Shawn.Utils.Wpf.Image
 
         #region Format
 
-        public static Bitmap ToBitmap(this BitmapImage bitmapImage)
+        public static Bitmap? ToBitmap(this BitmapImage bitmapImage)
         {
             return ((BitmapSource)bitmapImage).ToBitmap();
         }
 
-        public static Bitmap ToBitmap<T>(this T source) where T : BitmapSource
+        public static Bitmap? ToBitmap<T>(this T source) where T : BitmapSource
         {
             var m = (BitmapSource)source;
             var bmp = new System.Drawing.Bitmap(m.PixelWidth, m.PixelHeight,
@@ -99,7 +99,7 @@ namespace Shawn.Utils.Wpf.Image
             return bmp;
         }
 
-        public static Bitmap ToBitmap(this System.Drawing.Image image)
+        public static Bitmap? ToBitmap(this System.Drawing.Image image)
         {
             using var ms = new MemoryStream();
             image.Save(ms, ImageFormat.Png);
@@ -108,7 +108,7 @@ namespace Shawn.Utils.Wpf.Image
             return bitmapImage;
         }
 
-        public static Bitmap BitmapFromBytes(this byte[] bytes)
+        public static Bitmap? BitmapFromBytes(this byte[] bytes)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace Shawn.Utils.Wpf.Image
             }
         }
 
-        public static Bitmap BitmapFromBase64(this string base64)
+        public static Bitmap? BitmapFromBase64(this string base64)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace Shawn.Utils.Wpf.Image
 
         public static byte[] ToBytes<T>(this T source) where T : BitmapSource
         {
-            return source?.ToBitmap()?.ToBytes();
+            return source?.ToBitmap()?.ToBytes() ?? new byte[] { };
         }
 
         public static string ToBase64(this System.Drawing.Image img)
@@ -169,11 +169,8 @@ namespace Shawn.Utils.Wpf.Image
             return Convert.ToBase64String(source.ToBytes());
         }
 
-        public static BitmapImage ToBitmapImage(this System.Drawing.Bitmap src)
+        public static BitmapImage ToBitmapImage(this Bitmap? src)
         {
-            if (src == null)
-                return null;
-
             using var ms = new MemoryStream();
             src.Save(ms, ImageFormat.Png);
             ms.Seek(0, SeekOrigin.Begin);
@@ -203,7 +200,7 @@ namespace Shawn.Utils.Wpf.Image
             return bitmapImage;
         }
 
-        public static BitmapImage ToBitmapImage<T>(this BitmapSource bitmapSource) where T : BitmapEncoder, new()
+        public static BitmapImage? ToBitmapImage<T>(this BitmapSource bitmapSource) where T : BitmapEncoder, new()
         {
             var frame = BitmapFrame.Create(bitmapSource);
             var encoder = new T();
@@ -274,7 +271,7 @@ namespace Shawn.Utils.Wpf.Image
             return new Icon(ms);
         }
 
-        public static Icon ToIcon(this Bitmap bitmap)
+        public static Icon? ToIcon(this Bitmap bitmap)
         {
             var src = bitmap;
             if (src.Width > 256 || src.Height > 256)
@@ -289,14 +286,14 @@ namespace Shawn.Utils.Wpf.Image
             return Icon.FromHandle(src.GetHicon());
         }
 
-        public static Icon ToIcon<T>(this T source) where T : BitmapSource
+        public static Icon? ToIcon<T>(this T source) where T : BitmapSource
         {
             var src = source.ToBitmap();
-            return src.ToIcon();
+            return src?.ToIcon();
         }
 
         // Convert a Bitmap to a BitmapSource.
-        public static BitmapSource ToBitmapSource(this System.Drawing.Bitmap src)
+        public static BitmapSource? ToBitmapSource(this Bitmap src)
         {
             if (src == null)
                 return null;
@@ -329,16 +326,13 @@ namespace Shawn.Utils.Wpf.Image
 
         public static System.Drawing.Image ToImage(this Bitmap src)
         {
-            if (src == null)
-                return null;
-
             using var ms = new MemoryStream();
             src.Save(ms, ImageFormat.Png); // 坑点：格式选Bmp时，不带透明度
             ms.Seek(0, SeekOrigin.Begin);
             return System.Drawing.Image.FromStream(ms);
         }
 
-        public static System.Drawing.Image ToImage<T>(this BitmapSource bitmapSource) where T : BitmapEncoder, new()
+        public static System.Drawing.Image? ToImage<T>(this BitmapSource bitmapSource) where T : BitmapEncoder, new()
         {
             var frame = BitmapFrame.Create(bitmapSource);
             var encoder = new T();
@@ -352,13 +346,15 @@ namespace Shawn.Utils.Wpf.Image
             }
             catch
             {
+                // ignored
             }
+
             return null;
         }
 
         #endregion Format
 
-        public static Bitmap ReadImgFile(string filePath)
+        public static Bitmap? ReadImgFile(string? filePath)
         {
             try
             {
@@ -400,12 +396,12 @@ namespace Shawn.Utils.Wpf.Image
 
         #region Common
 
-        public static Bitmap DeepClone(this Bitmap image)
+        public static Bitmap? DeepClone(this Bitmap image)
         {
             //return image;
             if (image == null)
                 return null;
-            Bitmap dstBitmap = null;
+            Bitmap? dstBitmap = null;
             using var mStream = new MemoryStream();
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(mStream, image);

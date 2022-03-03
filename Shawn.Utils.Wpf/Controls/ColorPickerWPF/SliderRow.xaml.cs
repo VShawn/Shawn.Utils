@@ -10,7 +10,7 @@ namespace ColorPickerWPF
     {
         public delegate void SliderRowValueChangedHandler(double value);
 
-        public event SliderRowValueChangedHandler OnValueChanged;
+        public event SliderRowValueChangedHandler? OnValueChanged;
 
         public string FormatString { get; set; }
 

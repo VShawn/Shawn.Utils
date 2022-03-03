@@ -18,7 +18,7 @@ namespace ColorPickerWPF
     public class ColorSwatchItem
     {
         public Color Color { get; set; }
-        public string HexString { get; set; }
+        public string? HexString { get; set; }
     }
 
 
@@ -222,10 +222,10 @@ namespace ColorPickerWPF
         private void ColorPickerControl_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = e.GetPosition(SampleImage);
-            var img = SampleImage.Source as BitmapSource;
 
-            if (pos.X > 0 && pos.Y > 0 && pos.X < img.PixelWidth && pos.Y < img.PixelHeight)
-                SampleImageClick(img, pos);
+            if (SampleImage.Source is BitmapSource img)
+                if (pos.X > 0 && pos.Y > 0 && pos.X < img.PixelWidth && pos.Y < img.PixelHeight)
+                    SampleImageClick(img, pos);
         }
 
         private void ColorPickerControl_MouseUp(object sender, MouseButtonEventArgs e)

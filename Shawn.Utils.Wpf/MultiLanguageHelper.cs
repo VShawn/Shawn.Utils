@@ -33,7 +33,7 @@ namespace Shawn.Utils.Wpf
                 rd[key] = value;
         }
 
-        public static ResourceDictionary LangDictFromJsonFile(string path)
+        public static ResourceDictionary? LangDictFromJsonFile(string path)
         {
             Debug.Assert(path.ToLower().EndsWith(".json"));
             var fi = new FileInfo(path);
@@ -44,7 +44,7 @@ namespace Shawn.Utils.Wpf
             return rd;
         }
 
-        public static ResourceDictionary LangDictFromJsonString(string jsonString)
+        public static ResourceDictionary? LangDictFromJsonString(string jsonString)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Shawn.Utils.Wpf
         }
 
 
-        public static ResourceDictionary LangDictFromXamlFile(string path)
+        public static ResourceDictionary? LangDictFromXamlFile(string path)
         {
             Debug.Assert(path.ToLower().EndsWith(".xaml"));
             var fi = new FileInfo(path);
@@ -78,7 +78,7 @@ namespace Shawn.Utils.Wpf
             return rd;
         }
 
-        public static ResourceDictionary LangDictFromXamlUri(Uri uri)
+        public static ResourceDictionary? LangDictFromXamlUri(Uri uri)
         {
             try
             {
@@ -139,18 +139,20 @@ namespace Shawn.Utils.Wpf
             resources.MergedDictionaries.Add(lang);
         }
 
-        public static List<string> FindMissingFields(ResourceDictionary baseResourceDictionary, ResourceDictionary resource)
+        public static List<string> FindMissingFields(ResourceDictionary baseResourceDictionary, ResourceDictionary? resource)
         {
             Debug.Assert(baseResourceDictionary != null);
             Debug.Assert(resource != null);
             var missingFields = new List<string>();
-            foreach (DictionaryEntry entry in baseResourceDictionary)
-            {
-                if (resource.Contains(entry.Key) == false)
+            if (baseResourceDictionary != null)
+                foreach (DictionaryEntry entry in baseResourceDictionary)
                 {
-                    missingFields.Add(entry.Key as string);
+                    if (resource.Contains(entry.Key) == false && entry.Key is string key)
+                    {
+                        missingFields.Add(key);
+                    }
                 }
-            }
+
             return missingFields;
         }
     }

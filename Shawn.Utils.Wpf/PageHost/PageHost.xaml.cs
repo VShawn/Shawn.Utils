@@ -27,7 +27,7 @@ namespace Shawn.Utils.Wpf.PageHost
 
         private static void ContentWidthPropertyPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((PageHost)d).Content.Width = (double)e.NewValue;
+            ((PageHost)d).GridContent.Width = (double)e.NewValue;
         }
 
         public double ContentWidth
@@ -40,7 +40,7 @@ namespace Shawn.Utils.Wpf.PageHost
 
         private static void ContentHeightPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ((PageHost)d).Content.Height = (double)e.NewValue;
+            ((PageHost)d).GridContent.Height = (double)e.NewValue;
         }
 
         public double ContentHeight

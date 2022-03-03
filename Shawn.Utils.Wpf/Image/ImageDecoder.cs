@@ -11,7 +11,7 @@ namespace Shawn.Utils.Wpf.Image
     public static class ImageDecoder
     {
 #if NETFRAMEWORK
-        public static async Task<BitmapSource> GetBitmapSourceAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        public static async Task<BitmapSource?> GetBitmapSourceAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
         {
             var imageBytes = File.ReadAllBytes(filePath);
             if (imageBytes.Length == 0)
@@ -22,7 +22,7 @@ namespace Shawn.Utils.Wpf.Image
             return await GetBitmapSourceAsync(imageBytes, decodePixelWidth, decodePixelHeight);
         }
 #else
-        public static async Task<BitmapSource> GetBitmapSourceAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        public static async Task<BitmapSource?> GetBitmapSourceAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
         {
             var imageBytes = await File.ReadAllBytesAsync(filePath);
             if (imageBytes.Length == 0)
@@ -34,20 +34,20 @@ namespace Shawn.Utils.Wpf.Image
         }
 #endif
 
-        public static async Task<BitmapSource> GetBitmapSourceAsync(byte[] imageBytes, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        public static async Task<BitmapSource?> GetBitmapSourceAsync(byte[] imageBytes, int decodePixelWidth = 0, int decodePixelHeight = 0)
         {
             var ret = await Task.Run(() => GetBitmapSource(imageBytes, decodePixelWidth, decodePixelHeight));
             return ret;
         }
 
-        public static BitmapSource GetBitmapSource(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        public static BitmapSource? GetBitmapSource(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
         {
             SimpleLogHelper.Debug($"GetBitmapSource '{filePath}', decode({decodePixelWidth}, {decodePixelHeight})");
             var imageBytes = File.ReadAllBytes(filePath);
             return GetBitmapSource(imageBytes, decodePixelWidth, decodePixelHeight);
         }
 
-        public static BitmapSource GetBitmapSource(byte[] imageBytes, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        public static BitmapSource? GetBitmapSource(byte[] imageBytes, int decodePixelWidth = 0, int decodePixelHeight = 0)
         {
             if (imageBytes?.Length > 0)
             {
@@ -73,13 +73,13 @@ namespace Shawn.Utils.Wpf.Image
             return null;
         }
 
-        public static async Task<BitmapMetadata> GetImageMetaDataAsync(byte[] imageBytes)
+        public static async Task<BitmapMetadata?> GetImageMetaDataAsync(byte[] imageBytes)
         {
             var ret = await Task.Run(() => GetImageMetaData(imageBytes));
             return ret;
         }
 
-        public static BitmapMetadata GetImageMetaData(byte[] imageBytes)
+        public static BitmapMetadata? GetImageMetaData(byte[] imageBytes)
         {
             var ms = new MemoryStream(imageBytes);
             var bitmapFrame = BitmapFrame.Create(ms, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.Default);
@@ -125,8 +125,6 @@ namespace Shawn.Utils.Wpf.Image
                 ThumbnailSize.ExtraLarge => shellFile.Thumbnail.ExtraLargeBitmap.ToBitmapImage(),
                 _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
             };
-            var shellThumb = shellFile.Thumbnail.MediumBitmap;
-            return shellThumb.ToBitmapImage();
         }
 
         public static async Task<BitmapImage> GetThumbnailFromWinApiAsync(string filePath, ThumbnailSize size = ThumbnailSize.Medium)

@@ -4,12 +4,12 @@ using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Shawn.Utils
+namespace Shawn.Utils.Wpf
 {
     public class NamedPipeHelper : IDisposable
     {
         private readonly string _pipName;
-        private readonly Mutex _singleAppMutex = null;
+        private readonly Mutex? _singleAppMutex = null;
         private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         public delegate void OnMessageReceivedDelegate(string message);
@@ -46,7 +46,7 @@ namespace Shawn.Utils
 
         private void StartNamedPipeServer()
         {
-            NamedPipeServerStream server = null;
+            NamedPipeServerStream? server = null;
             Task.Factory.StartNew(() =>
             {
                 while (!_cancellationTokenSource.IsCancellationRequested)

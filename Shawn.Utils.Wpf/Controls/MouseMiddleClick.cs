@@ -19,7 +19,7 @@ namespace Shawn.Utils.Wpf.Controls
             sender.SetValue(MouseMiddleDownProperty, value);
         }
 
-        public static ICommand GetMouseMiddleDown(DependencyObject sender)
+        public static ICommand? GetMouseMiddleDown(DependencyObject sender)
         {
             return sender.GetValue(MouseMiddleDownProperty) as ICommand;
         }

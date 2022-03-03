@@ -34,7 +34,7 @@ namespace Shawn.Utils
 
         #endregion SHGetFileInfo
 
-        public static Bitmap GetFolderIcon(string path)
+        public static Bitmap? GetFolderIcon(string path)
         {
             //Constants flags for SHGetFileInfo
             const uint SHGFI_ICON = 0x100;
@@ -61,13 +61,16 @@ namespace Shawn.Utils
             return null;
         }
 
-        public static Bitmap GetFileIcon(string path)
+        public static Bitmap? GetFileIcon(string path)
         {
             if (File.Exists(path))
             {
                 var icon = System.Drawing.Icon.ExtractAssociatedIcon(path);
-                var bmp = icon.ToBitmap();
-                return bmp;
+                if (icon != null)
+                {
+                    var bmp = icon.ToBitmap();
+                    return bmp;
+                }
             }
 
             return null;
@@ -117,7 +120,7 @@ namespace Shawn.Utils
         /// 获取文件夹图标
         /// </summary>
         /// <returns>图标</returns>
-        public static Bitmap GetFolderIcon(string path = "", bool isLargeIcon = false)
+        public static Bitmap? GetFolderIcon(string path = "", bool isLargeIcon = false)
         {
             if (!string.IsNullOrEmpty(path) && Directory.Exists(path))
                 return GetFolderIcon(path);
@@ -143,7 +146,7 @@ namespace Shawn.Utils
         /// <param name="fileName">文件类型的扩展名或文件的绝对路径</param>
         /// <param name="isLargeIcon">是否返回大图标</param>
         /// <returns>获取到的图标</returns>
-        public static Bitmap GetFileIconByExt(string fileName, bool isLargeIcon = false)
+        public static Bitmap? GetFileIconByExt(string fileName, bool isLargeIcon = false)
         {
             var shfi = new SHFILEINFO();
             IntPtr iconIntPtr;
@@ -164,7 +167,7 @@ namespace Shawn.Utils
             return bmp;
         }
 
-        public static Bitmap GetIcon(string path)
+        public static Bitmap? GetIcon(string path)
         {
             if (Directory.Exists(path))
             {

@@ -41,29 +41,29 @@ namespace Shawn.Utils.Wpf
             }
         }
 
-        private readonly Func<object, bool> _canExecute;
+        private readonly Func<object?, bool>? _canExecute;
         private readonly Action<object> _execute;
 
         public RelayCommand(Action<object> execute) : this(execute, null)
         {
         }
 
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
+        public RelayCommand(Action<object> execute, Func<object?, bool>? canExecute)
         {
             _execute = execute;
             _canExecute = canExecute;
         }
 
-        public bool CanExecute(object parameter = null)
+        public bool CanExecute(object? parameter = null)
         {
             return _canExecute?.Invoke(parameter) ?? true;
         }
 
-        public void Execute(object parameter = null)
+        public void Execute(object? parameter = null)
         {
-            if (_execute != null && CanExecute(parameter))
+            if (CanExecute(parameter))
             {
-                _execute(parameter);
+                if (parameter != null) _execute(parameter);
             }
         }
     }

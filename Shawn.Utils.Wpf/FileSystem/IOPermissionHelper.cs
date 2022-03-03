@@ -91,7 +91,7 @@ namespace Shawn.Utils.Wpf.FileSystem
             return false;
         }
 
-        public static bool HasWritePermissionOnFile(string filePath)
+        public static bool HasWritePermissionOnFile(string? filePath)
         {
             try
             {

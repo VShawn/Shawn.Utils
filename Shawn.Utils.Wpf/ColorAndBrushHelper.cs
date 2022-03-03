@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Media;
 using Shawn.Utils.Wpf.Image;
+using Point = System.Windows.Point;
 
 namespace Shawn.Utils.Wpf
 {
@@ -67,11 +70,11 @@ namespace Shawn.Utils.Wpf
             if (string.IsNullOrEmpty(hexColor))
                 return new Tuple<byte, byte, byte, byte>(a, r, g, b);
             //remove the # at the front
-            var hex = hexColor.Replace("#", "");
+            var hex = hexColor?.Replace("#", "");
 
             int start = 0;
 
-            if (hex.Length != 8 && hex.Length != 6)
+            if (hex?.Length != 8 && hex?.Length != 6)
                 throw new ArgumentException("Error hex color string length.");
             //handle ARGB strings (8 characters long)
             if (hex.Length == 8)
@@ -203,7 +206,7 @@ namespace Shawn.Utils.Wpf
                 var color = ColorAndBrushHelper.HexColorToMediaColor(hexColor);
                 return color.A < 20;
             }
-            catch (Exception e)
+            catch
             {
                 return true;
             }

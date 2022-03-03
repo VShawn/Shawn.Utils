@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Documents;
 
 namespace Shawn.Utils.Wpf.Controls
 {
@@ -19,16 +20,15 @@ namespace Shawn.Utils.Wpf.Controls
 
         private static void OnIsOpenExternalChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
-            System.Windows.Documents.Hyperlink hyperlink = sender as System.Windows.Documents.Hyperlink;
-
-            if ((bool)args.NewValue)
-            {
-                hyperlink.RequestNavigate += Hyperlink_RequestNavigate;
-            }
-            else
-            {
-                hyperlink.RequestNavigate -= Hyperlink_RequestNavigate;
-            }
+            if (sender is Hyperlink hyperlink)
+                if ((bool)args.NewValue)
+                {
+                    hyperlink.RequestNavigate += Hyperlink_RequestNavigate;
+                }
+                else
+                {
+                    hyperlink.RequestNavigate -= Hyperlink_RequestNavigate;
+                }
         }
 
         private static void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)

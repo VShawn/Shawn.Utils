@@ -36,13 +36,13 @@ namespace Shawn.Utils.Wpf.FileSystem
             if (!File.Exists(fileName))
                 return false;
 
-            FileStream fs = null;
+            FileStream? fs = null;
             try
             {
                 fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.None);
                 return false;
             }
-            catch (Exception e)
+            catch
             {
                 // ignored
             }
@@ -62,7 +62,7 @@ namespace Shawn.Utils.Wpf.FileSystem
                     File.WriteAllText(fileName, "");
                     return true;
                 }
-                catch (Exception e)
+                catch
                 {
                     // ignored
                 }
@@ -74,13 +74,13 @@ namespace Shawn.Utils.Wpf.FileSystem
                 return false;
             }
 
-            FileStream fs = null;
+            FileStream? fs = null;
             try
             {
                 fs = new FileStream(fileName, FileMode.Open, FileAccess.Write, FileShare.None);
                 return true;
             }
-            catch (Exception e)
+            catch
             {
                 // ignored
             }

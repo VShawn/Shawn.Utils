@@ -60,15 +60,14 @@ namespace Shawn.Utils.Wpf
         /// <returns></returns>
         public static Tuple<byte, byte, byte, byte> HexColorToArgb(string hexColor)
         {
-            hexColor = hexColor?.Trim();
-
             byte a = 255;
             byte r = 160;
             byte g = 160;
             byte b = 160;
-
-            if (string.IsNullOrEmpty(hexColor))
+            if (string.IsNullOrWhiteSpace(hexColor))
                 return new Tuple<byte, byte, byte, byte>(a, r, g, b);
+            hexColor = hexColor.Trim();
+
             //remove the # at the front
             var hex = hexColor?.Replace("#", "");
 

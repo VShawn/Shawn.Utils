@@ -3,24 +3,6 @@ using System.Windows.Input;
 
 namespace Shawn.Utils.Wpf
 {
-    /*
-     *
-     *
-     *
-
-        private RelayCommand _cmdConnServer;
-        public RelayCommand CmdConnServer
-        {
-            get
-            {
-                return _cmdConnServer ??= new RelayCommand(o =>
-                {
-                    // do something
-                }, canRun == true);
-            }
-        }
-
-     */
     public class RelayCommand : ICommand
     {
         public event EventHandler CanExecuteChanged
@@ -41,14 +23,14 @@ namespace Shawn.Utils.Wpf
             }
         }
 
-        private readonly Func<object?, bool>? _canExecute;
-        private readonly Action<object> _execute;
+        private readonly Func<object?, bool>? _canExecute = null;
+        private readonly Action<object?>? _execute = null;
 
-        public RelayCommand(Action<object> execute) : this(execute, null)
+        public RelayCommand(Action<object?> execute) : this(execute, null)
         {
         }
 
-        public RelayCommand(Action<object> execute, Func<object?, bool>? canExecute)
+        public RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute)
         {
             _execute = execute;
             _canExecute = canExecute;
@@ -61,9 +43,9 @@ namespace Shawn.Utils.Wpf
 
         public void Execute(object? parameter = null)
         {
-            if (CanExecute(parameter))
+            if (_execute != null && CanExecute(parameter))
             {
-                if (parameter != null) _execute(parameter);
+                _execute(parameter);
             }
         }
     }

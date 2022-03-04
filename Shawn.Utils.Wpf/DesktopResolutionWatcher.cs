@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Win32;
 
+# nullable disable
 namespace Shawn.Utils.Wpf
 {
     /*
@@ -18,7 +19,7 @@ namespace Shawn.Utils.Wpf
     {
         public Action OnDesktopResolutionChanged;
         private int _lastScreenCount = 0;
-        private System.Drawing.Rectangle _lastScreenRectangle = System.Drawing.Rectangle.Empty;
+        private System.Drawing.Rectangle _lastScreenRectangle;
 
         public DesktopResolutionWatcher()
         {

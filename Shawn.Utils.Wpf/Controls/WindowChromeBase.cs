@@ -35,7 +35,7 @@ namespace Shawn.Utils.Wpf.Controls
             return true;
         }
 
-        protected virtual bool SetAndNotifyIfChanged<T>(ref T oldValue, T newValue, [CallerMemberName] string propertyName = null)
+        protected virtual bool SetAndNotifyIfChanged<T>(ref T oldValue, T newValue, [CallerMemberName] string? propertyName = null)
         {
             return SetAndNotifyIfChanged(propertyName, ref oldValue, newValue);
         }

@@ -57,7 +57,7 @@ namespace Shawn.Utils.Wpf.FileSystem
 
         private FileSystemWatcher? _watcher;
 
-        public event EventHandler<PathChangedEventArgs> PathChanged;
+        public event EventHandler<PathChangedEventArgs>? PathChanged;
 
         public FileWatcher(FileWatcherMode mode, string directory, TimeSpan existenceCheckingInterval, string filter = "*.*")
         {

@@ -92,7 +92,7 @@ namespace Shawn.Utils.Wpf.FileSystem
         /// <param name="filterIndex">default filter index when filter have multiple values</param>
         /// <param name="checkFileExists"></param>
         /// <returns></returns>
-        public static string[] OpenFiles(string? title = null, string? initialDirectory = null, string? filter = null, string? currentDirectoryForShowingRelativePath = null, int filterIndex = -1, bool checkFileExists = true)
+        public static string[]? OpenFiles(string? title = null, string? initialDirectory = null, string? filter = null, string? currentDirectoryForShowingRelativePath = null, int filterIndex = -1, bool checkFileExists = true)
         {
             var dlg = new OpenFileDialog
             {

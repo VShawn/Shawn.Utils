@@ -2,14 +2,14 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+# nullable disable
 namespace Shawn.Utils
 {
     public class VersionHelper
     {
         public class Version
         {
-            protected bool Equals(Version? other)
+            protected bool Equals(Version other)
             {
                 if (other is null)
                     return false;
@@ -86,7 +86,7 @@ namespace Shawn.Utils
                     }
                 }
 
-                if (splits?.Length >= 4)
+                if (splits != null && splits.Length >= 4)
                 {
                     if (uint.TryParse(splits[3], out var tmp))
                     {

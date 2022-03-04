@@ -31,7 +31,7 @@ namespace ColorPickerWPF
 
         public delegate void ColorPickerChangeHandler(Color color);
 
-        public event ColorPickerChangeHandler OnPickColor;
+        public event ColorPickerChangeHandler? OnPickColor;
 
         internal List<Brush> ColorSwatches = new List<Brush>();
 

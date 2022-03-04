@@ -10,11 +10,11 @@ namespace Shawn.Utils.Wpf
     {
         private readonly string _pipName;
         private readonly Mutex? _singleAppMutex = null;
-        private readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource _cancellationTokenSource = new();
 
         public delegate void OnMessageReceivedDelegate(string message);
 
-        public OnMessageReceivedDelegate OnMessageReceived;
+        public OnMessageReceivedDelegate? OnMessageReceived;
 
         public NamedPipeHelper(string pipName)
         {
@@ -56,7 +56,8 @@ namespace Shawn.Utils.Wpf
                     server.WaitForConnection();
                     var reader = new StreamReader(server);
                     var line = reader.ReadLine();
-                    OnMessageReceived?.Invoke(line);
+                    if (string.IsNullOrEmpty(line) == false)
+                        OnMessageReceived?.Invoke(line);
                 }
             }, _cancellationTokenSource.Token);
         }

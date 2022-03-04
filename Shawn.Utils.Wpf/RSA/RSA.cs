@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-
+# nullable disable
 namespace com.github.xiangyuecn.rsacsharp {
 	/// <summary>
 	/// RSA操作类
@@ -52,24 +52,23 @@ namespace com.github.xiangyuecn.rsacsharp {
 				return rsa.Encrypt(data, false);
 			}
 
-			using (var dataStream = new MemoryStream(data))
-			using (var enStream = new MemoryStream()) {
-				Byte[] buffer = new Byte[blockLen];
-				int len = dataStream.Read(buffer, 0, blockLen);
+            using var dataStream = new MemoryStream(data);
+            using var enStream = new MemoryStream();
+            Byte[] buffer = new Byte[blockLen];
+            int len = dataStream.Read(buffer, 0, blockLen);
 
-				while (len > 0) {
-					Byte[] block = new Byte[len];
-					Array.Copy(buffer, 0, block, 0, len);
+            while (len > 0) {
+                Byte[] block = new Byte[len];
+                Array.Copy(buffer, 0, block, 0, len);
 
-					Byte[] enBlock = rsa.Encrypt(block, false);
-					enStream.Write(enBlock, 0, enBlock.Length);
+                Byte[] enBlock = rsa.Encrypt(block, false);
+                enStream.Write(enBlock, 0, enBlock.Length);
 
-					len = dataStream.Read(buffer, 0, blockLen);
-				}
+                len = dataStream.Read(buffer, 0, blockLen);
+            }
 
-				return enStream.ToArray();
-			}
-		}
+            return enStream.ToArray();
+        }
 		/// <summary>
 		/// 解密字符串（utf-8），解密异常返回null
 		/// </summary>
@@ -88,38 +87,45 @@ namespace com.github.xiangyuecn.rsacsharp {
 			}
 			return Encoding.UTF8.GetString(val);
 		}
-		/// <summary>
-		/// 解密数据，解密异常返回null
-		/// </summary>
-		public byte[] DecodeOrNull(byte[] data) {
-			try {
-				int blockLen = rsa.KeySize / 8;
-				if (data.Length <= blockLen) {
-					return rsa.Decrypt(data, false);
-				}
 
-				using (var dataStream = new MemoryStream(data))
-				using (var deStream = new MemoryStream()) {
-					Byte[] buffer = new Byte[blockLen];
-					int len = dataStream.Read(buffer, 0, blockLen);
+        /// <summary>
+        /// 解密数据，解密异常返回null
+        /// </summary>
+        public byte[] DecodeOrNull(byte[] data)
+        {
+            try
+            {
+                int blockLen = rsa.KeySize / 8;
+                if (data.Length <= blockLen)
+                {
+                    return rsa.Decrypt(data, false);
+                }
 
-					while (len > 0) {
-						Byte[] block = new Byte[len];
-						Array.Copy(buffer, 0, block, 0, len);
+                using var dataStream = new MemoryStream(data);
+                using var deStream = new MemoryStream();
+                byte[] buffer = new Byte[blockLen];
+                var len = dataStream.Read(buffer, 0, blockLen);
 
-						Byte[] deBlock = rsa.Decrypt(block, false);
-						deStream.Write(deBlock, 0, deBlock.Length);
+                while (len > 0)
+                {
+                    byte[] block = new Byte[len];
+                    Array.Copy(buffer, 0, block, 0, len);
 
-						len = dataStream.Read(buffer, 0, blockLen);
-					}
+                    Byte[] deBlock = rsa.Decrypt(block, false);
+                    deStream.Write(deBlock, 0, deBlock.Length);
 
-					return deStream.ToArray();
-				}
-			} catch {
-				return null;
-			}
-		}
-		/// <summary>
+                    len = dataStream.Read(buffer, 0, blockLen);
+                }
+
+                return deStream.ToArray();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
 		/// 对str进行签名，并指定hash算法（如：SHA256）
 		/// </summary>
 		public string Sign(string hash, string str) {
@@ -239,14 +245,14 @@ namespace com.github.xiangyuecn.rsacsharp {
             }
             return EnumRsaStatus.NoError;
         }
-        public static EnumRsaStatus KeyFileCheck(string? keyPath, bool isPrivateKey)
+        public static EnumRsaStatus KeyFileCheck(string keyPath, bool isPrivateKey)
         {
             if (File.Exists(keyPath) == false)
                 return EnumRsaStatus.CannotReadPrivateKeyFile;
             return KeyCheck(File.ReadAllText(keyPath, Encoding.UTF8), isPrivateKey);
         }
 
-        public static EnumRsaStatus CheckPrivatePublicKeyMatch(string? privateKeyPath, string publicKey)
+        public static EnumRsaStatus CheckPrivatePublicKeyMatch(string privateKeyPath, string publicKey)
         {
             if (File.Exists(privateKeyPath) == false)
                 return EnumRsaStatus.CannotReadPrivateKeyFile;

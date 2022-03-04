@@ -38,10 +38,13 @@ namespace Shawn.Utils.Wpf
             Debug.Assert(path.ToLower().EndsWith(".json"));
             var fi = new FileInfo(path);
             if (!fi.Exists) return null;
-            var rd = LangDictFromJsonString(File.ReadAllText(fi.FullName));
-            SetKey(rd, LangFilePathKey, fi.FullName);
-            SetKey(rd, ResourceTypeKey, ResourceTypeValue);
-            return rd;
+            if (LangDictFromJsonString(File.ReadAllText(fi.FullName)) is ResourceDictionary rd)
+            {
+                SetKey(rd, LangFilePathKey, fi.FullName);
+                SetKey(rd, ResourceTypeKey, ResourceTypeValue);
+                return rd;
+            }
+            return null;
         }
 
         public static ResourceDictionary? LangDictFromJsonString(string jsonString)
@@ -50,19 +53,23 @@ namespace Shawn.Utils.Wpf
             {
                 var rd = new ResourceDictionary();
                 var kvs = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonString);
-                foreach (var kv in kvs)
+                if (kvs != null)
                 {
-                    SetKey(rd, kv.Key, kv.Value);
+                    foreach (var kv in kvs)
+                    {
+                        SetKey(rd, kv.Key, kv.Value);
+                    }
+
+                    SetKey(rd, LangFilePathKey, "from_memory");
+                    SetKey(rd, ResourceTypeKey, ResourceTypeValue);
+                    return rd;
                 }
-                SetKey(rd, LangFilePathKey, "from_memory");
-                SetKey(rd, ResourceTypeKey, ResourceTypeValue);
-                return rd;
             }
             catch (Exception e)
             {
                 SimpleLogHelper.Error(e);
-                return new ResourceDictionary();
             }
+            return null;
         }
 
 
@@ -72,10 +79,13 @@ namespace Shawn.Utils.Wpf
             var fi = new FileInfo(path);
             if (!fi.Exists) return null;
             using var fs = new FileStream(fi.FullName, FileMode.Open);
-            var rd = XamlReader.Load(fs) as ResourceDictionary;
-            SetKey(rd, LangFilePathKey, fi.FullName);
-            SetKey(rd, ResourceTypeKey, ResourceTypeValue);
-            return rd;
+            if (XamlReader.Load(fs) is ResourceDictionary rd)
+            {
+                SetKey(rd, LangFilePathKey, fi.FullName);
+                SetKey(rd, ResourceTypeKey, ResourceTypeValue);
+                return rd;
+            }
+            return null;
         }
 
         public static ResourceDictionary? LangDictFromXamlUri(Uri uri)
@@ -125,18 +135,22 @@ namespace Shawn.Utils.Wpf
         {
             Debug.Assert(resources != null);
             Debug.Assert(lang != null);
+            if (resources != null && lang != null)
+            {
+                var rs1 = resources.MergedDictionaries.Where(o => o.Source != null && o.Source.IsAbsoluteUri && o.Source.AbsolutePath.ToLower().IndexOf("Languages/".ToLower(), StringComparison.Ordinal) >= 0).ToArray();
+                foreach (var r in rs1)
+                {
+                    resources.MergedDictionaries.Remove(r);
+                }
 
-            var rs1 = resources.MergedDictionaries.Where(o => o.Source != null && o.Source.IsAbsoluteUri && o.Source.AbsolutePath.ToLower().IndexOf("Languages/".ToLower(), StringComparison.Ordinal) >= 0).ToArray();
-            foreach (var r in rs1)
-            {
-                resources.MergedDictionaries.Remove(r);
+                var rs2 = resources.MergedDictionaries.Where(o => o.Contains(ResourceTypeKey) && o[ResourceTypeKey].ToString() == ResourceTypeValue).ToArray();
+                foreach (var r in rs2)
+                {
+                    resources.MergedDictionaries.Remove(r);
+                }
+
+                resources.MergedDictionaries.Add(lang);
             }
-            var rs2 = resources.MergedDictionaries.Where(o => o.Contains(ResourceTypeKey) && o[ResourceTypeKey].ToString() == ResourceTypeValue).ToArray();
-            foreach (var r in rs2)
-            {
-                resources.MergedDictionaries.Remove(r);
-            }
-            resources.MergedDictionaries.Add(lang);
         }
 
         public static List<string> FindMissingFields(ResourceDictionary baseResourceDictionary, ResourceDictionary? resource)
@@ -147,7 +161,7 @@ namespace Shawn.Utils.Wpf
             if (baseResourceDictionary != null)
                 foreach (DictionaryEntry entry in baseResourceDictionary)
                 {
-                    if (resource.Contains(entry.Key) == false && entry.Key is string key)
+                    if (resource?.Contains(entry.Key) != true && entry.Key is string key)
                     {
                         missingFields.Add(key);
                     }

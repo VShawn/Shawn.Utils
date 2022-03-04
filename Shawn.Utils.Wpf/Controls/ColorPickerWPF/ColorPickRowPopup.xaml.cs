@@ -24,15 +24,10 @@ namespace ColorPickerWPF
 
         private static void OnColorPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var color = (Color?)e.NewValue;
-            if (color == null)
+            if (e.NewValue is Color color)
             {
-                ((ColorPickRowPopup) d).HexColor = null;
-            }
-            else
-            {
-                var c = (Color) color;
-                ((ColorPickRowPopup) d).HexColor = ColorAndBrushHelper.ArgbToHexColor(c.A, c.R, c.G, c.B);
+                var c = (Color)color;
+                ((ColorPickRowPopup)d).HexColor = ColorAndBrushHelper.ArgbToHexColor(c.A, c.R, c.G, c.B);
             }
         }
 
@@ -49,22 +44,22 @@ namespace ColorPickerWPF
                     SetValue(HexColorProperty, null);
                     ColorDisplayGrid.Background = ColorPickerControl4Popup.ChessboardBrush(2);
                 }
-                else
+                else if(value is { } color)
                 {
-                    var hexColor = value?.ToHexString();
-                    if (value != Color)
-                        SetValue(ColorProperty, value);
+                    var hexColor = color.ToHexString();
+                    if (color != Color)
+                        SetValue(ColorProperty, color);
                     if (HexColor != hexColor)
                         SetValue(HexColorProperty, hexColor);
-                    if (value.Value.ColorIsTransparent())
+                    if (color.ColorIsTransparent())
                     {
                         ColorDisplayGrid.Background = ColorPickerControl4Popup.ChessboardBrush(4);
                     }
                     else
                     {
-                        ColorDisplayGrid.Background = new SolidColorBrush((Color)value);
+                        ColorDisplayGrid.Background = new SolidColorBrush(color);
                     }
-                    ColorPicker.SetColor((Color)value);
+                    ColorPicker.SetColor(color);
                 }
             }
         }

@@ -49,7 +49,7 @@ namespace Shawn.Utils.Wpf.Controls
         }
         private static void BindVerticalOffset(ScrollViewer? scrollViewer)
         {
-            if (scrollViewer.GetValue(VerticalScrollBindingProperty) != null)
+            if (scrollViewer == null || scrollViewer.GetValue(VerticalScrollBindingProperty) != null)
                 return;
             scrollViewer.SetValue(VerticalScrollBindingProperty, true);
             scrollViewer.ScrollChanged += (o, args) =>

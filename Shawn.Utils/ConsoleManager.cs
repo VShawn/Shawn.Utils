@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace Shawn.Utils
@@ -50,18 +51,18 @@ namespace Shawn.Utils
         }
         static void InvalidateOutAndError()
         {
-            Type type = typeof(System.Console);
-            System.Reflection.FieldInfo _out = type.GetField("_out", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-            System.Reflection.FieldInfo _error = type.GetField("_error", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-            System.Reflection.MethodInfo _InitializeStdOutError = type.GetMethod("InitializeStdOutError", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
 
 #if NETCOREAPP
 #else
-            System.Diagnostics.Debug.Assert(_out != null);
-            System.Diagnostics.Debug.Assert(_error != null);
-            System.Diagnostics.Debug.Assert(_InitializeStdOutError != null);
-            _out.SetValue(null, null);
-            _error.SetValue(null, null); 
+            var type = typeof(System.Console);
+            var @out = type.GetField("_out", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var @error = type.GetField("_error", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            var initializeStdOutError = type.GetMethod("InitializeStdOutError", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            System.Diagnostics.Debug.Assert(@out != null);
+            System.Diagnostics.Debug.Assert(@error != null);
+            System.Diagnostics.Debug.Assert(initializeStdOutError != null);
+            @out?.SetValue(null, null);
+            @error?.SetValue(null, null); 
 #endif
             //_InitializeStdOutError.Invoke(null, new object[] { true });
         }

@@ -58,7 +58,7 @@ namespace Shawn.Utils.Wpf
 
         #region 单例
 
-        private static GlobalHotkeyHooker uniqueInstance;
+        private static GlobalHotkeyHooker? _uniqueInstance;
         private static readonly object InstanceLock = new object();
 
         private GlobalHotkeyHooker()
@@ -67,17 +67,17 @@ namespace Shawn.Utils.Wpf
 
         public static GlobalHotkeyHooker GetInstance()
         {
-            if (uniqueInstance == null)
+            if (_uniqueInstance == null)
             {
                 lock (InstanceLock)
                 {
-                    if (uniqueInstance == null)
+                    if (_uniqueInstance == null)
                     {
-                        uniqueInstance = new GlobalHotkeyHooker();
+                        _uniqueInstance = new GlobalHotkeyHooker();
                     }
                 }
             }
-            return uniqueInstance;
+            return _uniqueInstance;
         }
 
         public static GlobalHotkeyHooker Instance => GetInstance();

@@ -8,7 +8,7 @@ namespace Shawn.Utils.Wpf.Native
         [System.Runtime.InteropServices.DllImport("Shlwapi.dll", CharSet = CharSet.Unicode)]
         private static extern int StrCmpLogicalW(string param1, string param2);
 
-        public int Compare(object name1, object name2)
+        public int Compare(object? name1, object? name2)
         {
             if (name1 == null || name2 == null)
             {

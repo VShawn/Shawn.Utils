@@ -9,7 +9,7 @@ namespace Shawn.Utils
     {
         #region POST
 
-        public static string Post(string url, System.Text.Encoding encoding = null)
+        public static string Post(string url, Encoding? encoding = null)
         {
             if (encoding == null)
                 encoding = System.Text.Encoding.UTF8;
@@ -26,16 +26,16 @@ namespace Shawn.Utils
         }
 
         /// <returns></returns>
-        public static string Post(string url, Dictionary<string, string> dic, System.Text.Encoding encoding = null)
+        public static string Post(string url, Dictionary<string, string> dic, Encoding? encoding = null)
         {
             if (encoding == null)
                 encoding = System.Text.Encoding.UTF8;
-            string result = "";
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            var result = "";
+            var req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
 
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             int i = 0;
             foreach (var item in dic)
             {
@@ -45,17 +45,17 @@ namespace Shawn.Utils
                 i++;
             }
 
-            byte[] data = Encoding.UTF8.GetBytes(builder.ToString());
+            var data = Encoding.UTF8.GetBytes(builder.ToString());
             req.ContentLength = data.Length;
-            using (Stream reqStream = req.GetRequestStream())
+            using (var reqStream = req.GetRequestStream())
             {
                 reqStream.Write(data, 0, data.Length);
                 reqStream.Close();
             }
 
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-            Stream stream = resp.GetResponseStream();
-            using (StreamReader reader = new StreamReader(stream, encoding))
+            var resp = (HttpWebResponse)req.GetResponse();
+            var stream = resp.GetResponseStream();
+            using (var reader = new StreamReader(stream, encoding))
             {
                 result = reader.ReadToEnd();
             }
@@ -63,26 +63,26 @@ namespace Shawn.Utils
             return result;
         }
 
-        public static string Post(string url, string content, System.Text.Encoding encoding = null)
+        public static string Post(string url, string content, Encoding? encoding = null)
         {
             if (encoding == null)
                 encoding = System.Text.Encoding.UTF8;
             string result = "";
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            var req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "POST";
             req.ContentType = "application/x-www-form-urlencoded";
 
-            byte[] data = Encoding.UTF8.GetBytes(content);
+            var data = Encoding.UTF8.GetBytes(content);
             req.ContentLength = data.Length;
-            using (Stream reqStream = req.GetRequestStream())
+            using (var reqStream = req.GetRequestStream())
             {
                 reqStream.Write(data, 0, data.Length);
                 reqStream.Close();
             }
 
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-            Stream stream = resp.GetResponseStream();
-            using (StreamReader reader = new StreamReader(stream, encoding))
+            var resp = (HttpWebResponse)req.GetResponse();
+            var stream = resp.GetResponseStream();
+            using (var reader = new StreamReader(stream, encoding))
             {
                 result = reader.ReadToEnd();
             }
@@ -93,24 +93,22 @@ namespace Shawn.Utils
 
         #region GET
 
-        public static string Get(string url, System.Text.Encoding encoding = null)
+        public static string Get(string url, Encoding? encoding = null)
         {
             if (encoding == null)
                 encoding = System.Text.Encoding.UTF8;
             string result = "";
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
+            var req = (HttpWebRequest)WebRequest.Create(url);
             req.Method = "GET";
             req.Headers["Accept-Language"] = "zh-CN,zh;q=0.8";
             req.Referer = "https://www.google.com/";
             req.Timeout = 5 * 1000;
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-            Stream stream = resp.GetResponseStream();
+            var resp = (HttpWebResponse)req.GetResponse();
+            var stream = resp.GetResponseStream();
             try
             {
-                using (StreamReader reader = new StreamReader(stream, encoding))
-                {
-                    result = reader.ReadToEnd();
-                }
+                using var reader = new StreamReader(stream, encoding);
+                result = reader.ReadToEnd();
             }
             finally
             {
@@ -119,8 +117,7 @@ namespace Shawn.Utils
             return result;
         }
 
-        /// <summary>
-        public static string Get(string url, Dictionary<string, string> dic, System.Text.Encoding encoding = null)
+        public static string Get(string url, Dictionary<string, string> dic, Encoding? encoding = null)
         {
             if (encoding == null)
                 encoding = System.Text.Encoding.UTF8;
@@ -139,15 +136,13 @@ namespace Shawn.Utils
                     i++;
                 }
             }
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(builder.ToString());
-            HttpWebResponse resp = (HttpWebResponse)req.GetResponse();
-            Stream stream = resp.GetResponseStream();
+            var req = (HttpWebRequest)WebRequest.Create(builder.ToString());
+            var resp = (HttpWebResponse)req.GetResponse();
+            var stream = resp.GetResponseStream();
             try
             {
-                using (StreamReader reader = new StreamReader(stream, encoding))
-                {
-                    result = reader.ReadToEnd();
-                }
+                using var reader = new StreamReader(stream, encoding);
+                result = reader.ReadToEnd();
             }
             finally
             {

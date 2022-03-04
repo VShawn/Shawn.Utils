@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
+#nullable disable 
+
 namespace com.github.xiangyuecn.rsacsharp {
 	/// <summary>
 	/// RSA PEM格式密钥对的解析和导出
@@ -163,7 +165,7 @@ namespace com.github.xiangyuecn.rsacsharp {
 		/// <summary>
 		/// 转成正整数，如果是负数，需要加前导0转成正整数
 		/// </summary>
-		static public BigInteger BigX(byte[] bigb) {
+		public static BigInteger BigX(byte[] bigb) {
 			if (bigb[0] > 0x7F) {
 				byte[] c = new byte[bigb.Length + 1];
 				Array.Copy(bigb, 0, c, 1, bigb.Length);
@@ -174,7 +176,7 @@ namespace com.github.xiangyuecn.rsacsharp {
 		/// <summary>
 		/// BigInt导出byte整数首字节>0x7F的会加0前导，保证正整数，因此需要去掉0
 		/// </summary>
-		static public byte[] BigB(BigInteger bigx) {
+		public static byte[] BigB(BigInteger bigx) {
 			byte[] val = bigx.ToByteArray().Reverse().ToArray();//C#的二进制是反的
 			if (val[0] == 0) {
 				byte[] c = new byte[val.Length - 1];
@@ -188,7 +190,7 @@ namespace com.github.xiangyuecn.rsacsharp {
 		/// 资料： https://stackoverflow.com/questions/43136036/how-to-get-a-rsaprivatecrtkey-from-a-rsaprivatekey
 		/// https://v2ex.com/t/661736
 		/// </summary>
-		static private BigInteger FindFactor(BigInteger e, BigInteger d, BigInteger n) {
+		private static BigInteger FindFactor(BigInteger e, BigInteger d, BigInteger n) {
 			BigInteger edMinus1 = e * d - BigInteger.One;
 			int s = -1;
 			if (edMinus1 != BigInteger.Zero) {
@@ -233,7 +235,7 @@ namespace com.github.xiangyuecn.rsacsharp {
 		/// 用PEM格式密钥对创建RSA，支持PKCS#1、PKCS#8格式的PEM
 		/// 出错将会抛出异常
 		/// </summary>
-		static public RSA_PEM FromPEM(string pem) {
+		public static RSA_PEM FromPEM(string pem) {
 			RSA_PEM param = new RSA_PEM();
 
 			var base64 = _PEMCode.Replace(pem, "");
@@ -353,9 +355,9 @@ namespace com.github.xiangyuecn.rsacsharp {
 
 			return param;
 		}
-		static private readonly Regex _PEMCode = new Regex(@"--+.+?--+|\s+");
-		static private readonly byte[] _SeqOID = new byte[] { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
-		static private readonly byte[] _Ver = new byte[] { 0x02, 0x01, 0x00 };
+		private static readonly Regex _PEMCode = new Regex(@"--+.+?--+|\s+");
+		private static readonly byte[] _SeqOID = new byte[] { 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00 };
+        public static readonly byte[] _Ver = new byte[] { 0x02, 0x01, 0x00 };
 
 
 
@@ -544,7 +546,7 @@ namespace com.github.xiangyuecn.rsacsharp {
 		/// 将XML格式密钥转成PEM，支持公钥xml、私钥xml
 		/// 出错将会抛出异常
 		/// </summary>
-		static public RSA_PEM FromXML(string xml) {
+		public static RSA_PEM FromXML(string xml) {
 			RSA_PEM rtv = new RSA_PEM();
 
 			Match xmlM = xmlExp.Match(xml);
@@ -582,8 +584,8 @@ namespace com.github.xiangyuecn.rsacsharp {
 
 			return rtv;
 		}
-		static private readonly Regex xmlExp = new Regex("\\s*<RSAKeyValue>([<>\\/\\+=\\w\\s]+)</RSAKeyValue>\\s*");
-		static private readonly Regex xmlTagExp = new Regex("<(.+?)>\\s*([^<]+?)\\s*</");
+		private static readonly Regex xmlExp = new Regex("\\s*<RSAKeyValue>([<>\\/\\+=\\w\\s]+)</RSAKeyValue>\\s*");
+		private static readonly Regex xmlTagExp = new Regex("<(.+?)>\\s*([^<]+?)\\s*</");
 
 
 
@@ -594,7 +596,7 @@ namespace com.github.xiangyuecn.rsacsharp {
 		/// ，如果convertToPublic含私钥的RSA将只返回公钥，仅含公钥的RSA不受影响
 		/// </summary>
 		public string ToXML(bool convertToPublic) {
-			StringBuilder str = new StringBuilder();
+			var str = new StringBuilder();
 			str.Append("<RSAKeyValue>");
 			str.Append("<Modulus>" + Convert.ToBase64String(Key_Modulus) + "</Modulus>");
 			str.Append("<Exponent>" + Convert.ToBase64String(Key_Exponent) + "</Exponent>");

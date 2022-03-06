@@ -262,5 +262,26 @@ namespace Shawn.Utils
                 return new System.Drawing.Point((int)(w32Mouse.X), (int)(w32Mouse.Y));
             }
         }
+
+        public static uint GetPrimaryScreenScaleFactor()
+        {
+            uint sf = 100;
+            try
+            {
+                // !must use PrimaryScreen scale factor
+                sf = (uint)(100 * System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width / SystemParameters.PrimaryScreenWidth);
+            }
+            catch (Exception)
+            {
+                sf = 100;
+            }
+            finally
+            {
+                if (sf < 100)
+                    sf = 100;
+            }
+            return sf;
+        }
+
     }
 }

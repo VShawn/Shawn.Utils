@@ -13,5 +13,8 @@
     <converter:ConverterColorIsTransparent x:Key="ConverterColorIsTransparent"></converter:ConverterColorIsTransparent>
     <converter:ConverterIsTheSame x:Key="ConverterIsTheSame"></converter:ConverterIsTheSame>
     <converter:ConverterEqual2Visible x:Key="ConverterEqual2Visible"></converter:ConverterEqual2Visible>
+    <converter:DoubleAdd x:Key="DoubleAdd1" AddValue="1"></converter:DoubleAdd>
+    <converter:DoubleAdd x:Key="DoubleAdd2" AddValue="2"></converter:DoubleAdd>
+    <converter:DoubleAdd x:Key="DoubleAdd_1" AddValue="-1"></converter:DoubleAdd>
     <converter:DoubleAdd x:Key="DoubleAdd_2" AddValue="-2"></converter:DoubleAdd>
 </ResourceDictionary>

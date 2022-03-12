@@ -46,7 +46,7 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
         protected bool _isLeftMouseDown = false;
         protected bool _isDragging = false;
 
-        protected virtual void WinTitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        public virtual void WinTitleBar_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             _isDragging = false;
             _isLeftMouseDown = false;
@@ -76,13 +76,13 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
             }
         }
 
-        protected virtual void WinTitleBar_OnMouseUp(object sender, MouseButtonEventArgs e)
+        public virtual void WinTitleBar_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
             _isLeftMouseDown = false;
             _isDragging = false;
         }
 
-        protected virtual void WinTitleBar_OnPreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        public virtual void WinTitleBar_OnPreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (e.LeftButton != MouseButtonState.Pressed || !_isDragging)
             {
@@ -112,5 +112,18 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
         }
 
         #endregion DragMove
+
+        public virtual void WinTitleBar_OnCloseButtonDown(object s, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        public virtual void WinTitleBar_OnMaximizeButtonDown(object s, RoutedEventArgs e)
+        {
+            this.WindowState = (this.WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
+        }
+        public virtual void WinTitleBar_OnMinimizeButtonDown(object s, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
     }
 }

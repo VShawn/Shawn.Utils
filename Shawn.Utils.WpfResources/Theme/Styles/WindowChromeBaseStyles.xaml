@@ -5,7 +5,10 @@
     <Style x:Key="WindowChromeBaseBaseStyle" TargetType="styles:WindowChromeBase">
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
-                <WindowChrome CaptionHeight="0" ResizeBorderThickness="3" UseAeroCaptionButtons="False" />
+                <WindowChrome CaptionHeight="0" 
+                              GlassFrameThickness="1"
+                              ResizeBorderThickness="3" 
+                              UseAeroCaptionButtons="False" />
             </Setter.Value>
         </Setter>
         <Setter Property="Template">

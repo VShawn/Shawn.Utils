@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shawn.Utils", "Shawn.Utils\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shawn.Utils.Wpf", "Shawn.Utils.Wpf\Shawn.Utils.Wpf.csproj", "{97DE5486-3C76-4DAB-8818-42A272BA7FE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shawn.Utils.WpfResources", "Shawn.Utils.WpfResources\Shawn.Utils.WpfResources.csproj", "{45A6DBDA-91AD-47E5-935A-6E6B16760B7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{97DE5486-3C76-4DAB-8818-42A272BA7FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97DE5486-3C76-4DAB-8818-42A272BA7FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97DE5486-3C76-4DAB-8818-42A272BA7FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45A6DBDA-91AD-47E5-935A-6E6B16760B7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45A6DBDA-91AD-47E5-935A-6E6B16760B7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45A6DBDA-91AD-47E5-935A-6E6B16760B7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45A6DBDA-91AD-47E5-935A-6E6B16760B7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0-windows;net48;net452;</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<LangVersion>10.0</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Shawn.Utils.Wpf\Shawn.Utils.Wpf.csproj" />
+	  <ProjectReference Include="..\Shawn.Utils\Shawn.Utils.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Theme\Styles\WindowChromeBaseStyles.xaml">
+	    <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  </Page>
+	</ItemGroup>
+
+</Project>

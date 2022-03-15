@@ -50,7 +50,6 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
         {
             _isDragging = false;
             _isLeftMouseDown = false;
-
             if (e.LeftButton != MouseButtonState.Pressed)
             {
                 return;

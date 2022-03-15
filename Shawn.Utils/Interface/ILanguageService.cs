@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shawn.Utils
+namespace Shawn.Utils.Interface
 {
     public interface ILanguageService
     {

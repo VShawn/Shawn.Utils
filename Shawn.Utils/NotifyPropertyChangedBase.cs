@@ -30,10 +30,7 @@ namespace Shawn.Utils
         {
             if (NotifyPropertyChangedEnabled)
             {
-                if (arg != null)
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgsEx(propertyName, arg));
-                else
-                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged?.Invoke(this, arg != null ? new PropertyChangedEventArgsEx(propertyName, arg) : new PropertyChangedEventArgs(propertyName));
             }
         }
 

@@ -176,7 +176,6 @@
 
                     <TextBox Margin="6 4 0 4" MinWidth="100"
                                              Grid.Column="0" Name="PART_EditableTextBox" 
-                                             IsReadOnly="{TemplateBinding IsReadOnly}" 
                                              Foreground="{TemplateBinding Foreground}"
                                              CaretBrush="{TemplateBinding Foreground}"
                                              Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center" Focusable="True" >

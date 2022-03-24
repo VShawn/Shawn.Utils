@@ -4,6 +4,9 @@
                     xmlns:attachProperty="clr-namespace:Shawn.Utils.WpfResources.Theme.AttachProperty">
 
     <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../Basic/Const.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="../Basic/Effects.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="../Basic/Font.xaml"></ResourceDictionary>
         <ResourceDictionary Source="BaseStyle.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 

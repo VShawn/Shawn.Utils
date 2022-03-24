@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
@@ -63,13 +64,13 @@ namespace Shawn.Utils
         //    set => _simpleLogHelper.FatalFileName = value;
         //}
 
-        public static EnumLogLevel PrintLogEnumLogLevel
+        public static EnumLogLevel PrintLogLevel
         {
             get => _simpleLogHelper.PrintLogLevel;
             set => _simpleLogHelper.PrintLogLevel = value;
         }
 
-        public static EnumLogLevel WriteLogEnumLogLevel
+        public static EnumLogLevel WriteLogLevel
         {
             get => _simpleLogHelper.WriteLogLevel;
             set => _simpleLogHelper.WriteLogLevel = value;
@@ -267,34 +268,34 @@ namespace Shawn.Utils
             return logFileName;
         }
 
-        private void CleanUpLogFiles(FileInfo? fi)
+        private void CleanUpLogFiles(FileInfo fi)
         {
-            if (fi == null) return;
             // clean history
             if (LogFileMaxHistoryDays <= 0) return;
             var di = fi.Directory;
-            if (di?.GetFiles($"*{fi.Extension}") is FileInfo[] fis)
-                foreach (var fileInfo in fis)
+            var withOutExtension = fi.Name.Substring(0, fi.Name.LastIndexOf(".", StringComparison.Ordinal));
+            var fis = di.GetFiles($"*{fi.Extension}");
+            foreach (var fileInfo in fis)
+            {
+                try
                 {
-                    try
+                    var dateStr = fileInfo.Name.Replace(fileInfo.Extension, "");
+                    dateStr = dateStr.Substring(dateStr.LastIndexOf("_") + 1);
+                    if ((DateTime.Now - fileInfo.LastWriteTime).Days > LogFileMaxHistoryDays)
                     {
-                        var dateStr = fileInfo.Name.Replace(fileInfo.Extension, "");
-                        dateStr = dateStr.Substring(dateStr.LastIndexOf("_") + 1);
-                        if ((DateTime.Now - fileInfo.LastWriteTime).Days > LogFileMaxHistoryDays)
-                        {
-                            fileInfo.Delete();
-                        }
-                        else if (DateTime.TryParseExact(dateStr, "yyyyMMdd", null, DateTimeStyles.None, out var date)
-                                 && date < DateTime.Now.AddDays(-1 * LogFileMaxHistoryDays))
-                        {
-                            fileInfo.Delete();
-                        }
+                        fileInfo.Delete();
                     }
-                    catch (Exception)
+                    else if (DateTime.TryParseExact(dateStr, "yyyyMMdd", null, DateTimeStyles.None, out var date)
+                             && date < DateTime.Now.AddDays(-1 * LogFileMaxHistoryDays))
                     {
-                        throw;
+                        fileInfo.Delete();
                     }
                 }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
         }
 
         private void MoveIfLogOverSize(string logFilePath)
@@ -353,10 +354,8 @@ namespace Shawn.Utils
                     logFileName = $"{withOutExtension}_{DateTime.Now.ToString("yyyyMMdd")}{new FileInfo(logFileName).Extension}";
 
                     var fi = new FileInfo(logFileName);
-                    // create Directory
-                    if (fi.Directory == null)
-                        return;
-                    if (fi?.Directory?.Exists == false)
+                    // craete Directory
+                    if (!fi.Directory.Exists)
                         fi.Directory.Create();
 
                     // clean history
@@ -409,7 +408,7 @@ namespace Shawn.Utils
         public string GetLog(string logFilePath, int lastLineCount = 50)
         {
             if (!File.Exists(logFilePath))
-                return string.Empty;
+                return null;
 
             var lines = File.ReadAllLines(logFilePath, Encoding.UTF8);
             var logs = new List<string>();

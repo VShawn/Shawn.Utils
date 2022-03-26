@@ -86,6 +86,11 @@ namespace Shawn.Utils.Wpf.Image
         #endregion
 
 
+        /// <summary>
+        /// 获得文件或文件夹图标
+        /// </summary>
+        /// <param name="path">文件类型的扩展名或文件的绝对路径，如".jpg"</param>
+        /// <returns></returns>
         public static BitmapSource GetIcon(string path)
         {
             if (Directory.Exists(path))
@@ -96,7 +101,10 @@ namespace Shawn.Utils.Wpf.Image
             {
                 return GetFileIcon(path);
             }
-            return null;
+            else
+            {
+                return GetThumbnailFromShell(path);
+            }
         }
         public static BitmapSource GetFileIcon(string path)
         {
@@ -116,14 +124,13 @@ namespace Shawn.Utils.Wpf.Image
 
         public static BitmapImage GetThumbnailFromShell(string path)
         {
-            var info = new SHFILEINFO();
-            // get the file info from the windows apu
-            SHGetFileInfo(path, FILE_ATTRIBUTE_DIRECTORY,
-                ref info, (uint)Marshal.SizeOf(info), ShellGetFileInfoFlags.Icon | ShellGetFileInfoFlags.SmallIcon);
+            var shinfo = new SHFILEINFOW();
+            // get the file info from the windows api
+            SHGetFileInfoW(path, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), ShellGetFileInfoFlags.Icon | ShellGetFileInfoFlags.SmallIcon);
             // save it into a bitmap
-            var thumbnail = ((Icon)Icon.FromHandle(info.hIcon).Clone()).ToBitmap();
+            var thumbnail = ((Icon)Icon.FromHandle(shinfo.hIcon).Clone()).ToBitmap();
             // destroy the icon, as it isn't needed anymore
-            DestroyIcon(info.hIcon);
+            DestroyIcon(shinfo.hIcon);
             return thumbnail.ToBitmapImage();
         }
 
@@ -132,13 +139,11 @@ namespace Shawn.Utils.Wpf.Image
         {
             try
             {
-                if (Directory.Exists(path))
-                {
-                    var shinfo = new SHFILEINFOW();
-                    SHGetFileInfoW(path, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), ShellGetFileInfoFlags.Icon | ShellGetFileInfoFlags.LargeIcon);
-                    using var i = System.Drawing.Icon.FromHandle(shinfo.hIcon);
-                    return i.ToBitmap().ToBitmapSource();
-                }
+                var shinfo = new SHFILEINFOW();
+                SHGetFileInfoW(path, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), ShellGetFileInfoFlags.Icon | ShellGetFileInfoFlags.LargeIcon);
+                using var i = System.Drawing.Icon.FromHandle(shinfo.hIcon);
+                DestroyIcon(shinfo.hIcon);
+                return i.ToBitmap().ToBitmapSource();
             }
             catch (Exception e)
             {
@@ -245,5 +250,6 @@ namespace Shawn.Utils.Wpf.Image
         //    return t;
         //} 
         #endregion
+        
     }
 }

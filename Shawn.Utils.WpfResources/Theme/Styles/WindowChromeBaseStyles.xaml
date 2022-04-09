@@ -34,6 +34,11 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=WindowStyle}" Value="None">
+                <Setter Property="AllowsTransparency" Value="True"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="styles:WindowChromeBase" BasedOn="{StaticResource WindowChromeBaseBaseStyle}"></Style>

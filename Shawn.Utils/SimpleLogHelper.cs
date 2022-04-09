@@ -188,35 +188,54 @@ namespace Shawn.Utils
 
         public void Debug(params object[] o)
         {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
             MakeLog(SimpleLogHelper.EnumLogLevel.Debug, o);
         }
 
         public void Info(params object[] o)
         {
-            Console.ForegroundColor = ConsoleColor.Blue;
             MakeLog(SimpleLogHelper.EnumLogLevel.Info, o);
         }
 
         public void Warning(params object[] o)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
             MakeLog(SimpleLogHelper.EnumLogLevel.Warning, o);
         }
 
         public void Error(params object[] o)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
             MakeLog(SimpleLogHelper.EnumLogLevel.Error, o);
         }
 
         public void Fatal(params object[] o)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.BackgroundColor = ConsoleColor.Red;
             MakeLog(SimpleLogHelper.EnumLogLevel.Fatal, o);
         }
 
+        private static void SetConsoleColor(SimpleLogHelper.EnumLogLevel level)
+        {
+            Console.BackgroundColor = ConsoleColor.Black;
+            switch (level)
+            {
+                case SimpleLogHelper.EnumLogLevel.Debug:
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    break;
+                case SimpleLogHelper.EnumLogLevel.Info:
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    break;
+                case SimpleLogHelper.EnumLogLevel.Warning:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    break;
+                case SimpleLogHelper.EnumLogLevel.Error:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    break;
+                case SimpleLogHelper.EnumLogLevel.Fatal:
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(level), level, null);
+            }
+        }
 
         private string GetFileName(SimpleLogHelper.EnumLogLevel enumLogLevel)
         {
@@ -332,8 +351,13 @@ namespace Shawn.Utils
             if (enumLogLevel >= PrintLogLevel)
             {
                 dt ??= DateTime.Now;
+                SetConsoleColor(PrintLogLevel);
                 Console.WriteLine($"\r\n[T:{threadId:D3}][{fileName}({method}:{line})]");
-                Console.Write($"[{dt:yyyymmdd HH:mm:ss.ffffff}]\t{enumLogLevel}\t");
+                Console.Write($"[{dt:yyyymmdd HH:mm:ss.ffffff}]\t");
+                Console.BackgroundColor = ConsoleColor.DarkGray;
+                Console.Write($"{enumLogLevel}");
+                SetConsoleColor(PrintLogLevel);
+                Console.Write($"\t");
                 foreach (var obj in o)
                 {
                     Console.WriteLine(obj);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -188,71 +189,34 @@ namespace Shawn.Utils
         public void Debug(params object[] o)
         {
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            var dt = DateTime.Now;
-            var tid = Thread.CurrentThread.ManagedThreadId;
-            Print(SimpleLogHelper.EnumLogLevel.Debug, tid, dt, o);
-            WriteLog(SimpleLogHelper.EnumLogLevel.Debug, tid, dt, o);
+            MakeLog(SimpleLogHelper.EnumLogLevel.Debug, o);
         }
 
         public void Info(params object[] o)
         {
             Console.ForegroundColor = ConsoleColor.Blue;
-            var dt = DateTime.Now;
-            var tid = Thread.CurrentThread.ManagedThreadId;
-            Print(SimpleLogHelper.EnumLogLevel.Info, tid, dt, o);
-            WriteLog(SimpleLogHelper.EnumLogLevel.Info, tid, dt, o);
+            MakeLog(SimpleLogHelper.EnumLogLevel.Info, o);
         }
 
         public void Warning(params object[] o)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            var dt = DateTime.Now;
-            var tid = Thread.CurrentThread.ManagedThreadId;
-            Print(SimpleLogHelper.EnumLogLevel.Warning, tid, dt, o);
-            WriteLog(SimpleLogHelper.EnumLogLevel.Warning, tid, dt, o);
+            MakeLog(SimpleLogHelper.EnumLogLevel.Warning, o);
         }
 
         public void Error(params object[] o)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            var dt = DateTime.Now;
-            var tid = Thread.CurrentThread.ManagedThreadId;
-            Print(SimpleLogHelper.EnumLogLevel.Error, tid, dt, o);
-            WriteLog(SimpleLogHelper.EnumLogLevel.Error, tid, dt, o);
+            MakeLog(SimpleLogHelper.EnumLogLevel.Error, o);
         }
 
         public void Fatal(params object[] o)
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Red;
-            var dt = DateTime.Now;
-            var tid = Thread.CurrentThread.ManagedThreadId;
-            Print(SimpleLogHelper.EnumLogLevel.Fatal, tid, dt, o);
-            WriteLog(SimpleLogHelper.EnumLogLevel.Fatal, tid, dt, o);
+            MakeLog(SimpleLogHelper.EnumLogLevel.Fatal, o);
         }
 
-        private void Print(SimpleLogHelper.EnumLogLevel enumLogLevel, int threadId, DateTime? dt = null, params object[] o)
-        {
-            if (enumLogLevel >= PrintLogLevel)
-            {
-                dt ??= DateTime.Now;
-                Console.Write($"[{dt:o}][ThreadId:{threadId:D10}]\t{enumLogLevel}\t");
-                foreach (var obj in o)
-                {
-                    Console.WriteLine(obj);
-                    if (o[0] is Exception e)
-                    {
-                        Console.WriteLine(e.StackTrace);
-                        if (e.InnerException != null)
-                        {
-                            Console.WriteLine(e.InnerException.Message);
-                            Console.WriteLine(e.InnerException.StackTrace);
-                        }
-                    }
-                }
-            }
-            Console.ResetColor();
-        }
 
         private string GetFileName(SimpleLogHelper.EnumLogLevel enumLogLevel)
         {
@@ -340,7 +304,53 @@ namespace Shawn.Utils
             return levelString;
         }
 
-        private void WriteLog(SimpleLogHelper.EnumLogLevel enumLogLevel, int threadId, DateTime? dt = null, params object[] o)
+
+        private void MakeLog(SimpleLogHelper.EnumLogLevel enumLogLevel, params object[] o)
+        {
+            var dt = DateTime.Now;
+            var tid = Thread.CurrentThread.ManagedThreadId;
+            // skipFrames 表示要忽略的帧数
+            // true 表示需要文件信息
+            string fileName = "";
+            string func = "";
+            int line = 0;
+            var stack = new StackTrace(3, true);
+            if (stack.FrameCount > 0)
+            {
+                var frame = stack.GetFrame(0);
+                fileName = frame.GetFileName() ?? "";
+                fileName = new FileInfo(fileName).Name;
+                line = frame.GetFileLineNumber();
+                func = frame.GetMethod()?.Name ?? "";
+            }
+
+            Print(SimpleLogHelper.EnumLogLevel.Debug, fileName, func, line, tid, dt, o);
+            WriteLog(SimpleLogHelper.EnumLogLevel.Debug, fileName, func, line, tid, dt, o);
+        }
+        private void Print(SimpleLogHelper.EnumLogLevel enumLogLevel, string fileName, string method, int line, int threadId, DateTime? dt = null, params object[] o)
+        {
+            if (enumLogLevel >= PrintLogLevel)
+            {
+                dt ??= DateTime.Now;
+                Console.WriteLine($"\r\n[T:{threadId:D3}][{fileName}({method}:{line})]");
+                Console.Write($"[{dt:yyyymmdd HH:mm:ss.ffffff}]\t{enumLogLevel}\t");
+                foreach (var obj in o)
+                {
+                    Console.WriteLine(obj);
+                    if (o[0] is Exception e)
+                    {
+                        Console.WriteLine(e.StackTrace);
+                        if (e.InnerException != null)
+                        {
+                            Console.WriteLine(e.InnerException.Message);
+                            Console.WriteLine(e.InnerException.StackTrace);
+                        }
+                    }
+                }
+            }
+            Console.ResetColor();
+        }
+        private void WriteLog(SimpleLogHelper.EnumLogLevel enumLogLevel, string fileName, string method, int line, int threadId, DateTime? dt = null, params object[] o)
         {
             try
             {
@@ -365,38 +375,37 @@ namespace Shawn.Utils
                     MoveIfLogOverSize(logFileName);
 
                     string levelString = GetLogLevelString(enumLogLevel, LogFileType);
+                    string prefix = "";
+                    if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
+                        prefix = "> ";
 
                     using var sw = new StreamWriter(new FileStream(logFileName, FileMode.Append), Encoding.UTF8);
-                    sw.Write($"{dt:o}[ThreadId:{threadId:D10}]\t\t{levelString}\t\t");
-                    if (o.Length == 1)
+                    sw.WriteLine($"{dt:yyyymmdd HH:mm:ss.ffffff}[T:{threadId:D3}][{fileName}({method}:{line})]\t\t{levelString}");
+                    foreach (var obj in o)
                     {
-                        sw.WriteLine(o[0]);
-                        if (o[0] is Exception e)
-                            sw.WriteLine(e.StackTrace);
+                        if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
+                            sw.Write(prefix);
+                        sw.WriteLine(obj);
                         if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
                             sw.WriteLine();
-                    }
-                    else
-                    {
-                        sw.WriteLine();
-                        if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
-                            sw.WriteLine("\r\n```\r\n");
-                        foreach (var obj in o)
+                        if (o[0] is Exception e)
                         {
-                            sw.WriteLine(obj);
-                            if (o[0] is Exception e)
+                            sw.WriteLine(prefix + e.StackTrace);
+                            if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
+                                sw.WriteLine();
+                            if (e.InnerException != null)
                             {
-                                sw.WriteLine(e.StackTrace);
-                                if (e.InnerException != null)
-                                {
-                                    sw.WriteLine(e.InnerException.Message);
-                                    sw.WriteLine(e.InnerException.StackTrace);
-                                }
+                                sw.WriteLine(prefix + e.InnerException.Message);
+                                if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
+                                    sw.WriteLine();
+                                sw.WriteLine(prefix + e.InnerException.StackTrace);
+                                if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
+                                    sw.WriteLine();
                             }
                         }
-                        if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
-                            sw.WriteLine("\r\n```\r\n");
                     }
+                    if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
+                        sw.WriteLine();
                 }
             }
             catch (Exception)

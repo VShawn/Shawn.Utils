@@ -106,7 +106,7 @@ namespace Shawn.Utils.Wpf.FileSystem
                 }
                 else
                 {
-                    security = new DirectorySecurity(filePath,AccessControlSections.Owner |
+                    security = new DirectorySecurity((new FileInfo(filePath)).DirectoryName, AccessControlSections.Owner |
                                                               AccessControlSections.Group |
                                                               AccessControlSections.Access);
                 }

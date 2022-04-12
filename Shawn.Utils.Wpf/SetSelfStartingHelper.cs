@@ -168,9 +168,6 @@ namespace Shawn.Utils.Wpf
         public static async Task<bool> IsSelfStartByRegistryKey(string appName)
         {
             var key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-#if !DEV
-            key?.DeleteValue("PRemoteM_Debug", false);
-#endif
             return key?.GetValueNames().Contains(appName) == true;
         }
 

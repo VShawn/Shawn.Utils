@@ -33,8 +33,18 @@ namespace Shawn.Utils.Wpf.Controls
 
         private static void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri));
+            OpenUriBySystem(e.Uri.AbsoluteUri);
             e.Handled = true;
+        }
+
+        public static void OpenUriBySystem(string uri)
+        {
+            var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                UseShellExecute = true,
+                FileName = uri
+            };
+            System.Diagnostics.Process.Start(psi);
         }
     }
 }

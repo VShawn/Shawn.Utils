@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Shawn.Utils.Wpf;
 
 namespace Shawn.Utils.WpfResources.Theme.Styles
 {

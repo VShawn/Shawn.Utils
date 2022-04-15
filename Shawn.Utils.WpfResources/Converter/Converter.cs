@@ -224,7 +224,7 @@ namespace Shawn.Utils.WpfResources.Converter
                 var tb = new TextBlock
                 {
                     Text = values[0].ToString(),
-                    Width = int.Parse(values[1].ToString()),
+                    Width = int.Parse(values[1]?.ToString() ?? "0"),
                     FontFamily = (FontFamily)values[2],
                     FontStyle = (FontStyle)values[3],
                     FontWeight = (FontWeight)values[4],

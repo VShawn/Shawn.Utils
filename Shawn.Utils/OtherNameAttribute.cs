@@ -10,7 +10,7 @@ namespace Shawn.Utils
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method, Inherited = true, AllowMultiple = false)]
     public class OtherNameAttribute : Attribute
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
     }
 
     public static class OtherNameAttributeExtensions
@@ -24,7 +24,7 @@ namespace Shawn.Utils
 
         public static string Replace<T>(T obj, string template)
         {
-            var t = obj.GetType();
+            var t = obj!.GetType();
             var properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var p in properties)
             {

@@ -26,7 +26,7 @@ namespace Shawn.Utils
             NotifyPropertyChangedEnabled = isEnabled;
         }
 
-        public void RaisePropertyChanged([CallerMemberName] string propertyName = null, object? arg = null)
+        public void RaisePropertyChanged([CallerMemberName] string? propertyName = null, object? arg = null)
         {
             if (NotifyPropertyChangedEnabled)
             {
@@ -34,7 +34,7 @@ namespace Shawn.Utils
             }
         }
 
-        private bool SetAndNotifyIfChanged<T>(string propertyName, ref T oldValue, T newValue, object? arg = null)
+        private bool SetAndNotifyIfChanged<T>(string? propertyName, ref T oldValue, T newValue, object? arg = null)
         {
             if (oldValue == null && newValue == null) return false;
             if (oldValue != null && oldValue.Equals(newValue)) return false;
@@ -44,14 +44,14 @@ namespace Shawn.Utils
             return true;
         }
 
-        protected virtual bool SetAndNotifyIfChanged<T>(ref T oldValue, T newValue, [CallerMemberName] string propertyName = null)
+        protected virtual bool SetAndNotifyIfChanged<T>(ref T oldValue, T newValue, [CallerMemberName] string? propertyName = null)
         {
             return SetAndNotifyIfChanged(propertyName, ref oldValue, newValue);
         }
 
 
 
-        protected virtual bool SetAndNotifyIfChangedWithArg<T>(ref T oldValue, T newValue, object arg, [CallerMemberName] string propertyName = null)
+        protected virtual bool SetAndNotifyIfChangedWithArg<T>(ref T oldValue, T newValue, object arg, [CallerMemberName] string? propertyName = null)
         {
             return SetAndNotifyIfChanged(propertyName, ref oldValue, newValue, arg);
         }

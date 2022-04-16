@@ -111,7 +111,8 @@ namespace Shawn.Utils.Wpf
             var kvs = new Dictionary<string, string>();
             foreach (var key in lang.Keys)
             {
-                kvs.Add(key.ToString(), lang[key].ToString());
+                if (key == null) continue;
+                kvs.Add(key.ToString()!, lang[key].ToString()!);
             }
             return JsonConvert.SerializeObject(kvs);
         }

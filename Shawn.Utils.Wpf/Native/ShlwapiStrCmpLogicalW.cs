@@ -16,7 +16,7 @@ namespace Shawn.Utils.Wpf.Native
             }
             else
             {
-                return StrCmpLogicalW(name1.ToString(), name2.ToString());
+                return StrCmpLogicalW(name1.ToString()!, name2.ToString()!);
             }
         }
     }

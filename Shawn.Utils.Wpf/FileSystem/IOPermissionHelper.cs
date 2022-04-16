@@ -91,8 +91,10 @@ namespace Shawn.Utils.Wpf.FileSystem
             return false;
         }
 
-        public static bool HasWritePermissionOnFile(string? filePath)
+        public static bool HasWritePermissionOnFile(string filePath)
         {
+            if (string.IsNullOrEmpty(filePath))
+                return false;
             try
             {
                 FileSystemSecurity security;
@@ -106,7 +108,7 @@ namespace Shawn.Utils.Wpf.FileSystem
                 }
                 else
                 {
-                    security = new DirectorySecurity((new FileInfo(filePath)).DirectoryName, AccessControlSections.Owner |
+                    security = new DirectorySecurity((new FileInfo(filePath)).DirectoryName!, AccessControlSections.Owner |
                                                               AccessControlSections.Group |
                                                               AccessControlSections.Access);
                 }
@@ -155,7 +157,7 @@ namespace Shawn.Utils.Wpf.FileSystem
 
                 if (result)
                 {
-                    result = !IsFileInUse(filePath);
+                    result = IsFileInUse(filePath) == false;
                 }
                 return result;
             }

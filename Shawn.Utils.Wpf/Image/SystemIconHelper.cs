@@ -91,7 +91,7 @@ namespace Shawn.Utils.Wpf.Image
         /// </summary>
         /// <param name="path">文件类型的扩展名或文件的绝对路径，如".jpg"</param>
         /// <returns></returns>
-        public static BitmapSource GetIcon(string path)
+        public static BitmapSource? GetIcon(string path)
         {
             if (Directory.Exists(path))
             {
@@ -106,12 +106,12 @@ namespace Shawn.Utils.Wpf.Image
                 return GetThumbnailFromShell(path);
             }
         }
-        public static BitmapSource GetFileIcon(string path)
+        public static BitmapSource? GetFileIcon(string path)
         {
             if (File.Exists(path))
             {
                 var icon = System.Drawing.Icon.ExtractAssociatedIcon(path);
-                var bmp = icon.ToBitmap().ToBitmapSource();
+                var bmp = icon?.ToBitmap()?.ToBitmapSource();
                 return bmp;
             }
             return null;
@@ -135,7 +135,7 @@ namespace Shawn.Utils.Wpf.Image
         }
 
 
-        public static BitmapSource GetFolderIcon(string path)
+        public static BitmapSource? GetFolderIcon(string path)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace Shawn.Utils.Wpf.Image
         }
 
 
-        public static BitmapSource GetFolderIcon(IntPtr ptr)
+        public static BitmapSource? GetFolderIcon(IntPtr ptr)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace Shawn.Utils.Wpf.Image
                 using var i = System.Drawing.Icon.FromHandle(shinfo.hIcon);
                 return i.ToBitmap().ToBitmapSource();
             }
-            catch (Exception e)
+            catch
             {
             }
             return null;
@@ -181,17 +181,17 @@ namespace Shawn.Utils.Wpf.Image
             {
                 return await GetFileIconAsync(path);
             }
-            return null;
+            throw new FileNotFoundException(path + " not found!");
         }
         public static async Task<BitmapSource> GetFileIconAsync(string path)
         {
             var t = await Task.Run(() => GetFileIcon(path));
-            return t;
+            return t!;
         }
         public static async Task<BitmapSource> GetFolderIconAsync(string path)
         {
             var t = await Task.Run(() => GetFolderIcon(path));
-            return t;
+            return t!;
         }
         #endregion
 

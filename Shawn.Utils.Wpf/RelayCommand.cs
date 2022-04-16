@@ -5,7 +5,7 @@ namespace Shawn.Utils.Wpf
 {
     public class RelayCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged
+        public event EventHandler? CanExecuteChanged
         {
             add
             {

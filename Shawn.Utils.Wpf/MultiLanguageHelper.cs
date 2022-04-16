@@ -37,7 +37,7 @@ namespace Shawn.Utils.Wpf
         {
             Debug.Assert(path.ToLower().EndsWith(".json"));
             var fi = new FileInfo(path);
-            if (!fi.Exists) return null;
+            if (fi?.Exists != true) return null;
             if (LangDictFromJsonString(File.ReadAllText(fi.FullName)) is ResourceDictionary rd)
             {
                 SetKey(rd, LangFilePathKey, fi.FullName);
@@ -77,7 +77,7 @@ namespace Shawn.Utils.Wpf
         {
             Debug.Assert(path.ToLower().EndsWith(".xaml"));
             var fi = new FileInfo(path);
-            if (!fi.Exists) return null;
+            if (fi?.Exists != true) return null;
             using var fs = new FileStream(fi.FullName, FileMode.Open);
             if (XamlReader.Load(fs) is ResourceDictionary rd)
             {

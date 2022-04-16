@@ -256,8 +256,8 @@ namespace Shawn.Utils
             // clean history
             if (LogFileMaxHistoryDays <= 0) return;
             var di = fi.Directory;
-            var withOutExtension = fi.Name.Substring(0, fi.Name.LastIndexOf(".", StringComparison.Ordinal));
-            var fis = di.GetFiles($"*{fi.Extension}");
+            //var withOutExtension = fi.Name.Substring(0, fi.Name.LastIndexOf(".", StringComparison.Ordinal));
+            var fis = di!.GetFiles($"*{fi.Extension}");
             foreach (var fileInfo in fis)
             {
                 try
@@ -337,7 +337,7 @@ namespace Shawn.Utils
             if (stack.FrameCount > 0)
             {
                 var frame = stack.GetFrame(0);
-                fileName = frame.GetFileName() ?? "";
+                fileName = frame!.GetFileName() ?? "";
                 //fileName = new FileInfo(fileName).Name;
                 if (fileName.IndexOf("/") >= 0)
                     fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
@@ -392,12 +392,11 @@ namespace Shawn.Utils
                     logFileName = $"{withOutExtension}_{DateTime.Now.ToString("yyyyMMdd")}{new FileInfo(logFileName).Extension}";
 
                     var fi = new FileInfo(logFileName);
-                    // craete Directory
-                    if (!fi.Directory.Exists)
+                    if (fi?.Directory?.Exists == false)
                         fi.Directory.Create();
 
                     // clean history
-                    CleanUpLogFiles(fi);
+                    CleanUpLogFiles(fi!);
 
                     // over size then move to xxxx.md -> xxxx.001.md
                     MoveIfLogOverSize(logFileName);
@@ -445,7 +444,7 @@ namespace Shawn.Utils
         public string GetLog(string logFilePath, int lastLineCount = 50)
         {
             if (!File.Exists(logFilePath))
-                return null;
+                return "";
 
             var lines = File.ReadAllLines(logFilePath, Encoding.UTF8);
             var logs = new List<string>();

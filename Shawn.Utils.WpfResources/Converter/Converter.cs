@@ -91,12 +91,8 @@ namespace Shawn.Utils.WpfResources.Converter
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value != null)
-            {
-                double v = (double)value;
-                return v + AddValue;
-            }
-            return null;
+            double v = (double)value;
+            return v + AddValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -208,10 +204,12 @@ namespace Shawn.Utils.WpfResources.Converter
     {
         private static Size MeasureText(TextBlock tb, int fontSize)
         {
+#pragma warning disable CS0618 // 类型或成员已过时
             var formattedText = new FormattedText(tb.Text, CultureInfo.CurrentUICulture,
                 FlowDirection.LeftToRight,
                 new Typeface(tb.FontFamily, tb.FontStyle, tb.FontWeight, tb.FontStretch),
                 fontSize, Brushes.Black); // always uses MaxFontSize for desiredSize
+#pragma warning restore CS0618 // 类型或成员已过时
             return new Size(formattedText.Width, formattedText.Height);
         }
 
@@ -322,7 +320,7 @@ namespace Shawn.Utils.WpfResources.Converter
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return ColorAndBrushHelper.ColorIsTransparent(value.ToString());
+            return ColorAndBrushHelper.ColorIsTransparent(value?.ToString() ?? "#00000000");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

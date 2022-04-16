@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -37,7 +38,7 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
 
         protected virtual bool SetAndNotifyIfChanged<T>(ref T oldValue, T newValue, [CallerMemberName] string? propertyName = null)
         {
-            return SetAndNotifyIfChanged(propertyName, ref oldValue, newValue);
+            return SetAndNotifyIfChanged(propertyName!, ref oldValue, newValue);
         }
 
         #endregion INotifyPropertyChanged

@@ -339,9 +339,9 @@ namespace Shawn.Utils
                 var frame = stack.GetFrame(0);
                 fileName = frame!.GetFileName() ?? "";
                 //fileName = new FileInfo(fileName).Name;
-                if (fileName.IndexOf("/") >= 0)
-                    fileName = fileName.Substring(fileName.LastIndexOf("/") + 1);
-                if (fileName.IndexOf("\\") >= 0)
+                if (fileName.Contains("/"))
+                    fileName = fileName.Substring(fileName.LastIndexOf("/", StringComparison.Ordinal) + 1);
+                if (fileName.Contains("\\"))
                     fileName = fileName.Substring(fileName.LastIndexOf("\\") + 1);
                 line = frame.GetFileLineNumber();
                 func = frame.GetMethod()?.Name ?? "";

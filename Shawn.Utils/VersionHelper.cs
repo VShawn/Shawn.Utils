@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+#pragma warning disable CS0659, CS0660, CS0661
 # nullable disable
 namespace Shawn.Utils
 {
@@ -22,19 +23,6 @@ namespace Shawn.Utils
                 if (ReferenceEquals(this, obj)) return true;
                 if (obj.GetType() != this.GetType()) return false;
                 return Equals((Version)obj);
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    var hashCode = (int)Major;
-                    hashCode = (hashCode * 397) ^ (int)Minor;
-                    hashCode = (hashCode * 397) ^ (int)Patch;
-                    hashCode = (hashCode * 397) ^ (int)Build;
-                    hashCode = (hashCode * 397) ^ (PreRelease != null ? PreRelease.GetHashCode() : 0);
-                    return hashCode;
-                }
             }
 
             public readonly uint Major;

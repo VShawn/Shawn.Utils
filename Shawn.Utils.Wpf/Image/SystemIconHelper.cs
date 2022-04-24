@@ -95,7 +95,7 @@ namespace Shawn.Utils.Wpf.Image
         {
             if (Directory.Exists(path))
             {
-                return GetFolderIcon(path);
+                return GetThumbnailFromShell(path, ShellGetFileInfoFlags.LargeIcon);
             }
             else if (File.Exists(path))
             {
@@ -103,7 +103,34 @@ namespace Shawn.Utils.Wpf.Image
             }
             else
             {
-                return GetThumbnailFromShell(path);
+                try
+                {
+                    if (path.StartsWith(".") == false && Directory.Exists(path) == false)
+                    {
+                        path = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond.ToString());
+                        if (Directory.Exists(path) == false)
+                            Directory.CreateDirectory(path);
+                    }
+                    else
+                    {
+                        if (path == ".*")
+                            path = ".x" + DateTime.Now.Millisecond;
+                        path = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond + path);
+                        File.WriteAllText(path, "");
+                    }
+                    return GetThumbnailFromShell(path);
+                }
+                finally
+                {
+                    if (Directory.Exists(path))
+                    {
+                        Directory.Delete(path, true);
+                    }
+                    else if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                }
             }
         }
         public static BitmapSource? GetFileIcon(string path)
@@ -122,28 +149,18 @@ namespace Shawn.Utils.Wpf.Image
         private static extern bool DestroyIcon(IntPtr hIcon);
 
 
-        public static BitmapImage GetThumbnailFromShell(string path)
-        {
-            var shinfo = new SHFILEINFOW();
-            // get the file info from the windows api
-            SHGetFileInfoW(path, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), ShellGetFileInfoFlags.Icon | ShellGetFileInfoFlags.SmallIcon);
-            // save it into a bitmap
-            var thumbnail = ((Icon)Icon.FromHandle(shinfo.hIcon).Clone()).ToBitmap();
-            // destroy the icon, as it isn't needed anymore
-            DestroyIcon(shinfo.hIcon);
-            return thumbnail.ToBitmapImage();
-        }
-
-
-        public static BitmapSource? GetFolderIcon(string path)
+        public static BitmapImage? GetThumbnailFromShell(string path, ShellGetFileInfoFlags icon = ShellGetFileInfoFlags.SmallIcon)
         {
             try
             {
                 var shinfo = new SHFILEINFOW();
-                SHGetFileInfoW(path, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), ShellGetFileInfoFlags.Icon | ShellGetFileInfoFlags.LargeIcon);
-                using var i = System.Drawing.Icon.FromHandle(shinfo.hIcon);
+                // get the file info from the windows api
+                SHGetFileInfoW(path, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), ShellGetFileInfoFlags.Icon | icon);
+                // save it into a bitmap
+                var thumbnail = ((Icon)Icon.FromHandle(shinfo.hIcon).Clone()).ToBitmap();
+                // destroy the icon, as it isn't needed anymore
                 DestroyIcon(shinfo.hIcon);
-                return i.ToBitmap().ToBitmapSource();
+                return thumbnail.ToBitmapImage();
             }
             catch (Exception e)
             {
@@ -153,21 +170,20 @@ namespace Shawn.Utils.Wpf.Image
         }
 
 
-        public static BitmapSource? GetFolderIcon(IntPtr ptr)
-        {
-            try
-            {
-
-                var shinfo = new SHFILEINFOW();
-                SHGetFileInfoW(ptr, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), ShellGetFileInfoFlags.Icon | ShellGetFileInfoFlags.LargeIcon);
-                using var i = System.Drawing.Icon.FromHandle(shinfo.hIcon);
-                return i.ToBitmap().ToBitmapSource();
-            }
-            catch
-            {
-            }
-            return null;
-        }
+        //public static BitmapSource? GetFolderIcon(IntPtr ptr)
+        //{
+        //    try
+        //    {
+        //        var shinfo = new SHFILEINFOW();
+        //        SHGetFileInfoW(ptr, 0, ref shinfo, (uint)Marshal.SizeOf(shinfo), ShellGetFileInfoFlags.Icon | ShellGetFileInfoFlags.LargeIcon);
+        //        using var i = System.Drawing.Icon.FromHandle(shinfo.hIcon);
+        //        return i.ToBitmap().ToBitmapSource();
+        //    }
+        //    catch
+        //    {
+        //    }
+        //    return null;
+        //}
 
 
 
@@ -190,7 +206,7 @@ namespace Shawn.Utils.Wpf.Image
         }
         public static async Task<BitmapSource> GetFolderIconAsync(string path)
         {
-            var t = await Task.Run(() => GetFolderIcon(path));
+            var t = await Task.Run(() => GetThumbnailFromShell(path, ShellGetFileInfoFlags.LargeIcon));
             return t!;
         }
         #endregion
@@ -250,6 +266,6 @@ namespace Shawn.Utils.Wpf.Image
         //    return t;
         //} 
         #endregion
-        
+
     }
 }

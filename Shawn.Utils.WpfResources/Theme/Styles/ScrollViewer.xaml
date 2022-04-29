@@ -229,16 +229,16 @@
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsFocused" Value="true">
-                <Setter TargetName="PART_VerticalScrollBar" Property="Opacity" Value="1"></Setter>
-                <Setter TargetName="PART_HorizontalScrollBar" Property="Opacity" Value="1"></Setter>
+                <Setter TargetName="PART_VerticalScrollBar" Property="Opacity" Value="{Binding Path=(attachProperty:VisionElement.OpacityOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}"></Setter>
+                <Setter TargetName="PART_HorizontalScrollBar" Property="Opacity" Value="{Binding Path=(attachProperty:VisionElement.OpacityOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}"></Setter>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter TargetName="PART_VerticalScrollBar" Property="Opacity" Value="0.8"></Setter>
-                <Setter TargetName="PART_HorizontalScrollBar" Property="Opacity" Value="0.8"></Setter>
+                <Setter TargetName="PART_VerticalScrollBar" Property="Opacity" Value="{Binding Path=(attachProperty:VisionElement.OpacityAccent),RelativeSource={RelativeSource TemplatedParent}}"></Setter>
+                <Setter TargetName="PART_HorizontalScrollBar" Property="Opacity" Value="{Binding Path=(attachProperty:VisionElement.OpacityAccent),RelativeSource={RelativeSource TemplatedParent}}"></Setter>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="false">
-                <Setter TargetName="PART_VerticalScrollBar" Property="Opacity" Value="0.4"></Setter>
-                <Setter TargetName="PART_HorizontalScrollBar" Property="Opacity" Value="0.4"></Setter>
+                <Setter TargetName="PART_VerticalScrollBar" Property="Opacity" Value="{Binding Path=(attachProperty:VisionElement.Opacity),RelativeSource={RelativeSource TemplatedParent}}"></Setter>
+                <Setter TargetName="PART_HorizontalScrollBar" Property="Opacity" Value="{Binding Path=(attachProperty:VisionElement.Opacity),RelativeSource={RelativeSource TemplatedParent}}"></Setter>
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="Grid" Property="IsEnabled" Value="False"></Setter>
@@ -254,6 +254,9 @@
         <Setter Property="Focusable" Value="False" />
         <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource PrimaryMidBrush}"/>
         <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource PrimaryMidBrush}"/>
+        <Setter Property="attachProperty:VisionElement.Opacity" Value="0.4"/>
+        <Setter Property="attachProperty:VisionElement.OpacityAccent" Value="0.8"/>
+        <Setter Property="attachProperty:VisionElement.OpacityOnMouseDown" Value="1"/>
         <Setter Property="Template" Value="{StaticResource ScrollViewBaseControlTemplate}" />
     </Style>
 

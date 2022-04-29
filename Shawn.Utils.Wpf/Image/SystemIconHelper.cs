@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -85,6 +86,16 @@ namespace Shawn.Utils.Wpf.Image
         protected static extern IntPtr SHGetFileInfoW(IntPtr pidl, uint dwFileAttributes, ref SHFILEINFOW psfi, uint cbSizeFileInfo, ShellGetFileInfoFlags uFlags);
         #endregion
 
+        private static bool IsDirPath(string path)
+        {
+            if (path.EndsWith("/") || path.EndsWith("\\"))
+                return true;
+            if (Directory.Exists(path))
+                return true;
+            //if (File.Exists(path))
+            //    return false;
+            return false;
+        }
 
         /// <summary>
         /// 获得文件或文件夹图标
@@ -93,35 +104,30 @@ namespace Shawn.Utils.Wpf.Image
         /// <returns></returns>
         public static BitmapSource? GetIcon(string path)
         {
-            if (Directory.Exists(path))
+            bool isDirPath = IsDirPath(path);
+            if (isDirPath && Directory.Exists(path))
             {
                 return GetThumbnailFromShell(path, ShellGetFileInfoFlags.LargeIcon);
             }
-            else if (File.Exists(path))
+
+            if (isDirPath == false && File.Exists(path))
             {
                 return GetFileIcon(path);
             }
-            else
+
+            try
             {
-                try
+                if (path.StartsWith(".") == false && Directory.Exists(path) == false)
                 {
-                    if (path.StartsWith(".") == false && Directory.Exists(path) == false)
-                    {
-                        path = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond.ToString());
-                        if (Directory.Exists(path) == false)
-                            Directory.CreateDirectory(path);
-                    }
-                    else
-                    {
-                        if (path == ".*")
-                            path = ".x" + DateTime.Now.Millisecond;
-                        path = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond + path);
-                        File.WriteAllText(path, "");
-                    }
-                    return GetThumbnailFromShell(path);
+                    path = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond.ToString());
+                    if (Directory.Exists(path) == false)
+                        Directory.CreateDirectory(path);
                 }
-                finally
+                else
                 {
+                    if (path == ".*")
+                        path = "";
+                    path = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond + path);
                     if (Directory.Exists(path))
                     {
                         Directory.Delete(path, true);
@@ -130,6 +136,19 @@ namespace Shawn.Utils.Wpf.Image
                     {
                         File.Delete(path);
                     }
+                    File.WriteAllText(path, "");
+                }
+                return GetThumbnailFromShell(path);
+            }
+            finally
+            {
+                if (Directory.Exists(path))
+                {
+                    Directory.Delete(path, true);
+                }
+                else if (File.Exists(path))
+                {
+                    File.Delete(path);
                 }
             }
         }

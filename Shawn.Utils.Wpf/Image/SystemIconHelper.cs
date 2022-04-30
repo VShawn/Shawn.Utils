@@ -101,54 +101,55 @@ namespace Shawn.Utils.Wpf.Image
         /// 获得文件或文件夹图标
         /// </summary>
         /// <param name="path">文件类型的扩展名或文件的绝对路径，如".jpg"</param>
+        /// <param name="isDir"></param>
+        /// <param name="isFile"></param>
         /// <returns></returns>
-        public static BitmapSource? GetIcon(string path)
+        public static BitmapSource? GetIcon(string path = "", bool? isDir = null, bool? isFile = null)
         {
-            bool isDirPath = IsDirPath(path);
-            if (isDirPath && Directory.Exists(path))
+            if (isDir == true || Directory.Exists(path))
             {
                 return GetThumbnailFromShell(path, ShellGetFileInfoFlags.LargeIcon);
             }
 
-            if (isDirPath == false && File.Exists(path))
+            if (isFile == true || File.Exists(path))
             {
                 return GetFileIcon(path);
             }
 
+            var tmpPath = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond.ToString());
             try
             {
-                if (path.StartsWith(".") == false && Directory.Exists(path) == false)
+                if (isDir == true)
                 {
-                    path = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond.ToString());
-                    if (Directory.Exists(path) == false)
-                        Directory.CreateDirectory(path);
+                    if (Directory.Exists(tmpPath) == false)
+                        Directory.CreateDirectory(tmpPath);
                 }
-                else
+                else if (isFile == true)
                 {
                     if (path == ".*")
                         path = "";
-                    path = Path.Combine(Path.GetTempPath(), DateTime.Now.Millisecond + path);
-                    if (Directory.Exists(path))
+                    if (path.StartsWith("."))
+                        tmpPath = Path.Combine(tmpPath, path);
+                    if (Directory.Exists(tmpPath))
                     {
-                        Directory.Delete(path, true);
+                        Directory.Delete(tmpPath, true);
                     }
-                    else if (File.Exists(path))
+                    if (File.Exists(tmpPath) == false)
                     {
-                        File.Delete(path);
+                        File.WriteAllText(tmpPath, "");
                     }
-                    File.WriteAllText(path, "");
                 }
-                return GetThumbnailFromShell(path);
+                return GetThumbnailFromShell(tmpPath);
             }
             finally
             {
-                if (Directory.Exists(path))
+                if (Directory.Exists(tmpPath))
                 {
-                    Directory.Delete(path, true);
+                    Directory.Delete(tmpPath, true);
                 }
-                else if (File.Exists(path))
+                else if (File.Exists(tmpPath))
                 {
-                    File.Delete(path);
+                    File.Delete(tmpPath);
                 }
             }
         }

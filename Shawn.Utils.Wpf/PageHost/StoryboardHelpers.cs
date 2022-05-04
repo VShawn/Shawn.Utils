@@ -72,16 +72,16 @@ namespace Shawn.Utils.Wpf.PageHost
 
         public static void AddFadeIn(this Storyboard storyboard, double seconds)
         {
-            AddDoubleAnimation(storyboard, seconds, 0, 1, "Opacity");
+            AddDoubleAnimation(storyboard, seconds, null, 1, "Opacity");
         }
 
         public static void AddFadeOut(this Storyboard storyboard, double seconds)
         {
-            AddDoubleAnimation(storyboard, seconds, 1, 0, "Opacity");
+            AddDoubleAnimation(storyboard, seconds, null, 0, "Opacity");
         }
 
         public static void AddDoubleAnimation(this Storyboard storyboard, double seconds,
-            double from, double to,
+            double? from, double to,
             string propertyName,
             float decelerationRatio = 0.9f)
         {

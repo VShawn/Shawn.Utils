@@ -8,17 +8,33 @@ namespace Shawn.Utils.Wpf
     public class MyVisualTreeHelper
     {
         #region Static Func
-
-        public static T? FindAncestor<T>(DependencyObject obj) where T : DependencyObject
+        public static DependencyObject? GetParent(DependencyObject reference)
         {
-            while (obj != null)
+            return System.Windows.Media.VisualTreeHelper.GetParent(reference);
+        }
+
+        /// <summary>
+        /// 在虚拟树向上机搜索指定类型的元素
+        /// </summary>
+        /// <example>例如</example>
+        /// <code>
+        /// if (MyVisualTreeHelper.VisualUpwardSearch[ListBoxItem](e.OriginalSource as DependencyObject) is ListBoxItem lbi)
+        ///     if (lbi.Content is ProtocolBaseViewModel baseViewModel)
+        ///         baseViewModel.Show();
+        /// </code>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T? VisualUpwardSearch<T>(DependencyObject? obj) where T : DependencyObject
+        {
+            DependencyObject? current = obj;
+            while (current != null)
             {
-                if (obj is T o)
+                if (current is T o)
                 {
                     return o;
                 }
-
-                obj = VisualTreeHelper.GetParent(obj);
+                current = GetParent(current);
             }
             return default(T);
         }
@@ -31,7 +47,7 @@ namespace Shawn.Utils.Wpf
         /// <returns></returns>
         public static ListViewItem? GetItemOnPosition(ScrollContentPresenter lvSender, Point position)
         {
-            HitTestResult r = VisualTreeHelper.HitTest(lvSender, position);
+            HitTestResult r = System.Windows.Media.VisualTreeHelper.HitTest(lvSender, position);
             if (r == null)
             {
                 return null;
@@ -39,7 +55,7 @@ namespace Shawn.Utils.Wpf
             var obj = r.VisualHit;
             while (!(obj is ListView) && (obj != null))
             {
-                obj = VisualTreeHelper.GetParent(obj);
+                obj = System.Windows.Media.VisualTreeHelper.GetParent(obj);
                 if (obj is ListViewItem item)
                 {
                     return item;
@@ -48,28 +64,26 @@ namespace Shawn.Utils.Wpf
             return null;
         }
 
-        public static DependencyObject? VisualUpwardSearch<T>(DependencyObject? source)
-        {
-            try
-            {
-                while (source != null && !(source is T))
-                    source = System.Windows.Media.VisualTreeHelper.GetParent(source);
-                return source;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            return null;
-        }
-
         //http://stackoverflow.com/questions/665719/wpf-animate-listbox-scrollviewer-horizontaloffset
         public static T? FindVisualChild<T>(DependencyObject obj) where T : DependencyObject
         {
-            // Search immediate children first (breadth-first)
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            /******
+            // 按住鼠标滚动滚轮时，显示选取框
+            var onScrollChange = (RoutedEventHandler)delegate (object sender, RoutedEventArgs args)
             {
-                var child = VisualTreeHelper.GetChild(obj, i);
+                ItemsPresenter ip = VisualTreeHelper.FindVisualChild<ItemsPresenter>(sender as ListView);
+                ScrollContentPresenter p = VisualTreeHelper.VisualUpwardSearch<ScrollContentPresenter>(ip);
+                if (GetIsDragging(p) && Mouse.LeftButton == MouseButtonState.Pressed)
+                {
+                    UpdatePosition(p, true);
+                }
+            };
+              ******/
+
+            // Search immediate children first (breadth-first)
+            for (int i = 0; i < System.Windows.Media.VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                var child = System.Windows.Media.VisualTreeHelper.GetChild(obj, i);
                 if (child is T o)
                 {
                     return o;

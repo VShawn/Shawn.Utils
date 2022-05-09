@@ -17,4 +17,5 @@
     <converter:DoubleAdd x:Key="DoubleAdd2" AddValue="2"></converter:DoubleAdd>
     <converter:DoubleAdd x:Key="DoubleAdd_1" AddValue="-1"></converter:DoubleAdd>
     <converter:DoubleAdd x:Key="DoubleAdd_2" AddValue="-2"></converter:DoubleAdd>
+    <converter:ConverterIsEqual x:Key="ConverterIsEqual"></converter:ConverterIsEqual>
 </ResourceDictionary>

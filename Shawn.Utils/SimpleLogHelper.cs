@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -183,6 +184,7 @@ namespace Shawn.Utils
         /// del log files created before LogFileMaxHistoryDays if LogFileMaxHistoryDays > 0
         /// </summary>
         public uint LogFileMaxHistoryDays { get; set; } = 60;
+        public long LogFileMaxByteSize { get; set; } = 1024 * 1024 * 10; // kb -> mb -> * 10
 
         private readonly object _obj = new object();
 
@@ -251,32 +253,45 @@ namespace Shawn.Utils
             return logFileName;
         }
 
+        private DateTime _lastCleanupTime = DateTime.MinValue;
         private void CleanUpLogFiles(FileInfo fi)
         {
+            // 最近X分钟内清理过日志，则跳过
+            if ((DateTime.Now - _lastCleanupTime).TotalMinutes < 15)
+                return;
+            _lastCleanupTime = DateTime.Now;
+
             // clean history
             if (LogFileMaxHistoryDays <= 0) return;
-            var di = fi.Directory;
-            //var withOutExtension = fi.Name.Substring(0, fi.Name.LastIndexOf(".", StringComparison.Ordinal));
-            var fis = di!.GetFiles($"*{fi.Extension}");
+            var di = fi.Directory!;
+            var fis = di.GetFiles($"*{fi.Extension}").Where(f => f.CreationTime < DateTime.Today).ToArray();
             foreach (var fileInfo in fis)
             {
-                try
+                if ((DateTime.Now - fileInfo.CreationTime).Days > LogFileMaxHistoryDays)
                 {
-                    var dateStr = fileInfo.Name.Replace(fileInfo.Extension, "");
-                    dateStr = dateStr.Substring(dateStr.LastIndexOf("_") + 1);
-                    if ((DateTime.Now - fileInfo.LastWriteTime).Days > LogFileMaxHistoryDays)
-                    {
-                        fileInfo.Delete();
-                    }
-                    else if (DateTime.TryParseExact(dateStr, "yyyyMMdd", null, DateTimeStyles.None, out var date)
-                             && date < DateTime.Now.AddDays(-1 * LogFileMaxHistoryDays))
-                    {
-                        fileInfo.Delete();
-                    }
+                    fileInfo.Delete();
+                    continue;
                 }
-                catch (Exception)
+
+                //var dateStr = fileInfo.Name.Replace(fileInfo.Extension, "");
+                //// ReSharper disable once StringLastIndexOfIsCultureSpecific.1
+                //dateStr = dateStr.Substring(dateStr.LastIndexOf("_") + 1);
+                //if (DateTime.TryParseExact(dateStr, "yyyyMMdd", null, DateTimeStyles.None, out var date)
+                //         && date < DateTime.Now.AddDays(-1 * LogFileMaxHistoryDays))
+                //{
+                //    fileInfo.Delete();
+                //}
+            }
+
+            // clean over size
+            fis = di.GetFiles($"*{fi.Extension}").Where(f => f.CreationTime < DateTime.Today).OrderByDescending(f => f.CreationTime).ToArray();
+            long byteLength = 0;
+            foreach (var fileInfo in fis)
+            {
+                byteLength += fileInfo.Length;
+                if (byteLength > LogFileMaxByteSize)
                 {
-                    throw;
+                    fileInfo.Delete();
                 }
             }
         }

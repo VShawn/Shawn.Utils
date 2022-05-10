@@ -38,8 +38,6 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="TextElement.Foreground" TargetName="ContentPresenter" Value="{Binding Foreground,RelativeSource={RelativeSource TemplatedParent}}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" TargetName="Background" Value="Gray" />
                             <Setter Property="Opacity" TargetName="Background" Value="0.5" />
                             <Setter Property="TextElement.Foreground" TargetName="ContentPresenter" Value="LightGray" />
@@ -68,6 +66,8 @@
     </Style>
 
     <Style x:Key="ComboBoxItemPrimaryStyle" TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBaseStyle}">
+        <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource PrimaryTextBrush}"/>
+        <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource PrimaryMidBrush}"/>
     </Style>
 
     <Style x:Key="ComboBoxItemAccentStyle" TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBaseStyle}">
@@ -75,8 +75,10 @@
         <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource AccentMidBrush}"/>
     </Style>
 
-    <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemAccentStyle}">
-    </Style>
+    <!--<Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemAccentStyle}">
+        <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource AccentTextBrush}"/>
+        <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource AccentMidBrush}"/>
+    </Style>-->
 
 
     <Style x:Key="ComboBoxToggleButton" TargetType="ToggleButton" BasedOn="{StaticResource ControlBase}">
@@ -284,14 +286,13 @@
         <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
         <Setter Property="ScrollViewer.PanningMode" Value="Both" />
         <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
-        <Setter Property="Template" Value="{StaticResource ComboBoxTemplate}" />
+        <Setter Property="Template" Value="{DynamicResource ComboBoxTemplate}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
         <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource PrimaryTextBrush}"/>
         <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource PrimaryMidBrush}"/>
         <Setter Property="attachProperty:VisionElement.BorderCornerRadius" Value="{DynamicResource DefaultCornerRadius}"/>
-        <!--<Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemBaseStyle}" />-->
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="ComboBoxItem" BasedOn="{StaticResource ComboBoxItemBaseStyle}">
@@ -303,17 +304,16 @@
     </Style>
 
     <Style x:Key="ComboBoxPrimaryStyle" TargetType="ComboBox" BasedOn="{StaticResource ComboBoxBaseStyle}">
-        <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource PrimaryTextBrush}"/>
-        <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource PrimaryMidBrush}"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemPrimaryStyle}" />
     </Style>
 
     <Style x:Key="ComboBoxAccentStyle" TargetType="ComboBox" BasedOn="{StaticResource ComboBoxBaseStyle}">
         <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource AccentTextBrush}"/>
         <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource AccentMidBrush}"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ComboBoxItemAccentStyle}" />
     </Style>
 
 
-    <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxAccentStyle}">
-    </Style>
+    <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxAccentStyle}"></Style>
 
 </ResourceDictionary>

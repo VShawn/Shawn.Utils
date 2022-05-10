@@ -12,6 +12,12 @@ namespace Shawn.Utils.Wpf.FileSystem
             var writeAllow = false;
             var writeDeny = false;
             var di = new DirectoryInfo(path);
+            while (di.Exists == false && di.Parent != null)
+            {
+                di = di.Parent;
+            }
+            if (di.Exists == false)
+                return false;
             var accessControlList = di.GetAccessControl();
             var accessRules = accessControlList?.GetAccessRules(true, true,
                 typeof(System.Security.Principal.SecurityIdentifier));
@@ -95,6 +101,7 @@ namespace Shawn.Utils.Wpf.FileSystem
         {
             if (string.IsNullOrEmpty(filePath))
                 return false;
+            var fi = new FileInfo(filePath);
             try
             {
                 FileSystemSecurity security;
@@ -108,18 +115,20 @@ namespace Shawn.Utils.Wpf.FileSystem
                 }
                 else
                 {
-                    security = new DirectorySecurity((new FileInfo(filePath)).DirectoryName!, AccessControlSections.Owner |
-                                                              AccessControlSections.Group |
-                                                              AccessControlSections.Access);
+                    return HasWritePermissionOnDir(fi.Directory.FullName);
                 }
 #else
-                if (File.Exists(filePath))
+                if (fi.Exists)
                 {
                     security = File.GetAccessControl(filePath);
                 }
+                else if(fi?.Directory != null)
+                {
+                    return HasWritePermissionOnDir(fi.Directory.FullName);
+                }
                 else
                 {
-                    security = Directory.GetAccessControl(Path.GetDirectoryName(filePath));
+                    return false;
                 }
 #endif
                 var rules = security.GetAccessRules(true, true, typeof(NTAccount));

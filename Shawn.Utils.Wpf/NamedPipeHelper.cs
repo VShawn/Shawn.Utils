@@ -64,7 +64,10 @@ namespace Shawn.Utils.Wpf
 
         public void Dispose()
         {
-            _cancellationTokenSource.Cancel(false);
+            if (_cancellationTokenSource.IsCancellationRequested == false)
+            {
+                _cancellationTokenSource.Cancel(false);
+            }
             _singleAppMutex?.Dispose();
             _cancellationTokenSource?.Dispose();
         }

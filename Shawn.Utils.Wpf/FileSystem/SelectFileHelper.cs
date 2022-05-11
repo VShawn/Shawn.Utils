@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using Microsoft.Win32;
 
 namespace Shawn.Utils.Wpf.FileSystem
@@ -124,6 +125,24 @@ namespace Shawn.Utils.Wpf.FileSystem
                 return ret;
             }
             return dlg.FileNames;
+        }
+
+        public static void OpenInExplorer(string dirPath)
+        {
+            if (Directory.Exists(dirPath))
+            {
+                System.Diagnostics.Process.Start(dirPath);
+            }
+        }
+
+        public static void OpenInExplorerAndSelect(string path)
+        {
+            if (Directory.Exists(path)
+                || File.Exists(path))
+            {
+                string argument = "/select, \"" + path + "\"";
+                System.Diagnostics.Process.Start("explorer.exe", argument);
+            }
         }
     }
 }

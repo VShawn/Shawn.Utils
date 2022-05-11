@@ -362,20 +362,20 @@ namespace Shawn.Utils
                 func = frame.GetMethod()?.Name ?? "";
             }
 
-            Print(SimpleLogHelper.EnumLogLevel.Debug, fileName, func, line, tid, dt, o);
-            WriteLog(SimpleLogHelper.EnumLogLevel.Debug, fileName, func, line, tid, dt, o);
+            Print(enumLogLevel, fileName, func, line, tid, dt, o);
+            WriteLog(enumLogLevel, fileName, func, line, tid, dt, o);
         }
         private void Print(SimpleLogHelper.EnumLogLevel enumLogLevel, string fileName, string method, int line, int threadId, DateTime? dt = null, params object[] o)
         {
             if (enumLogLevel >= PrintLogLevel)
             {
                 dt ??= DateTime.Now;
-                SetConsoleColor(PrintLogLevel);
+                SetConsoleColor(enumLogLevel);
                 Console.WriteLine($"\r\n[T:{threadId:D3}][{fileName}({method}:{line})]");
                 Console.Write($"[{dt:yyyymmdd HH:mm:ss.ffffff}]\t");
                 Console.BackgroundColor = ConsoleColor.DarkGray;
                 Console.Write($"{enumLogLevel}");
-                SetConsoleColor(PrintLogLevel);
+                SetConsoleColor(enumLogLevel);
                 Console.Write($"\t");
                 foreach (var obj in o)
                 {

@@ -106,12 +106,12 @@ namespace Shawn.Utils.Wpf.Image
         /// <returns></returns>
         public static BitmapSource? GetIcon(string path = "", bool? isDir = null, bool? isFile = null)
         {
-            if (isDir == true || Directory.Exists(path))
+            if (isDir != false && Directory.Exists(path))
             {
                 return GetThumbnailFromShell(path, ShellGetFileInfoFlags.LargeIcon);
             }
 
-            if (isFile == true || File.Exists(path))
+            if (isFile != false && File.Exists(path))
             {
                 return GetFileIcon(path);
             }
@@ -124,12 +124,12 @@ namespace Shawn.Utils.Wpf.Image
                     if (Directory.Exists(tmpPath) == false)
                         Directory.CreateDirectory(tmpPath);
                 }
-                else if (isFile == true)
+                else if (isDir == null || isFile == true)
                 {
                     if (path == ".*")
                         path = "";
                     if (path.StartsWith("."))
-                        tmpPath = Path.Combine(tmpPath, path);
+                        tmpPath = tmpPath + path;
                     if (Directory.Exists(tmpPath))
                     {
                         Directory.Delete(tmpPath, true);

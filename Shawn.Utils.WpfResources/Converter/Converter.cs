@@ -103,6 +103,26 @@ namespace Shawn.Utils.WpfResources.Converter
         #endregion IValueConverter 成员
     }
 
+    public class IntAdd : IValueConverter
+    {
+        public double AddValue { get; set; } = 1;
+
+        #region IValueConverter 成员
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int v = (int)value;
+            return v + AddValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+
+        #endregion IValueConverter 成员
+    }
+
     public class ConverterBool2Visible : IValueConverter
     {
         #region IValueConverter 成员

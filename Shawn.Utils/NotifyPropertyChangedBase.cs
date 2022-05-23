@@ -12,8 +12,15 @@ namespace Shawn.Utils
         public object? Arg { get; }
     }
 
+    public interface INotifyPropertyChangedBase
+    {
+        public void SetNotifyPropertyChangedEnabled(bool isEnabled);
+        public void RaisePropertyChanged([CallerMemberName] string? propertyName = null, object? arg = null);
+        public bool SetAndNotifyIfChangedWithArg<T>(ref T oldValue, T newValue, object arg, [CallerMemberName] string? propertyName = null);
+    }
 
-    public class NotifyPropertyChangedBase : INotifyPropertyChanged
+
+    public class NotifyPropertyChangedBase : INotifyPropertyChanged, INotifyPropertyChangedBase
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -51,7 +58,7 @@ namespace Shawn.Utils
 
 
 
-        protected virtual bool SetAndNotifyIfChangedWithArg<T>(ref T oldValue, T newValue, object arg, [CallerMemberName] string? propertyName = null)
+        public virtual bool SetAndNotifyIfChangedWithArg<T>(ref T oldValue, T newValue, object arg, [CallerMemberName] string? propertyName = null)
         {
             return SetAndNotifyIfChanged(propertyName, ref oldValue, newValue, arg);
         }

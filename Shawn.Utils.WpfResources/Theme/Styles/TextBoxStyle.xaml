@@ -42,15 +42,28 @@
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}"/>
 
-                        <TextBlock Text="{TemplateBinding Tag}" Background="{TemplateBinding Background}" VerticalAlignment="Center" Margin="{TemplateBinding Padding}">
+                        <TextBlock Text="{TemplateBinding Tag}" Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="Opacity" Value="0.4"/>
                                     <Setter Property="Foreground" Value="Transparent"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
                                             <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TextBox}, Path=Foreground}"/>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=AcceptsReturn, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+                                            <Setter Property="VerticalAlignment" Value="Top"/>
+                                        </DataTrigger>
+                                        <!--<MultiTrigger>
+                                            <MultiTrigger.Conditions>
+                                                <Condition Property="TextWrapping" Value="Wrap"></Condition>
+                                                <Condition Property="AcceptsReturn" Value="True"></Condition>
+                                            </MultiTrigger.Conditions>
+                                            <MultiTrigger.Setters>
+                                                <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TextBox}, Path=Foreground}"/>
+                                            </MultiTrigger.Setters>
+                                        </MultiTrigger>-->
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>

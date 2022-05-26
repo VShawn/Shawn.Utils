@@ -6,6 +6,9 @@ using System.Runtime.InteropServices;
 namespace Shawn.Utils.Wpf.FileSystem
 {
     // https://social.msdn.microsoft.com/Forums/vstudio/en-US/98d15984-12d9-47d1-a14d-6e887bf88333/how-to-get-quick-access-folder-path-in-windows-10-using-clsid-in-c-wpf-?forum=csharpgeneral
+    /// <summary>
+    /// 支持访问 win10 的快速访问文件夹
+    /// </summary>
     public class QuickAccessFolder
     {
         #region Declarations

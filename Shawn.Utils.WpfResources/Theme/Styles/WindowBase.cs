@@ -126,5 +126,11 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
         {
             this.WindowState = WindowState.Minimized;
         }
+        protected WindowBase()
+        {
+#if DEBUG
+            SimpleLogHelper.Debug($"{this.GetType().Name} init");
+#endif
+        }
     }
 }

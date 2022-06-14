@@ -323,6 +323,8 @@ namespace Shawn.Utils
         private string GetLogLevelString(SimpleLogHelper.EnumLogLevel enumLogLevel, SimpleLogHelper.EnumLogFileType type)
         {
             string levelString = enumLogLevel.ToString();
+            if (type == SimpleLogHelper.EnumLogFileType.MarkDown)
+                levelString = $"`{levelString}`";
             //if (type == SimpleLogHelper.EnumLogFileType.MarkDown)
             //{
             //    levelString = enumLogLevel switch
@@ -371,12 +373,17 @@ namespace Shawn.Utils
             {
                 dt ??= DateTime.Now;
                 SetConsoleColor(enumLogLevel);
-                Console.WriteLine($"\r\n[T:{threadId:D3}][{fileName}({method}:{line})]");
-                Console.Write($"[{dt:yyyymmdd HH:mm:ss.ffffff}]\t");
+                Console.Write($"[T:{threadId:D3}][{dt:HH:mm:ss.fff}]\t");
                 Console.BackgroundColor = ConsoleColor.DarkGray;
                 Console.Write($"{enumLogLevel}");
                 SetConsoleColor(enumLogLevel);
                 Console.Write($"\t");
+
+                if (enumLogLevel >= SimpleLogHelper.EnumLogLevel.Warning)
+                {
+                    Console.Write($"[{fileName}({method}:{line})]\t");
+                }
+
                 foreach (var obj in o)
                 {
                     Console.WriteLine(obj);
@@ -422,30 +429,44 @@ namespace Shawn.Utils
                         prefix = "> ";
 
                     using var sw = new StreamWriter(new FileStream(logFileName, FileMode.Append), Encoding.UTF8);
-                    sw.WriteLine($"{dt:yyyymmdd HH:mm:ss.ffffff}[T:{threadId:D3}][{fileName}({method}:{line})]\t\t{levelString}");
-                    foreach (var obj in o)
+
+                    sw.Write($"[T:{threadId:D3}][{dt:HH:mm:ss.fff}]\t{levelString}\t\t");
+                    if (enumLogLevel >= SimpleLogHelper.EnumLogLevel.Warning)
                     {
-                        if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
-                            sw.Write(prefix);
-                        sw.WriteLine(obj);
-                        if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
-                            sw.WriteLine();
-                        if (o[0] is Exception e)
+                        sw.Write($"[{fileName}({method}:{line})]\t");
+                    }
+
+                    if (o.Length == 1 && o[0] is string msg)
+                    {
+                        sw.WriteLine(msg);
+                    }
+                    else
+                    {
+                        sw.WriteLine();
+                        foreach (var obj in o)
                         {
-                            sw.WriteLine(prefix + e.StackTrace);
+                            sw.Write(prefix);
+                            sw.WriteLine(obj);
                             if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
                                 sw.WriteLine();
-                            if (e.InnerException != null)
+                            if (o[0] is Exception e)
                             {
-                                sw.WriteLine(prefix + e.InnerException.Message);
+                                sw.WriteLine(prefix + "StackTrace: " + e.StackTrace);
                                 if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
                                     sw.WriteLine();
-                                sw.WriteLine(prefix + e.InnerException.StackTrace);
-                                if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
-                                    sw.WriteLine();
+                                if (e.InnerException != null)
+                                {
+                                    sw.WriteLine(prefix + "InnerException: " + e.InnerException.Message);
+                                    if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
+                                        sw.WriteLine();
+                                    sw.WriteLine(prefix + "Inner StackTrace: " + e.InnerException.StackTrace);
+                                    if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
+                                        sw.WriteLine();
+                                }
                             }
                         }
                     }
+
                     if (LogFileType == SimpleLogHelper.EnumLogFileType.MarkDown)
                         sw.WriteLine();
                 }

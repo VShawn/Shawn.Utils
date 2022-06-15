@@ -64,7 +64,7 @@ namespace Shawn.Utils.Wpf.PageHost
             _oldPage = _newPage;
             _newPage = newPage;
 
-            Dispatcher.Invoke((Action)delegate
+            Dispatcher.Invoke(delegate
             {
                 NewPageHost.Content = null;
                 OldPageHost.Content = null;

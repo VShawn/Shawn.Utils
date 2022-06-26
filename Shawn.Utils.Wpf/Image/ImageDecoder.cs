@@ -114,17 +114,23 @@ namespace Shawn.Utils.Wpf.Image
             Large,
             ExtraLarge
         }
+
+        private static readonly object LockerGetThumbnailFromWinApi = new object();
         public static BitmapImage GetThumbnailFromWinApi(string filePath, ThumbnailSize size = ThumbnailSize.Medium)
         {
-            var shellFile = Microsoft.WindowsAPICodePack.Shell.ShellFile.FromFilePath(filePath);
-            return size switch
+            // 这里必须锁住，不然多线程同时读取缩略图会无错误崩溃，原因不明
+            lock (LockerGetThumbnailFromWinApi)
             {
-                ThumbnailSize.Small => shellFile.Thumbnail.SmallBitmap.ToBitmapImage(),
-                ThumbnailSize.Medium => shellFile.Thumbnail.MediumBitmap.ToBitmapImage(),
-                ThumbnailSize.Large => shellFile.Thumbnail.LargeBitmap.ToBitmapImage(),
-                ThumbnailSize.ExtraLarge => shellFile.Thumbnail.ExtraLargeBitmap.ToBitmapImage(),
-                _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
-            };
+                var shellFile = Microsoft.WindowsAPICodePack.Shell.ShellFile.FromFilePath(filePath);
+                return size switch
+                {
+                    ThumbnailSize.Small => shellFile.Thumbnail.SmallBitmap.ToBitmapImage(),
+                    ThumbnailSize.Medium => shellFile.Thumbnail.MediumBitmap.ToBitmapImage(),
+                    ThumbnailSize.Large => shellFile.Thumbnail.LargeBitmap.ToBitmapImage(),
+                    ThumbnailSize.ExtraLarge => shellFile.Thumbnail.ExtraLargeBitmap.ToBitmapImage(),
+                    _ => throw new ArgumentOutOfRangeException(nameof(size), size, null)
+                }; 
+            }
         }
 
         public static async Task<BitmapImage> GetThumbnailFromWinApiAsync(string filePath, ThumbnailSize size = ThumbnailSize.Medium)

@@ -158,7 +158,7 @@ namespace Shawn.Utils.Wpf.Image
             if (File.Exists(path))
             {
                 var icon = System.Drawing.Icon.ExtractAssociatedIcon(path);
-                var bmp = icon?.ToBitmap()?.ToBitmapSource();
+                var bmp = icon?.ToBitmap()?.ToBitmapImage();
                 return bmp;
             }
             return null;

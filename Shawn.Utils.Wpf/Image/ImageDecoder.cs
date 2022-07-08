@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
@@ -10,6 +11,68 @@ namespace Shawn.Utils.Wpf.Image
 {
     public static class ImageDecoder
     {
+
+        #region Bitmap
+#if NETFRAMEWORK
+        public static async Task<Bitmap?> GetBitmapAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        {
+            var imageBytes = File.ReadAllBytes(filePath);
+            if (imageBytes.Length == 0)
+            {
+                SimpleLogHelper.Warning($"{filePath} read 0 byte");
+                return null;
+            }
+            return await GetBitmapAsync(imageBytes, decodePixelWidth, decodePixelHeight);
+        }
+#else
+        public static async Task<Bitmap?> GetBitmapAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        {
+            var imageBytes = await File.ReadAllBytesAsync(filePath);
+            if (imageBytes.Length == 0)
+            {
+                SimpleLogHelper.Warning($"{filePath} read 0 byte");
+                return null;
+            }
+            return await GetBitmapAsync(imageBytes, decodePixelWidth, decodePixelHeight);
+        }
+#endif
+
+        public static async Task<Bitmap?> GetBitmapAsync(byte[] imageBytes, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        {
+            var ret = await Task.Run(() => GetBitmap(imageBytes, decodePixelWidth, decodePixelHeight));
+            return ret;
+        }
+
+        public static Bitmap? GetBitmap(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        {
+            SimpleLogHelper.Debug($"GetBitmap '{filePath}', decode({decodePixelWidth}, {decodePixelHeight})");
+            var imageBytes = File.ReadAllBytes(filePath);
+            return GetBitmap(imageBytes, decodePixelWidth, decodePixelHeight);
+        }
+
+        public static Bitmap? GetBitmap(byte[] imageBytes, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        {
+            if (imageBytes?.Length > 0)
+            {
+                try
+                {
+                    var ms = new MemoryStream(imageBytes);
+                    var bm = Bitmap.FromStream(ms).ToBitmap();
+                    return bm;
+                }
+                catch (Exception e)
+                {
+                    SimpleLogHelper.Error(e);
+                }
+            }
+            return null;
+        }
+
+
+        #endregion
+
+
+        #region BitmapSource
 #if NETFRAMEWORK
         public static async Task<BitmapSource?> GetBitmapSourceAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
         {
@@ -72,6 +135,73 @@ namespace Shawn.Utils.Wpf.Image
             }
             return null;
         }
+
+
+        #endregion
+
+
+
+        #region Image
+
+
+#if NETFRAMEWORK
+        public static async Task<System.Drawing.Image?> GetImageAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
+        {
+            var imageBytes = File.ReadAllBytes(filePath);
+            if (imageBytes.Length == 0)
+            {
+                SimpleLogHelper.Warning($"{filePath} read 0 byte");
+                return null;
+            }
+            return await GetImageAsync(filePath);
+        }
+#else
+        public static async Task<System.Drawing.Image?> GetImageAsync(string filePath)
+        {
+            var imageBytes = await File.ReadAllBytesAsync(filePath);
+            if (imageBytes.Length == 0)
+            {
+                SimpleLogHelper.Warning($"{filePath} read 0 byte");
+                return null;
+            }
+            return await GetImageAsync(imageBytes);
+        }
+#endif
+        public static async Task<System.Drawing.Image?> GetImageAsync(byte[] imageBytes)
+        {
+            var ret = await Task.Run(() => GetImage(imageBytes));
+            return ret;
+        }
+        public static System.Drawing.Image? GetImage(string filePath)
+        {
+            var imageBytes = File.ReadAllBytes(filePath);
+            return GetImage(imageBytes);
+        }
+        public static System.Drawing.Image? GetImage(byte[] imageBytes)
+        {
+            if (imageBytes?.Length > 0)
+            {
+                try
+                {
+                    var ms = new MemoryStream(imageBytes);
+                    var img = System.Drawing.Image.FromStream(ms);
+                    return img;
+                }
+                catch (Exception e)
+                {
+                    SimpleLogHelper.Error(e);
+                }
+            }
+            return null;
+        }
+
+
+
+
+        #endregion
+
+
+
 
         public static async Task<BitmapMetadata?> GetImageMetaDataAsync(byte[] imageBytes)
         {

@@ -246,11 +246,13 @@ namespace Shawn.Utils.Wpf.Image
         }
 
         private static readonly object LockerGetThumbnailFromWinApi = new object();
-        public static BitmapImage GetThumbnailFromWinApi(string filePath, ThumbnailSize size = ThumbnailSize.Medium)
+        public static BitmapImage? GetThumbnailFromWinApi(string filePath, ThumbnailSize size = ThumbnailSize.Medium)
         {
             // 这里必须锁住，不然多线程同时读取缩略图会无错误崩溃，原因不明
             lock (LockerGetThumbnailFromWinApi)
             {
+                if (File.Exists(filePath) == false)
+                    return null;
                 var shellFile = Microsoft.WindowsAPICodePack.Shell.ShellFile.FromFilePath(filePath);
                 return size switch
                 {
@@ -263,7 +265,7 @@ namespace Shawn.Utils.Wpf.Image
             }
         }
 
-        public static async Task<BitmapImage> GetThumbnailFromWinApiAsync(string filePath, ThumbnailSize size = ThumbnailSize.Medium)
+        public static async Task<BitmapImage?> GetThumbnailFromWinApiAsync(string filePath, ThumbnailSize size = ThumbnailSize.Medium)
         {
             var ret = await Task.Run(() => GetThumbnailFromWinApi(filePath, size));
             return ret;

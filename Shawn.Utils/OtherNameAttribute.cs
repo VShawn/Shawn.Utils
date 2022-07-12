@@ -22,9 +22,9 @@ namespace Shawn.Utils
         //    return null;
         //}
 
-        public static string Replace<T>(T obj, string template)
+        public static string Replace<T>(T obj, string template) where T : class
         {
-            var t = obj!.GetType();
+            var t = obj.GetType();
             var properties = t.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var p in properties)
             {

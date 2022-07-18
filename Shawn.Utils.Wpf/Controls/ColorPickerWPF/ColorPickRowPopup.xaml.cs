@@ -121,7 +121,7 @@ namespace ColorPickerWPF
                     ColorDisplayGrid.Background = ColorPickerControl4Popup.ChessboardBrush(2);
                     SetValue(ColorProperty, null);
                     SetValue(HexColorProperty, null);
-                    Console.WriteLine(e);
+                    SimpleLogHelper.Error(e);
                 }
             }
         }

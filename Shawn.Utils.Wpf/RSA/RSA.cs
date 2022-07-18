@@ -2,6 +2,8 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Shawn.Utils;
+
 # nullable disable
 namespace com.github.xiangyuecn.rsacsharp {
 	/// <summary>
@@ -237,7 +239,7 @@ namespace com.github.xiangyuecn.rsacsharp {
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                SimpleLogHelper.Error(e);
                 if (isPrivateKey)
                     return EnumRsaStatus.PrivateKeyFormatError;
                 else
@@ -279,7 +281,7 @@ namespace com.github.xiangyuecn.rsacsharp {
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                SimpleLogHelper.Error(e);
             }
 			return EnumRsaStatus.PrivateAndPublicMismatch;
         }

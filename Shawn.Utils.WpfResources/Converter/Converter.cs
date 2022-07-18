@@ -257,7 +257,7 @@ namespace Shawn.Utils.WpfResources.Converter
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                SimpleLogHelper.Error(e);
                 return 12;
             }
         }

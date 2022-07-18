@@ -127,7 +127,7 @@ namespace Shawn.Utils.Wpf
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                SimpleLogHelper.Error(e);
                 throw;
             }
         }

@@ -24,6 +24,19 @@ namespace Shawn.Utils.Wpf.Controls
             return sender.GetValue(MouseMiddleDownProperty) as ICommand;
         }
 
+        public static readonly DependencyProperty MouseMiddleDownParameterProperty =
+            DependencyProperty.RegisterAttached("MouseMiddleDownParameter", typeof(object), typeof(MouseMiddleClick), new PropertyMetadata(null));
+
+        public static void SetMouseMiddleDownParameter(DependencyObject sender, ICommand value)
+        {
+            sender.SetValue(MouseMiddleDownParameterProperty, value);
+        }
+
+        public static object? GetMouseMiddleDownParameter(DependencyObject sender)
+        {
+            return sender.GetValue(MouseMiddleDownParameterProperty);
+        }
+
         private static void MouseMiddleDownPropertySetCallBack(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if (sender is UIElement element)
@@ -43,20 +56,21 @@ namespace Shawn.Utils.Wpf.Controls
         {
             if (e.MiddleButton != MouseButtonState.Pressed) return;
             var element = sender as UIElement;
+            var parameter = element?.GetValue(MouseMiddleDownParameterProperty);
             if (element?.GetValue(MouseMiddleDownProperty) is ICommand cmd)
             {
                 if (cmd is RoutedCommand routedCmd)
                 {
-                    if (routedCmd.CanExecute(element, element))
+                    if (routedCmd.CanExecute(parameter, element))
                     {
-                        routedCmd.Execute(element, element);
+                        routedCmd.Execute(parameter, element);
                     }
                 }
                 else
                 {
-                    if (cmd.CanExecute(element))
+                    if (cmd.CanExecute(parameter))
                     {
-                        cmd.Execute(element);
+                        cmd.Execute(parameter);
                     }
                 }
             }

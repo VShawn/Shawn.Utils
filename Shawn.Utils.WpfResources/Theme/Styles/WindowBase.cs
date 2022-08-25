@@ -77,16 +77,21 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
             }
         }
 
-        public virtual void WinTitleBar_OnMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            _isLeftMouseDown = false;
-            _isDragging = false;
-        }
+        public Action? OnDragEnd = null;
 
         public virtual void WinTitleBar_OnPreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            if (e.LeftButton != MouseButtonState.Pressed && _isDragging)
+            {
+                _isDragging = false;
+                OnDragEnd?.Invoke();
+                SimpleLogHelper.Debug("OnDragEnd?.Invoke();");
+                return;
+            }
             if (e.LeftButton != MouseButtonState.Pressed || !_isDragging)
             {
+                _isLeftMouseDown = false;
+                //SimpleLogHelper.Debug("_isLeftMouseDown = false");
                 return;
             }
 

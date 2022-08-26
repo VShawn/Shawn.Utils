@@ -45,35 +45,25 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
 
         #region DragMove
 
-        protected bool _isLeftMouseDown = false;
         protected bool _isDragging = false;
-
+        private Point _mousePosition = new Point(-1, -1);
         public virtual void WinTitleBar_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             _isDragging = false;
-            _isLeftMouseDown = false;
             if (e.LeftButton != MouseButtonState.Pressed)
             {
+                SimpleLogHelper.Debug("e.LeftButton != MouseButtonState.Pressed");
                 return;
             }
 
             if (e.ClickCount == 2)
             {
                 this.WindowState = (this.WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
+                _mousePosition = new Point(-1, -1);
             }
             else
             {
-                _isLeftMouseDown = true;
-                var th = new Thread(() =>
-                {
-                    Thread.Sleep(50);
-                    if (_isLeftMouseDown)
-                    {
-                        _isDragging = true;
-                    }
-                    _isLeftMouseDown = false;
-                });
-                th.Start();
+                _mousePosition = e.GetPosition(this);
             }
         }
 
@@ -81,39 +71,46 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
 
         public virtual void WinTitleBar_OnPreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if (e.LeftButton != MouseButtonState.Pressed && _isDragging)
+            if (e.LeftButton != MouseButtonState.Pressed)
             {
-                _isDragging = false;
-                OnDragEnd?.Invoke();
-                SimpleLogHelper.Debug("OnDragEnd?.Invoke();");
-                return;
-            }
-            if (e.LeftButton != MouseButtonState.Pressed || !_isDragging)
-            {
-                _isLeftMouseDown = false;
-                //SimpleLogHelper.Debug("_isLeftMouseDown = false");
+                if (_isDragging)
+                {
+                    _isDragging = false;
+                    OnDragEnd?.Invoke();
+                    SimpleLogHelper.Debug("OnDragEnd?.Invoke();");
+                }
                 return;
             }
 
-            if (this.WindowState == WindowState.Maximized)
+            var cmp = e.GetPosition(this);
+            if (Math.Abs(cmp.X - _mousePosition.X) > 2 || Math.Abs(cmp.Y - _mousePosition.Y) > 2)
             {
-                var p = ScreenInfoEx.GetMouseVirtualPosition();
-                var top = p.Y;
-                var left = p.X;
-                this.Top = top - 15;
-                this.Left = left - this.Width / 2;
-                this.WindowState = WindowState.Normal;
-                this.Top = top - 15;
-                this.Left = left - this.Width / 2;
+                _isDragging = true;
             }
 
-            try
+
+            if (_isDragging)
             {
-                this.DragMove();
-            }
-            catch
-            {
-                // ignored
+                if (this.WindowState == WindowState.Maximized)
+                {
+                    var p = ScreenInfoEx.GetMouseVirtualPosition();
+                    var top = p.Y;
+                    var left = p.X;
+                    this.Top = top - 15;
+                    this.Left = left - this.Width / 2;
+                    this.WindowState = WindowState.Normal;
+                    this.Top = top - 15;
+                    this.Left = left - this.Width / 2;
+                }
+
+                try
+                {
+                    this.DragMove();
+                }
+                catch
+                {
+                    // ignored
+                }
             }
         }
 

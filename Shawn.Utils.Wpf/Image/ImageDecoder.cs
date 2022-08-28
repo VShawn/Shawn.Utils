@@ -87,6 +87,8 @@ namespace Shawn.Utils.Wpf.Image
 #else
         public static async Task<BitmapSource?> GetBitmapSourceAsync(string filePath, int decodePixelWidth = 0, int decodePixelHeight = 0)
         {
+            if (File.Exists(filePath) == false)
+                return null;
             var imageBytes = await File.ReadAllBytesAsync(filePath);
             if (imageBytes.Length == 0)
             {

@@ -36,7 +36,9 @@ namespace Shawn.Utils.Wpf.FileSystem
             if (title != null)
                 dlg.Title = title;
             if (selectedFileName != null)
+            {
                 dlg.FileName = selectedFileName;
+            }
 
             if (dlg.ShowDialog() != true) return null;
 

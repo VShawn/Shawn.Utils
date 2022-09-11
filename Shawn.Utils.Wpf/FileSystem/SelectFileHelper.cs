@@ -12,7 +12,7 @@ namespace Shawn.Utils.Wpf.FileSystem
         /// <param name="title"></param>
         /// <param name="selectedFileName"></param>
         /// <param name="initialDirectory"></param>
-        /// <param name="filter">e.g. txt files (*.txt)|*.txt|All files (*.*)|*.*</param>
+        /// <param name="filter">e.g. JPG (*.jpg,*.jpeg)|*.jpg;*.jpeg|txt files (*.txt)|*.txt|All files (*.*)|*.*</param>
         /// <param name="currentDirectoryForShowingRelativePath"></param>
         /// <param name="filterIndex">default filter index when filter have multiple values</param>
         /// <param name="checkFileExists"></param>

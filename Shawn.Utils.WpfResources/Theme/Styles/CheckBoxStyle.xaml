@@ -25,7 +25,8 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Grid Height="18" Width="18">
+                        <Grid Height="18" Width="18"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" >
                             <Border Name="BorderForBackground" 
                                 SnapsToDevicePixels="True"
                                 Background="{TemplateBinding Background}"

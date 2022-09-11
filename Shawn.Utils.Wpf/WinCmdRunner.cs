@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
 
 namespace Shawn.Utils.Wpf
 {
@@ -8,18 +10,19 @@ namespace Shawn.Utils.Wpf
         /// cmd by cmd.exe
         /// </summary>
         /// <returns>[0] = output info，[1] = ret code</returns>
-        public static string[] RunCmdSync(string cmd, bool createNoWindow = false)
+        public static string[] RunCmdSync(string cmd, bool isHideWindow = false)
         {
             var pro = new Process
             {
                 StartInfo =
                 {
                     FileName = "cmd.exe",
-                    UseShellExecute = false,
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
-                    CreateNoWindow = createNoWindow
+                    WindowStyle = isHideWindow ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal,
+                    UseShellExecute = !isHideWindow,
+                    CreateNoWindow = isHideWindow,
                 }
             };
             //pro.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -44,27 +47,60 @@ namespace Shawn.Utils.Wpf
         /// <summary>
         /// cmd by cmd.exe
         /// </summary>
-        public static void RunCmdAsync(string cmd, bool createNoWindow = false)
+        public static void RunCmdAsync(string cmd, bool isHideWindow = false)
         {
             var pro = new Process
             {
                 StartInfo =
                 {
                     FileName = "cmd.exe",
-                    UseShellExecute = false,
                     RedirectStandardError = true,
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
-                    CreateNoWindow = createNoWindow
+                    WindowStyle = isHideWindow ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal,
+                    UseShellExecute = !isHideWindow,
+                    CreateNoWindow = isHideWindow,
                 }
             };
             pro.Start();
             pro.StandardInput.WriteLine(cmd);
+            pro.StandardInput.WriteLine("---------------split_line---------------");// add a symble for exit code
+            pro.StandardInput.WriteLine("exit");// add a symble for exit code
         }
 
-        public static void RunExeAsync(string cmd, bool createNoWindow = false)
+        public static void RunExe(string filePath, string arguments = "", bool isAsync = false, bool isHideWindow = false)
         {
-            Process.Start(cmd);
+            var pro = new Process
+            {
+                StartInfo =
+                {
+                    FileName = filePath,
+                    Arguments = arguments,
+                    WindowStyle = isHideWindow ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal,
+                    UseShellExecute = !isHideWindow,
+                    CreateNoWindow = isHideWindow,
+                }
+            };
+
+            pro.Start();
+            if (isAsync == false)
+            {
+                pro.WaitForExit();
+            }
+        }
+
+
+        public static void RunScriptFile(string filePath, bool isAsync = false, bool isHideWindow = false)
+        {
+            if (File.Exists(filePath) == false)
+                throw new MissingFieldException($"{filePath} not found!");
+            var ext = Path.GetExtension(filePath).ToLower();
+            if (ext == ".py")
+            {
+                RunExe("python", filePath, isAsync: isAsync, isHideWindow: isHideWindow);
+                return;
+            }
+            RunExe(filePath, isAsync: isAsync, isHideWindow: isHideWindow);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -68,7 +69,7 @@ namespace Shawn.Utils.Wpf
             pro.StandardInput.WriteLine("exit");// add a symble for exit code
         }
 
-        public static void RunExe(string filePath, string arguments = "", bool isAsync = false, bool isHideWindow = false)
+        public static void RunFile(string filePath, string arguments = "", bool isAsync = false, bool isHideWindow = false)
         {
             var pro = new Process
             {
@@ -89,18 +90,46 @@ namespace Shawn.Utils.Wpf
             }
         }
 
-
-        public static void RunScriptFile(string filePath, bool isAsync = false, bool isHideWindow = false)
+        public static Tuple<string, string> DisassembleOneLineScriptCmd(string cmd)
         {
-            if (File.Exists(filePath) == false)
-                throw new MissingFieldException($"{filePath} not found!");
-            var ext = Path.GetExtension(filePath).ToLower();
-            if (ext == ".py")
+            var parameters = "";
+            cmd = cmd.Trim();
+            var file = cmd;
+            if (File.Exists(file))
             {
-                RunExe("python", filePath, isAsync: isAsync, isHideWindow: isHideWindow);
-                return;
             }
-            RunExe(filePath, isAsync: isAsync, isHideWindow: isHideWindow);
+            else if (cmd.StartsWith(@""""))
+            {
+                var i = cmd.IndexOf('"', 1);
+                file = cmd.Substring(1, i - 1).Trim();
+                parameters  = cmd.Substring(i + 1).Trim();
+            }
+            else if(cmd.IndexOf(" ", StringComparison.Ordinal) > 0)
+            {
+                var s = cmd.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                var st = new Queue<string>(s);
+                var filePath = st.Dequeue();
+                while (st.Count > 0)
+                {
+                    if (File.Exists(filePath))
+                    {
+                        file = filePath;
+                        parameters = string.Join(" ", st);
+                        break;
+                    }
+                    filePath += " " + st.Dequeue();
+                }
+            }
+            if (File.Exists(file))
+            {
+                var ext = Path.GetExtension(file).ToLower();
+                if (ext == ".py")
+                {
+                    parameters = file + " " + parameters;
+                    file = "python";
+                }
+            }
+            return new Tuple<string, string>(file, parameters);
         }
     }
 }

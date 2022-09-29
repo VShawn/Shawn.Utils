@@ -90,6 +90,11 @@ namespace Shawn.Utils.Wpf
             }
         }
 
+        /// <summary>
+        /// 解析单行命令中 exe 路径存在的空格或引号包裹的 "EXE 路径"，返回 EXE 路径 + 参数
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
         public static Tuple<string, string> DisassembleOneLineScriptCmd(string cmd)
         {
             var parameters = "";
@@ -130,6 +135,31 @@ namespace Shawn.Utils.Wpf
                 }
             }
             return new Tuple<string, string>(file, parameters);
+        }
+
+        public static Tuple<bool, string> CheckFileExistsAndFullName(string fileName)
+        {
+            if (Path.IsPathRooted(fileName))
+            {
+                return new Tuple<bool, string>(File.Exists(fileName), Path.GetFullPath(fileName));
+            }
+
+            if (File.Exists(fileName))
+            {
+                return new Tuple<bool, string>(true, Path.GetFullPath(fileName));
+            }
+
+            var file = Environment.ExpandEnvironmentVariables(fileName);
+            if (Path.GetDirectoryName(file) == string.Empty)
+            {
+                foreach (string test in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';'))
+                {
+                    string path = test.Trim();
+                    if (!string.IsNullOrEmpty(path) && File.Exists(path = Path.Combine(path, file)))
+                        return new Tuple<bool, string>(true, Path.GetFullPath(path));
+                }
+            }
+            return new Tuple<bool, string>(false, Path.GetFullPath(fileName));
         }
     }
 }

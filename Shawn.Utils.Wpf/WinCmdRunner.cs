@@ -139,6 +139,21 @@ namespace Shawn.Utils.Wpf
 
         public static Tuple<bool, string> CheckFileExistsAndFullName(string fileName)
         {
+            // 判断是否有环境变量
+            var splitByPercent = $"_{fileName}_".Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
+            if (splitByPercent.Length > 2)
+            {
+                for (int i = 1; i < splitByPercent.Length - 1; i++)
+                {
+                    var tmp = Environment.GetEnvironmentVariable(splitByPercent[i]);
+                    if (string.IsNullOrEmpty(tmp) == false)
+                    {
+                        fileName = fileName.Replace($"%{splitByPercent[i]}%", tmp);
+                    }
+                }
+            }
+
+
             if (Path.IsPathRooted(fileName))
             {
                 return new Tuple<bool, string>(File.Exists(fileName), Path.GetFullPath(fileName));

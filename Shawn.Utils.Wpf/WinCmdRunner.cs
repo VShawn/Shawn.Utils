@@ -152,10 +152,11 @@ namespace Shawn.Utils.Wpf
             var file = Environment.ExpandEnvironmentVariables(fileName);
             if (Path.GetDirectoryName(file) == string.Empty)
             {
-                foreach (string test in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';'))
+                var paths = (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';');
+                foreach (string test in paths)
                 {
-                    string path = test.Trim();
-                    if (!string.IsNullOrEmpty(path) && File.Exists(path = Path.Combine(path, file)))
+                    string path = Path.Combine(test.Trim(), file);
+                    if (File.Exists(path))
                         return new Tuple<bool, string>(true, Path.GetFullPath(path));
                 }
             }

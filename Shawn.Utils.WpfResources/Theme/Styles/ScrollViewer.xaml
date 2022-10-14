@@ -286,6 +286,13 @@
     <Style TargetType="ScrollViewer" BasedOn="{StaticResource ScrollViewBackgroundInvertStyle}">
     </Style>
 
+
+
+    <Style TargetType="ScrollBar" BasedOn="{StaticResource ScrollBarBaseStyle}">
+        <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource BackgroundTextBrush}"/>
+        <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource BackgroundTextBrush}"/>
+    </Style>
+
     <Style x:Key="ScrollBarMiniStyle" TargetType="{x:Type ScrollBar}" BasedOn="{StaticResource ScrollBarBaseStyle}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Template">

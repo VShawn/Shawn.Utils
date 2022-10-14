@@ -22,6 +22,8 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource BackgroundTextBrush}" />
+        <Setter Property="TextBlock.Foreground" Value="{DynamicResource BackgroundTextBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"/>
         <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
         <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource PrimaryTextBrush}"/>

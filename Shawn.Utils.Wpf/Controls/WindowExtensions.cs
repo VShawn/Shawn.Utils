@@ -52,12 +52,13 @@ namespace Shawn.Utils.Wpf.Controls
 
         public static void FlashIfNotActive(this Window win, UInt32 count = UInt32.MaxValue, UInt32 interval = 500)
         {
-            //Don't flash if the window is active
-            win.Dispatcher.Invoke(() =>
-            {
-                if (win.IsActive) return;
-                Flash(win, count, interval);
-            });
+            if (win.IsLoaded)
+                //Don't flash if the window is active
+                win.Dispatcher.Invoke(() =>
+                {
+                    if (win.IsActive) return;
+                    Flash(win, count, interval);
+                });
         }
 
         public static void StopFlashingWindow(this Window win)

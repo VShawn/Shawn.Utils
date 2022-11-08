@@ -116,6 +116,14 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
 
         #endregion DragMove
 
+        public bool IsClosed { get; private set; }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            IsClosed = true;
+        }
+
         public virtual void WinTitleBar_OnCloseButtonDown(object s, RoutedEventArgs e)
         {
             this.Close();

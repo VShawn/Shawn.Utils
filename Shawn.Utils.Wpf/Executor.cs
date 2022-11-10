@@ -20,7 +20,7 @@ namespace Shawn.Utils.Wpf
                     {
                         if (dispatcher.CheckAccess())
                             action();
-                        else 
+                        else
                             dispatcher.BeginInvoke(action);
                     };
                 }
@@ -31,7 +31,8 @@ namespace Shawn.Utils.Wpf
         {
             InitExecutor();
             Debug.Assert(_executor != null);
-            _executor(action);
+            if (_executor != null)
+                _executor(action);
         }
 
         public static Exception? TryCatch(this System.Action action)
@@ -53,7 +54,8 @@ namespace Shawn.Utils.Wpf
             Debug.Assert(_executor != null);
             try
             {
-                _executor(action);
+                if (_executor != null)
+                    _executor(action);
             }
             catch (Exception e)
             {

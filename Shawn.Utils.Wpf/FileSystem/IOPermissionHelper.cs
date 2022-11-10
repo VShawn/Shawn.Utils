@@ -115,7 +115,10 @@ namespace Shawn.Utils.Wpf.FileSystem
                 }
                 else
                 {
-                    return HasWritePermissionOnDir(fi.Directory.FullName);
+                    if (fi.Directory != null)
+                        return HasWritePermissionOnDir(fi.Directory.FullName);
+                    else
+                        return false;
                 }
 #else
                 if (fi.Exists)

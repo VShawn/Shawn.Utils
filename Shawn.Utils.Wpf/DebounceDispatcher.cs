@@ -21,7 +21,7 @@ namespace Shawn.Utils.Wpf
     {
         private DispatcherTimer? _timer;
 
-        public void Debounce(int interval, Action<object> action,
+        public void Debounce(int interval, Action<object?> action,
             object? actionParameter = null,
             DispatcherPriority priority = DispatcherPriority.ApplicationIdle,
             Dispatcher? dispatcher = null)

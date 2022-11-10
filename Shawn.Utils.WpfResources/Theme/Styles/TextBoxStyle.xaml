@@ -187,26 +187,26 @@
 
                                 <Grid Grid.Column="0" Margin="{TemplateBinding Padding}">
                                     <TextBox x:Name="PART_DecryptPassword" Grid.Column="0" Style="{x:Null}"
-                                        IsTabStop="True" Focusable="False"
-                                        Padding="0"
-                                        Foreground="{TemplateBinding Foreground}"
-                                        Background="{TemplateBinding Background}"
-                                        HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                                        BorderBrush="Transparent" BorderThickness="0"
-                                        Visibility="Collapsed" IsHitTestVisible="False"
-                                        Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.Password), RelativeSource={RelativeSource TemplatedParent}}"
-                                        FontSize="{TemplateBinding FontSize}"/>
+                                             IsTabStop="True" Focusable="False"
+                                             Padding="0"
+                                             Foreground="{TemplateBinding Foreground}"
+                                             Background="{TemplateBinding Background}"
+                                             HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                             BorderBrush="Transparent" BorderThickness="0"
+                                             Visibility="Collapsed" IsHitTestVisible="False"
+                                             Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.Password), RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"
+                                             FontSize="{TemplateBinding FontSize}"/>
                                 </Grid>
 
 
                                 <TextBlock x:Name="PART_PlaceHolder" Grid.Column="0" Foreground="{DynamicResource BackgroundTextBrush}"
-                                    IsHitTestVisible="False" Margin="{TemplateBinding Padding}"
-                                    HorizontalAlignment="Left" VerticalAlignment="Center"
-                                    SnapsToDevicePixels="True"
-                                    Visibility="Collapsed" Opacity="0.6"
-                                    TextAlignment="Center"
-                                    Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.PlaceHolder), RelativeSource={RelativeSource TemplatedParent}}"
-                                    FontSize="12" />
+                                           IsHitTestVisible="False" Margin="{TemplateBinding Padding}"
+                                           HorizontalAlignment="Left" VerticalAlignment="Center"
+                                           SnapsToDevicePixels="True"
+                                           Visibility="Collapsed" Opacity="0.6"
+                                           TextAlignment="Center"
+                                           Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.PlaceHolder), RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"
+                                           FontSize="12" />
 
                                 <CheckBox x:Name="PART_DecryptButton" Grid.Column="1" Background="Transparent" VerticalAlignment="Center"
                                           Visibility="Hidden" BorderBrush="{TemplateBinding BorderBrush}"

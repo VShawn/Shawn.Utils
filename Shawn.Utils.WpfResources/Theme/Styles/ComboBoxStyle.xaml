@@ -30,7 +30,7 @@
                                 Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                             <ContentPresenter x:Name="ContentPresenter" 
                                               TextElement.Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}, Path=Foreground}"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </Border>
@@ -174,7 +174,12 @@
                     <ContentPresenter Grid.Column="0" Margin="8 4 0 4" 
                                                       x:Name="ContentPresenter" 
                                                       ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
-                                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" Content="{TemplateBinding SelectionBoxItem}" ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
+                                                      Content="{TemplateBinding SelectionBoxItem}" 
+                                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
+                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                      IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 
                     <TextBox Margin="6 4 0 4" MinWidth="100"
                                              Grid.Column="0" Name="PART_EditableTextBox" 

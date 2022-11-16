@@ -29,6 +29,20 @@ namespace Shawn.Utils.WpfResources.Theme.AttachProperty
         public static void SetOpacityOnMouseDown(DependencyObject element, double value) => element.SetValue(OpacityOnMouseDownProperty, value);
         public static double GetOpacityOnMouseDown(DependencyObject element) => (double)element.GetValue(OpacityOnMouseDownProperty);
 
+
+        public static readonly DependencyProperty BorderOpacityProperty = DependencyProperty.RegisterAttached("BorderOpacity", typeof(double), typeof(VisionElement), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.Inherits));
+        public static void SetBorderOpacity(DependencyObject element, double value) => element.SetValue(BorderOpacityProperty, value);
+        public static double GetBorderOpacity(DependencyObject element) => (double)element.GetValue(BorderOpacityProperty);
+
+        public static readonly DependencyProperty BorderOpacityAccentProperty = DependencyProperty.RegisterAttached("BorderOpacityAccent", typeof(double), typeof(VisionElement), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.Inherits));
+        public static void SetBorderOpacityAccent(DependencyObject element, double value) => element.SetValue(BorderOpacityAccentProperty, value);
+        public static double GetBorderOpacityAccent(DependencyObject element) => (double)element.GetValue(BorderOpacityAccentProperty);
+
+
+        public static readonly DependencyProperty BorderOpacityOnMouseDownProperty = DependencyProperty.RegisterAttached("BorderOpacityOnMouseDown", typeof(double), typeof(VisionElement), new FrameworkPropertyMetadata(1.0, FrameworkPropertyMetadataOptions.Inherits));
+        public static void SetBorderOpacityOnMouseDown(DependencyObject element, double value) => element.SetValue(BorderOpacityOnMouseDownProperty, value);
+        public static double GetBorderOpacityOnMouseDown(DependencyObject element) => (double)element.GetValue(BorderOpacityOnMouseDownProperty);
+
         #endregion
 
         #region Border

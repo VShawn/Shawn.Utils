@@ -33,9 +33,14 @@
         <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"></Setter>
         <Setter Property="BorderThickness" Value="1"></Setter>
         <Setter Property="attachProperty:VisionElement.BorderCornerRadius" Value="{DynamicResource DefaultCornerRadius}"/>
+        <Setter Property="attachProperty:VisionElement.BorderBrushOnMouseOver" Value="{DynamicResource PrimaryTextBrush}"/>
+        <Setter Property="attachProperty:VisionElement.BorderBrushOnMouseDown" Value="{DynamicResource PrimaryTextBrush}"/>
         <Setter Property="attachProperty:VisionElement.Opacity" Value="1"/>
         <Setter Property="attachProperty:VisionElement.OpacityAccent" Value="1"/>
         <Setter Property="attachProperty:VisionElement.OpacityOnMouseDown" Value="0.8"/>
+        <Setter Property="attachProperty:VisionElement.BorderOpacity" Value="0.5"/>
+        <Setter Property="attachProperty:VisionElement.BorderOpacityAccent" Value="1"/>
+        <Setter Property="attachProperty:VisionElement.BorderOpacityOnMouseDown" Value="0.8"/>
         <Setter Property="attachProperty:VisionElement.ContentGeometry" Value="{x:Null}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -49,7 +54,7 @@
                         <Border Name="Border" 
                                 SnapsToDevicePixels="True"
                                 Background="Transparent"
-                                Opacity="0.5"
+                                Opacity="{Binding Path=(attachProperty:VisionElement.BorderOpacity),RelativeSource={RelativeSource TemplatedParent}}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}" />
@@ -66,6 +71,7 @@
                                       SnapsToDevicePixels="True" Stretch="Uniform" 
                                       Data="{TemplateBinding attachProperty:VisionElement.ContentGeometry}"/>
                                 <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                                  TextElement.Foreground="{TemplateBinding Foreground}"
                                                   x:Name="ContentPresenter" 
                                                   RecognizesAccessKey="True" 
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
@@ -86,8 +92,8 @@
                             <Setter Property="Fill" TargetName="ContentGeometry" Value="{Binding Path=(attachProperty:VisionElement.ForegroundAccent),RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter Property="Foreground" Value="{Binding Path=(attachProperty:VisionElement.ForegroundAccent),RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter Property="TextElement.Foreground" TargetName="ContentPresenter" Value="{Binding Path=(attachProperty:VisionElement.ForegroundAccent),RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter Property="BorderBrush" TargetName="Border" Value="{Binding Path=(attachProperty:VisionElement.ForegroundAccent),RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter Property="Opacity" TargetName="Border" Value="1" />
+                            <Setter Property="BorderBrush" TargetName="Border" Value="{Binding Path=(attachProperty:VisionElement.BorderBrushOnMouseOver),RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter Property="Opacity" TargetName="Border" Value="{Binding Path=(attachProperty:VisionElement.BorderOpacityAccent),RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter Property="Opacity" TargetName="Grid" Value="{Binding Path=(attachProperty:VisionElement.OpacityAccent),RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter Property="Background" TargetName="BorderForBackground" Value="{Binding Path=(attachProperty:VisionElement.BackgroundAccent),RelativeSource={RelativeSource TemplatedParent}}" />
                         </MultiTrigger>
@@ -95,8 +101,8 @@
                             <Setter Property="Fill" TargetName="ContentGeometry" Value="{Binding Path=(attachProperty:VisionElement.ForegroundOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter Property="Foreground" Value="{Binding Path=(attachProperty:VisionElement.ForegroundOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter Property="TextElement.Foreground" TargetName="ContentPresenter" Value="{Binding Path=(attachProperty:VisionElement.ForegroundOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter Property="BorderBrush" TargetName="Border" Value="{Binding Path=(attachProperty:VisionElement.ForegroundOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter Property="Opacity" TargetName="Border" Value="1" />
+                            <Setter Property="BorderBrush" TargetName="Border" Value="{Binding Path=(attachProperty:VisionElement.BorderBrushOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter Property="Opacity" TargetName="Border" Value="{Binding Path=(attachProperty:VisionElement.BorderOpacityOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter Property="Opacity" TargetName="Grid" Value="{Binding Path=(attachProperty:VisionElement.OpacityOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter Property="Background" TargetName="BorderForBackground" Value="{Binding Path=(attachProperty:VisionElement.BackgroundOnMouseDown),RelativeSource={RelativeSource TemplatedParent}}" />
                         </Trigger>
@@ -129,6 +135,8 @@
     <Style x:Key="ButtonPrimaryStyle" BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
         <Setter Property="Background" Value="{DynamicResource PrimaryMidBrush}"/>
+        <Setter Property="attachProperty:VisionElement.BorderBrushOnMouseOver" Value="{DynamicResource PrimaryTextBrush}"/>
+        <Setter Property="attachProperty:VisionElement.BorderBrushOnMouseDown" Value="{DynamicResource PrimaryTextBrush}"/>
         <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource PrimaryTextBrush}"/>
         <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource PrimaryMidBrush}"/>
         <Setter Property="attachProperty:VisionElement.ForegroundOnMouseDown" Value="{DynamicResource PrimaryTextBrush}"/>
@@ -138,6 +146,8 @@
     <Style x:Key="ButtonAccentStyle" BasedOn="{StaticResource ButtonBaseStyle}" TargetType="Button">
         <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
         <Setter Property="Background" Value="{DynamicResource AccentMidBrush}"/>
+        <Setter Property="attachProperty:VisionElement.BorderBrushOnMouseOver" Value="{DynamicResource AccentTextBrush}"/>
+        <Setter Property="attachProperty:VisionElement.BorderBrushOnMouseDown" Value="{DynamicResource AccentTextBrush}"/>
         <Setter Property="attachProperty:VisionElement.ForegroundAccent" Value="{DynamicResource AccentTextBrush}"/>
         <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource AccentMidBrush}"/>
         <Setter Property="attachProperty:VisionElement.ForegroundOnMouseDown" Value="{DynamicResource AccentTextBrush}"/>

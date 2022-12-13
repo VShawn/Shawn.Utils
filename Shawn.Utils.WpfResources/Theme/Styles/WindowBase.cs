@@ -46,10 +46,12 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
         #region DragMove
 
         protected bool _isDragging = false;
+        private bool _doubleClickEnd = false;
         private Point _mousePosition = new Point(-1, -1);
         public virtual void WinTitleBar_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             _isDragging = false;
+            _doubleClickEnd = false;
             if (e.LeftButton != MouseButtonState.Pressed)
             {
                 SimpleLogHelper.Debug("e.LeftButton != MouseButtonState.Pressed");
@@ -58,6 +60,8 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
 
             if (e.ClickCount == 2)
             {
+                _doubleClickEnd = true;
+                _isDragging = false;
                 this.WindowState = (this.WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
                 _mousePosition = new Point(-1, -1);
             }
@@ -71,7 +75,8 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
 
         public virtual void WinTitleBar_OnPreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if (e.LeftButton != MouseButtonState.Pressed)
+            if (e.LeftButton != MouseButtonState.Pressed
+                || _doubleClickEnd)
             {
                 if (_isDragging)
                 {

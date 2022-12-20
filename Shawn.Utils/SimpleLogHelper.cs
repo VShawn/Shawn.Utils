@@ -19,6 +19,7 @@ namespace Shawn.Utils
             Warning,
             Error,
             Fatal,
+            Disabled,
         }
 
         public enum EnumLogFileType
@@ -369,32 +370,31 @@ namespace Shawn.Utils
         }
         private void Print(SimpleLogHelper.EnumLogLevel enumLogLevel, string fileName, string method, int line, int threadId, DateTime? dt = null, params object[] o)
         {
-            if (enumLogLevel >= PrintLogLevel)
+            if (enumLogLevel < PrintLogLevel) return;
+
+            dt ??= DateTime.Now;
+            SetConsoleColor(enumLogLevel);
+            Console.Write($"[T:{threadId:D3}][{dt:HH:mm:ss.fff}]\t");
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            Console.Write($"{enumLogLevel}");
+            SetConsoleColor(enumLogLevel);
+            Console.Write($"\t");
+
+            if (enumLogLevel >= SimpleLogHelper.EnumLogLevel.Warning)
             {
-                dt ??= DateTime.Now;
-                SetConsoleColor(enumLogLevel);
-                Console.Write($"[T:{threadId:D3}][{dt:HH:mm:ss.fff}]\t");
-                Console.BackgroundColor = ConsoleColor.DarkGray;
-                Console.Write($"{enumLogLevel}");
-                SetConsoleColor(enumLogLevel);
-                Console.Write($"\t");
+                Console.Write($"[{fileName}({method}:{line})]\t");
+            }
 
-                if (enumLogLevel >= SimpleLogHelper.EnumLogLevel.Warning)
+            foreach (var obj in o)
+            {
+                Console.WriteLine(obj);
+                if (o[0] is Exception e)
                 {
-                    Console.Write($"[{fileName}({method}:{line})]\t");
-                }
-
-                foreach (var obj in o)
-                {
-                    Console.WriteLine(obj);
-                    if (o[0] is Exception e)
+                    Console.WriteLine(e.StackTrace);
+                    if (e.InnerException != null)
                     {
-                        Console.WriteLine(e.StackTrace);
-                        if (e.InnerException != null)
-                        {
-                            Console.WriteLine(e.InnerException.Message);
-                            Console.WriteLine(e.InnerException.StackTrace);
-                        }
+                        Console.WriteLine(e.InnerException.Message);
+                        Console.WriteLine(e.InnerException.StackTrace);
                     }
                 }
             }
@@ -402,6 +402,8 @@ namespace Shawn.Utils
         }
         private void WriteLog(SimpleLogHelper.EnumLogLevel enumLogLevel, string fileName, string method, int line, int threadId, DateTime? dt = null, params object[] o)
         {
+            if (enumLogLevel < WriteLogLevel) return;
+
             try
             {
                 dt ??= DateTime.Now;

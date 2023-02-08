@@ -14,6 +14,7 @@
         <ResourceDictionary Source="Styles/ButtonStyle.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/TextBoxStyle.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/ComboBoxStyle.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="Styles/DataGrid.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/Menu.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/ScrollViewer.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/ToggleButtonStyle.xaml"></ResourceDictionary>

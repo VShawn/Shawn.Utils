@@ -121,11 +121,19 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
 
         #endregion DragMove
 
-        public bool IsClosed { get; private set; }
+        public bool IsClosing { get; private set; } = false;
+        public bool IsClosed { get; private set; } = false;
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            IsClosing = true;
+            base.OnClosing(e);
+        }
 
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
+            IsClosing = true;
             IsClosed = true;
         }
 

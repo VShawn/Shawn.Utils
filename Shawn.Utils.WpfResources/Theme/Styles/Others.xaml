@@ -110,8 +110,8 @@
                     </ControlTemplate.Triggers>
 
                     <Border Background="{TemplateBinding Background}">
-                        <Grid>
-                            <Canvas Height="60" Width="60">
+                        <Grid Width="100">
+                            <Canvas Height="60" Width="60" Margin="12 0 0 0">
                                 <Canvas.Resources>
                                     <Style TargetType="Ellipse">
                                         <Setter Property="Width" Value="8"/>

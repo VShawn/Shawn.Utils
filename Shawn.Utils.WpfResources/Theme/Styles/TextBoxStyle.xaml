@@ -181,6 +181,7 @@
 
                                 <TextBlock Grid.Column="0" Grid.ColumnSpan="2" 
                                            x:Name="PART_Tag" 
+                                           Cursor="IBeam"
                                            Margin="{TemplateBinding Padding}"
                                            Text="{TemplateBinding Tag}">
                                     <TextBlock.Style>
@@ -211,6 +212,7 @@
                                            IsHitTestVisible="False" Margin="{TemplateBinding Padding}"
                                            HorizontalAlignment="Left" VerticalAlignment="Center"
                                            SnapsToDevicePixels="True"
+                                           Cursor="IBeam"
                                            Visibility="Collapsed" Opacity="0.6"
                                            TextAlignment="Center"
                                            Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.PlaceHolder), RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"

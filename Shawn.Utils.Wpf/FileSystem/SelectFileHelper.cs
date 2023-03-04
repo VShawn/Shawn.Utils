@@ -31,7 +31,7 @@ namespace Shawn.Utils.Wpf.FileSystem
                 if (filterIndex >= 0)
                     dlg.FilterIndex = filterIndex;
             }
-            if (initialDirectory != null)
+            if (initialDirectory != null && Directory.Exists(initialDirectory))
                 dlg.InitialDirectory = initialDirectory;
             if (title != null)
                 dlg.Title = title;

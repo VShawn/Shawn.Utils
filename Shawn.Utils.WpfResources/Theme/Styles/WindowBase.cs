@@ -155,5 +155,23 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
             SimpleLogHelper.Debug($"{this.GetType().Name} init");
 #endif
         }
+
+        public new void Hide()
+        {
+            if (IsClosing == false)
+                base.Hide();
+        }
+
+        public new void Show()
+        {
+            if (IsClosing == false)
+                base.Show();
+        }
+
+        public new void Activate()
+        {
+            if (IsClosing == false)
+                base.Activate();
+        }
     }
 }

@@ -131,6 +131,7 @@
 
 
     <Style x:Key="PasswordBoxBaseStyle" TargetType="{x:Type PasswordBox}">
+        <Setter Property="Height" Value="26" />
         <Setter Property="PasswordChar" Value="●" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />

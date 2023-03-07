@@ -19,5 +19,6 @@
     <Geometry x:Key="GeometryWindowMaximize">F1 M 5.500000 -82.500000 L 82.500000 -82.500000 L 82.500000 -5.500000 L 5.500000 -5.500000 Z</Geometry>
     <Geometry x:Key="GeometryWindowNormalize">M2,2 L2,0 L8,0 L8,6 L6,6 M0,2 L6,2 L6,8 L0,8 Z</Geometry>
     <Geometry x:Key="GeometryCross">M 41.888 18.304 L 41.888 23.584 L 23.584 23.584 L 23.584 41.888 L 18.304 41.888 L 18.304 23.584 L 0 23.584 L 0 18.304 L 18.304 18.304 L 18.304 0 L 23.584 0 L 23.584 18.304 Z</Geometry>
+    <Geometry x:Key="GeometryHook">M345.781 890.168 0 544.571l77.181-77.187 268.601 268.234 601.781-601.786 77.186 77.366L345.781 890.168z</Geometry>
     <!--<Geometry x:Key="GeometryLeft"></Geometry>-->
 </ResourceDictionary>

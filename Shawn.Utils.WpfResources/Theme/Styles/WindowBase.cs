@@ -126,6 +126,7 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            if (e.Cancel != false) return;
             IsClosing = true;
             base.OnClosing(e);
         }

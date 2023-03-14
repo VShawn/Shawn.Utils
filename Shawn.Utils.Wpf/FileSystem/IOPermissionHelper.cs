@@ -134,6 +134,11 @@ namespace Shawn.Utils.Wpf.FileSystem
                     return false;
                 }
 #endif
+
+                if (System.IO.File.GetAttributes(fi.FullName).ToString().IndexOf("ReadOnly") != -1)
+                {
+                    return false;
+                }
                 var rules = security.GetAccessRules(true, true, typeof(NTAccount));
                 var currentUser = new WindowsPrincipal(WindowsIdentity.GetCurrent());
                 bool result = false;

@@ -69,7 +69,11 @@ namespace Shawn.Utils.Wpf
             pro.StandardInput.WriteLine("exit");// add a symble for exit code
         }
 
-        public static void RunFile(string filePath, string arguments = "", bool isAsync = false, bool isHideWindow = false)
+        /// <summary>
+        /// return ExitCode
+        /// </summary>
+        /// <returns></returns>
+        public static int RunFile(string filePath, string arguments = "", bool isAsync = false, bool isHideWindow = false)
         {
             var pro = new Process
             {
@@ -88,6 +92,7 @@ namespace Shawn.Utils.Wpf
             {
                 pro.WaitForExit();
             }
+            return pro.ExitCode;
         }
 
         /// <summary>
@@ -125,6 +130,13 @@ namespace Shawn.Utils.Wpf
                     filePath += " " + st.Dequeue();
                 }
             }
+
+            var tmp = CheckFileExistsAndFullName(file);
+            if (tmp.Item1)
+            {
+                file = tmp.Item2;
+            }
+
             if (File.Exists(file))
             {
                 var ext = Path.GetExtension(file).ToLower();
@@ -132,6 +144,11 @@ namespace Shawn.Utils.Wpf
                 {
                     parameters = file + " " + parameters;
                     file = "python";
+                }
+                if (ext == ".ps1")
+                {
+                    parameters = file + " " + parameters;
+                    file = "powershell.exe";
                 }
             }
             return new Tuple<string, string>(file, parameters);

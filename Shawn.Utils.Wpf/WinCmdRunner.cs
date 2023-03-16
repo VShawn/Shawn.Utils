@@ -91,8 +91,9 @@ namespace Shawn.Utils.Wpf
             if (isAsync == false)
             {
                 pro.WaitForExit();
+                return pro.ExitCode;
             }
-            return pro.ExitCode;
+            return 0;
         }
 
         /// <summary>

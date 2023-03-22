@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -181,7 +182,7 @@ namespace Shawn.Utils
         /// Invoke to notify a newer version of te software was released
         /// while new version code = arg1, download url = arg2
         /// </summary>
-        public delegate void OnNewVersionReleaseDelegate(string version, string url);
+        public delegate void OnNewVersionReleaseDelegate(string version, string url, bool isBreakingChange);
 
         private readonly string[] _urls;
 
@@ -203,7 +204,7 @@ namespace Shawn.Utils
 
 
 
-        public Tuple<bool, string, string> CheckUpdateFromUrl(string url, Version ignoreVersion = null, string urlContent = "")
+        public Tuple<bool, string, string, bool> CheckUpdateFromUrl(string url, Version ignoreVersion = null, string urlContent = "")
         {
             try
             {
@@ -213,28 +214,28 @@ namespace Shawn.Utils
                 else
                     html = HttpHelper.Get(url).ToLower();
 
-                var vs = Regex.Match(html, @"latest\sversion:\s*([\d|.]*)");
+                var vs = Regex.Match(html, @".?latest\sversion:\s*([\d|.]*)");
                 if (vs.Success)
                 {
-                    var tmp = vs.ToString();
-                    var versionString = tmp.Substring(tmp.IndexOf("version:", StringComparison.OrdinalIgnoreCase) + "version:".Length + 1).Trim();
+                    var tmp = vs.ToString().Trim();
+                    var versionString = tmp.Substring(tmp.IndexOf("version:", StringComparison.OrdinalIgnoreCase) + "version:".Length + 1).Trim('!').Trim();
                     var releasedVersion = Version.FromString(versionString);
                     if (ignoreVersion != null)
                     {
                         if (releasedVersion <= ignoreVersion)
                         {
-                            return new Tuple<bool, string, string>(false, "", url);
+                            return new Tuple<bool, string, string, bool>(false, "", url, false);
                         }
                     }
                     if (releasedVersion > _currentVersion)
-                        return new Tuple<bool, string, string>(true, versionString, url);
+                        return new Tuple<bool, string, string, bool>(true, versionString, url, tmp.FirstOrDefault() == '!' || tmp.LastOrDefault() == '!');
                 }
             }
             catch (Exception e)
             {
                 SimpleLogHelper.Warning(e);
             }
-            return new Tuple<bool, string, string>(false, "", url);
+            return new Tuple<bool, string, string, bool>(false, "", url, false);
         }
 
 
@@ -243,7 +244,7 @@ namespace Shawn.Utils
         /// Check if new release, return true + url.
         /// </summary>
         /// <returns></returns>
-        public Tuple<bool, string, string> CheckUpdate(string assignUrl = "", string assignUrlContent = "")
+        public Tuple<bool, string, string, bool> CheckUpdate(string assignUrl = "", string assignUrlContent = "")
         {
             if (_urls?.Length > 0)
                 foreach (var url in _urls)
@@ -258,7 +259,7 @@ namespace Shawn.Utils
                 return CheckUpdateFromUrl(assignUrl, null, assignUrlContent);
             }
 
-            return new Tuple<bool, string, string>(false, "", "");
+            return new Tuple<bool, string, string, bool>(false, "", "", false);
         }
 
         /// <summary>
@@ -272,7 +273,7 @@ namespace Shawn.Utils
                 var r = CheckUpdate(assignUrl, assignUrlContent);
                 if (r.Item1)
                 {
-                    OnNewVersionRelease?.Invoke(r.Item2, r.Item3);
+                    OnNewVersionRelease?.Invoke(r.Item2, r.Item3, r.Item4);
                 }
             });
             t.Start();

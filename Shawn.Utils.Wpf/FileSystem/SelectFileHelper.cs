@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Microsoft.Win32;
 
@@ -40,7 +41,15 @@ namespace Shawn.Utils.Wpf.FileSystem
                 dlg.FileName = selectedFileName;
             }
 
-            if (dlg.ShowDialog() != true) return null;
+            try
+            {
+
+                if (dlg.ShowDialog() != true) return null;
+            }
+            catch
+            {
+                return null;
+            }
 
             return currentDirectoryForShowingRelativePath != null ? dlg.FileName.Replace(currentDirectoryForShowingRelativePath, ".") : dlg.FileName;
         }

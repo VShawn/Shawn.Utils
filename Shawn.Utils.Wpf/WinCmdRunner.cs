@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 
 namespace Shawn.Utils.Wpf
 {
@@ -22,7 +23,7 @@ namespace Shawn.Utils.Wpf
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     WindowStyle = isHideWindow ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal,
-                    UseShellExecute = !isHideWindow,
+                    UseShellExecute = isHideWindow == false,
                     CreateNoWindow = isHideWindow,
                 }
             };
@@ -73,21 +74,44 @@ namespace Shawn.Utils.Wpf
         /// return ExitCode
         /// </summary>
         /// <returns></returns>
-        public static int RunFile(string filePath, string arguments = "", bool isAsync = false, bool isHideWindow = false)
+        public static int RunFile(string filePath, 
+            string arguments = "", 
+            bool isAsync = false, 
+            bool isHideWindow = false,
+            DirectoryInfo? workingDirectory = null,
+            Dictionary<string, string>? envVariables = null)
         {
-            var pro = new Process
+            var psi = new ProcessStartInfo()
             {
-                StartInfo =
-                {
-                    FileName = filePath,
-                    Arguments = arguments,
-                    WindowStyle = isHideWindow ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal,
-                    UseShellExecute = !isHideWindow,
-                    CreateNoWindow = isHideWindow,
-                }
+                FileName = filePath,
+                Arguments = arguments,
+                WindowStyle = isHideWindow ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal,
+                UseShellExecute = !isHideWindow && envVariables == null,
+                CreateNoWindow = isHideWindow,
             };
 
+            if (workingDirectory != null)
+            {
+                psi.WorkingDirectory = workingDirectory.FullName;
+            }
+
+            if (envVariables != null)
+            {
+                foreach (var kv in envVariables)
+                {
+                    if (psi.EnvironmentVariables.ContainsKey(kv.Key))
+                        psi.EnvironmentVariables[kv.Key] = kv.Value;
+                    else
+                        psi.EnvironmentVariables.Add(kv.Key, kv.Value);
+                }
+            }
+
+            var pro = new Process
+            {
+                StartInfo = psi,
+            };
             pro.Start();
+
             if (isAsync == false)
             {
                 pro.WaitForExit();
@@ -97,11 +121,11 @@ namespace Shawn.Utils.Wpf
         }
 
         /// <summary>
-        /// 解析单行命令中 exe 路径存在的空格或引号包裹的 "EXE 路径"，返回 EXE 路径 + 参数
+        /// 解析单行命令中 exe 路径存在的空格或引号包裹的 "EXE 路径"，返回 EXE 路径 + 参数 + 工作目录
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public static Tuple<string, string> DisassembleOneLineScriptCmd(string cmd)
+        public static Tuple<string, string, DirectoryInfo?> DisassembleOneLineScriptCmd(string cmd)
         {
             var parameters = "";
             cmd = cmd.Trim();
@@ -138,8 +162,11 @@ namespace Shawn.Utils.Wpf
                 file = tmp.Item2;
             }
 
+            DirectoryInfo? workDirectory = null;
+            ;
             if (File.Exists(file))
             {
+                workDirectory = new FileInfo(file).Directory;
                 var ext = Path.GetExtension(file).ToLower();
                 if (ext == ".py")
                 {
@@ -152,7 +179,8 @@ namespace Shawn.Utils.Wpf
                     file = "powershell.exe";
                 }
             }
-            return new Tuple<string, string>(file, parameters);
+
+            return new Tuple<string, string, DirectoryInfo?>(file, parameters, workDirectory);
         }
 
         public static Tuple<bool, string> CheckFileExistsAndFullName(string fileName)

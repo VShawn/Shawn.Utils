@@ -144,6 +144,10 @@ namespace Shawn.Utils.Wpf.FileSystem
             {
                 System.Diagnostics.Process.Start(dirPath);
             }
+            else
+            {
+                OpenInExplorerAndSelect(dirPath);
+            }
         }
 
         public static void OpenInExplorerAndSelect(string path)

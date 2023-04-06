@@ -22,15 +22,12 @@
         <Setter Property="FontStyle" Value="Normal"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Padding" Value="10, 6"/>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
         <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
         <Setter Property="Background" Value="{DynamicResource PrimaryDarkBrush}"/>
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Margin" Value="0"/>
-        <Setter Property="Cursor" Value="Hand" />
         <!--<Setter Property="attachProperty:VisionElement.Opacity" Value="1"/>
         <Setter Property="attachProperty:VisionElement.OpacityAccent" Value="1"/>
         <Setter Property="attachProperty:VisionElement.OpacityOnMouseDown" Value="0.8"/>-->
@@ -40,7 +37,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="MenuItem">
                             <Border x:Name="templateRoot"
-                                    CornerRadius="2" 
+                                    CornerRadius="4" 
                                     BorderBrush="{TemplateBinding BorderBrush}" 
                                     BorderThickness="{TemplateBinding BorderThickness}" 
                                     Background="{TemplateBinding Background}" 
@@ -76,7 +73,7 @@
                                             <Grid.Effect>
                                                 <DropShadowEffect BlurRadius="4" ShadowDepth="4" Color="Black" Opacity="0.5" Direction="300"></DropShadowEffect>
                                             </Grid.Effect>
-                                            <Border CornerRadius="0,0,2,2" 
+                                            <Border CornerRadius="0,0,4,4" 
                                                         x:Name="SubMenuBorder" 
                                                         BorderThickness="0"
                                                         SnapsToDevicePixels="True"
@@ -122,7 +119,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="MenuItem">
                             <Border x:Name="templateRoot"
-                                    CornerRadius="2" 
+                                    CornerRadius="4" 
                                     BorderBrush="{TemplateBinding BorderBrush}" 
                                     BorderThickness="{TemplateBinding BorderThickness}" 
                                     Background="{TemplateBinding Background}" 
@@ -191,7 +188,7 @@
                         <ControlTemplate TargetType="MenuItem">
 
                             <Border x:Name="templateRoot"
-                                    CornerRadius="2" 
+                                    CornerRadius="4" 
                                     BorderBrush="{TemplateBinding BorderBrush}" 
                                     BorderThickness="{TemplateBinding BorderThickness}" 
                                     Background="{TemplateBinding Background}" 
@@ -238,23 +235,25 @@
                                     </Path>
 
                                     <Popup Grid.Column="0" x:Name="PART_Popup" PlacementTarget="{Binding ElementName=templateRoot}" 
-                                           HorizontalOffset="-4"
+                                           HorizontalOffset="0"
                                            AllowsTransparency="True" 
                                            Focusable="False" 
                                            IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}" 
                                            Placement="Right">
-                                        <Grid Margin="8,0,8,8" Background="Transparent">
+                                        <!--此处不能有阴影，否则当子菜单位于父菜单左侧且鼠标移动到阴影上时，由于同时不在父菜单和子菜单上，菜单会消失，随后由于鼠标重新hover到父菜单，子菜单再次显示如此反复-->
+                                        <!--<Grid Margin="8,0,8,8" Background="Transparent">
                                             <Grid.Effect>
                                                 <DropShadowEffect BlurRadius="4" ShadowDepth="4" Color="Black" Opacity="0.5" Direction="300"></DropShadowEffect>
                                             </Grid.Effect>
-                                            <Border CornerRadius="0,0,2,2" 
-                                                        x:Name="SubMenuBorder" 
-                                                        BorderThickness="0"
-                                                        SnapsToDevicePixels="True"
-                                                        Background="{DynamicResource PrimaryDarkBrush}">
-                                                <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle" Grid.IsSharedSizeScope="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
-                                            </Border>
-                                        </Grid>
+                                        </Grid>-->
+
+                                        <Border CornerRadius="0,0,4,4" 
+                                                x:Name="SubMenuBorder" 
+                                                BorderThickness="0"
+                                                SnapsToDevicePixels="True"
+                                                Background="{DynamicResource PrimaryDarkBrush}">
+                                            <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Cycle" Grid.IsSharedSizeScope="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" KeyboardNavigation.TabNavigation="Cycle"/>
+                                        </Border>
                                     </Popup>
                                 </Grid>
                             </Border>
@@ -294,7 +293,7 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="MenuItem">
                             <Border x:Name="templateRoot"
-                                    CornerRadius="2" 
+                                    CornerRadius="4" 
                                     BorderBrush="{TemplateBinding BorderBrush}" 
                                     BorderThickness="{TemplateBinding BorderThickness}" 
                                     Background="{TemplateBinding Background}" 

@@ -131,6 +131,11 @@ namespace Shawn.Utils
             var logFileName = $"{withOutExtension}_{DateTime.Now.ToString("yyyyMMdd")}{new FileInfo(LogFileName).Extension}";
             return _simpleLogHelper.GetLog(logFileName, lastLineCount);
         }
+
+        public static string GetFileFullName()
+        {
+            return _simpleLogHelper.GetFileFullName(EnumLogLevel.Info);
+        }
     }
 
     public class SimpleLogHelperObject
@@ -184,7 +189,7 @@ namespace Shawn.Utils
         /// <summary>
         /// del log files created before LogFileMaxHistoryDays if LogFileMaxHistoryDays > 0
         /// </summary>
-        public uint LogFileMaxHistoryDays { get; set; } = 60;
+        public uint LogFileMaxHistoryDays { get; set; } = 30;
         public long LogFileMaxByteSize { get; set; } = 1024 * 1024 * 10; // kb -> mb -> * 10
 
         private readonly object _obj = new object();
@@ -240,7 +245,7 @@ namespace Shawn.Utils
             }
         }
 
-        private string GetFileName(SimpleLogHelper.EnumLogLevel enumLogLevel)
+        public string GetFileFullName(SimpleLogHelper.EnumLogLevel enumLogLevel)
         {
             var logFileName = enumLogLevel switch
             {
@@ -251,6 +256,12 @@ namespace Shawn.Utils
                 SimpleLogHelper.EnumLogLevel.Fatal => FatalFileName,
                 _ => throw new ArgumentOutOfRangeException(nameof(enumLogLevel), enumLogLevel, null)
             };
+
+
+            // append date
+            var withOutExtension = logFileName.Substring(0, logFileName.LastIndexOf(".", StringComparison.Ordinal));
+            logFileName = $"{withOutExtension}_{DateTime.Now.ToString("yyyyMMdd")}{new FileInfo(logFileName).Extension}";
+
             return logFileName;
         }
 
@@ -274,14 +285,14 @@ namespace Shawn.Utils
                     continue;
                 }
 
-                //var dateStr = fileInfo.Name.Replace(fileInfo.Extension, "");
-                //// ReSharper disable once StringLastIndexOfIsCultureSpecific.1
-                //dateStr = dateStr.Substring(dateStr.LastIndexOf("_") + 1);
-                //if (DateTime.TryParseExact(dateStr, "yyyyMMdd", null, DateTimeStyles.None, out var date)
-                //         && date < DateTime.Now.AddDays(-1 * LogFileMaxHistoryDays))
-                //{
-                //    fileInfo.Delete();
-                //}
+                var dateStr = fileInfo.Name.Replace(fileInfo.Extension, "");
+                // ReSharper disable once StringLastIndexOfIsCultureSpecific.1
+                dateStr = dateStr.Substring(dateStr.LastIndexOf("_") + 1);
+                if (DateTime.TryParseExact(dateStr, "yyyyMMdd", null, DateTimeStyles.None, out var date)
+                         && date < DateTime.Now.AddDays(-1 * LogFileMaxHistoryDays))
+                {
+                    fileInfo.Delete();
+                }
             }
 
             // clean over size
@@ -409,11 +420,7 @@ namespace Shawn.Utils
                 dt ??= DateTime.Now;
                 lock (_obj)
                 {
-                    string logFileName = GetFileName(enumLogLevel);
-
-                    // append date
-                    var withOutExtension = logFileName.Substring(0, logFileName.LastIndexOf(".", StringComparison.Ordinal));
-                    logFileName = $"{withOutExtension}_{DateTime.Now.ToString("yyyyMMdd")}{new FileInfo(logFileName).Extension}";
+                    string logFileName = GetFileFullName(enumLogLevel);
 
                     var fi = new FileInfo(logFileName);
                     if (fi?.Directory?.Exists == false)

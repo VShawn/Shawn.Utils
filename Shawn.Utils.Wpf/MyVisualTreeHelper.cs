@@ -31,7 +31,7 @@ namespace Shawn.Utils.Wpf
             DependencyObject? current = obj;
             while (current != null)
             {
-                if (current is T o)
+                if (current is T o && current != obj)
                 {
                     return o;
                 }

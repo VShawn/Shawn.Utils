@@ -12,6 +12,8 @@
         <ResourceDictionary Source="Styles/AppStyles.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/BaseStyle.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/ButtonStyle.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="Styles/Expander.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="Styles/ListView.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/TextBoxStyle.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/ComboBoxStyle.xaml"></ResourceDictionary>
         <ResourceDictionary Source="Styles/DataGrid.xaml"></ResourceDictionary>

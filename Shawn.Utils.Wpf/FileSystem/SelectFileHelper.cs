@@ -142,7 +142,8 @@ namespace Shawn.Utils.Wpf.FileSystem
         {
             if (Directory.Exists(dirPath))
             {
-                System.Diagnostics.Process.Start(dirPath);
+                //System.Diagnostics.Process.Start(dirPath);
+                System.Diagnostics.Process.Start("explorer.exe", dirPath);
             }
             else
             {

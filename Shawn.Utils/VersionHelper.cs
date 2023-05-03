@@ -4,7 +4,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 #pragma warning disable CS0659, CS0660, CS0661
-# nullable disable
 namespace Shawn.Utils
 {
     public class VersionHelper
@@ -18,7 +17,7 @@ namespace Shawn.Utils
                 return Major == other.Major && Minor == other.Minor && Patch == other.Patch && Build == other.Build && PreRelease == other.PreRelease;
             }
 
-            public override bool Equals(object obj)
+            public override bool Equals(object? obj)
             {
                 if (ReferenceEquals(null, obj)) return false;
                 if (ReferenceEquals(this, obj)) return true;
@@ -56,13 +55,20 @@ namespace Shawn.Utils
             public static Version FromString(string versionString)
             {
                 bool isPreRelease = versionString.IndexOf("-", StringComparison.Ordinal) > 0;
-                var splits = versionString?.Split(new[] { ".", "-" }, StringSplitOptions.RemoveEmptyEntries);
+                string preRelease = "";
+                var splits = versionString.Split(new[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+                if (isPreRelease)
+                {
+                    var i = versionString.IndexOf("-", StringComparison.Ordinal);
+                    preRelease = versionString.Substring(i + 1);
+                    versionString = versionString.Substring(0, i);
+                    splits = versionString.Split(new[] { "." }, StringSplitOptions.RemoveEmptyEntries);
+                }
                 uint major = 0;
                 uint minor = 0;
                 uint patch = 0;
                 uint build = 0;
-                string preRelease = "";
-                if (splits?.Length >= 3)
+                if (splits.Length >= 3)
                 {
                     if (uint.TryParse(splits[0], out var majorTmp)
                         && uint.TryParse(splits[1], out var minorTmp)
@@ -75,34 +81,18 @@ namespace Shawn.Utils
                     }
                 }
 
-                if (splits != null && splits.Length >= 4)
+                if (splits.Length >= 4
+                     && uint.TryParse(splits[3], out var tmp))
                 {
-                    if (uint.TryParse(splits[3], out var tmp))
-                    {
-                        if (splits?.Length == 5)
-                        {
-                            build = tmp;
-                            preRelease = splits[4];
-                        }
-                        else if (isPreRelease == false)
-                        {
-                            build = tmp;
-                        }
-                        else
-                        {
-                            preRelease = splits[3];
-                        }
-                    }
-                    else
-                    {
-                        preRelease = splits[3];
-                    }
+                    build = tmp;
                 }
                 return new Version(major, minor, patch, build, preRelease);
             }
 
-            public static bool operator >(Version a, Version b)
+            public static bool operator >(Version? a, Version? b)
             {
+                if (a is null && b is null) return true;
+                if (a is null || b is null) return false;
                 if (a == b)
                     return false;
                 return Compare(b, a);
@@ -169,7 +159,8 @@ namespace Shawn.Utils
                     && v2.Minor == v1.Minor
                     && v2.Patch == v1.Patch
                     && v2.Build == v1.Build
-                    && (string.IsNullOrEmpty(v2.PreRelease) && string.IsNullOrEmpty(v1.PreRelease) == false) || string.CompareOrdinal(v2.PreRelease.ToLower(), v1.PreRelease.ToLower()) > 0)
+                    && (string.IsNullOrEmpty(v2.PreRelease) && string.IsNullOrEmpty(v1.PreRelease) == false)
+                        || string.CompareOrdinal(v2.PreRelease.ToLower(), v1.PreRelease.ToLower()) > 0)
                     return true;
 
                 return false;
@@ -182,60 +173,97 @@ namespace Shawn.Utils
         /// Invoke to notify a newer version of te software was released
         /// while new version code = arg1, download url = arg2
         /// </summary>
-        public delegate void OnNewVersionReleaseDelegate(string version, string url, bool isBreakingChange);
-
-        private readonly string[] _urls;
-
+        public delegate void OnNewVersionReleaseDelegate(CheckUpdateResult result);
         /// <summary>
         /// Invoke to notify a newer version of te software was released
         /// while new version code = arg1, download url = arg2
         /// </summary>
-        public OnNewVersionReleaseDelegate OnNewVersionRelease = null;
+        public OnNewVersionReleaseDelegate? OnNewVersionRelease = null;
 
+        public delegate CheckUpdateResult CheckMethod(string html, string publishUrl, Version currentVersion, Version? ignoreVersion = null);
+
+
+        private readonly string[] _checkUrls;
+        private readonly string[] _publishUrls;
         private readonly Version _currentVersion;
-        public Version IgnoreVersion;
-
-        public VersionHelper(Version version, Version ignoreVersion = null, string[] urls = null)
+        public Version? IgnoreVersion;
+        private readonly CheckMethod? _customCheckMethod = null;
+        private readonly CheckMethod _defaultCheckMethod = null;
+        public VersionHelper(Version version, string[] checkUrls, string[]? publishUrls = null, 
+            Version? ignoreVersion = null,
+            CheckMethod? customCheckMethod = null)
         {
             _currentVersion = version;
+            _checkUrls = checkUrls;
+            _publishUrls = publishUrls?.Length != checkUrls.Length ? checkUrls : publishUrls;
             IgnoreVersion = ignoreVersion;
-            _urls = urls;
+            _customCheckMethod = customCheckMethod;
+            _defaultCheckMethod = DefaultCheckMethod;
         }
 
 
+        public struct CheckUpdateResult
+        {
+            public readonly bool NewerPublished;
+            public readonly string NewerVersion;
+            public readonly string NewerUrl;
+            public readonly bool NewerHasBreakChange;
 
-        public Tuple<bool, string, string, bool> CheckUpdateFromUrl(string url, Version ignoreVersion = null, string urlContent = "")
+            public CheckUpdateResult(bool newerPublished, string newerVersion, string newerUrl, bool newerHasBreakChange)
+            {
+                NewerPublished = newerPublished;
+                NewerVersion = newerVersion;
+                NewerUrl = newerUrl;
+                NewerHasBreakChange = newerHasBreakChange;
+            }
+
+            public static CheckUpdateResult False()
+            {
+                return new CheckUpdateResult(false, "", "", false);
+            }
+        }
+
+        public static CheckUpdateResult DefaultCheckMethod(string urlContent, string publishUrl, VersionHelper.Version currentVersion, VersionHelper.Version? ignoreVersion)
         {
             try
             {
-                string html = "";
-                if (string.IsNullOrEmpty(urlContent) == false)
-                    html = urlContent;
-                else
-                    html = HttpHelper.Get(url).ToLower();
-
-                var vs = Regex.Match(html, @".?latest\sversion:\s*([\d|.]*)");
+                string html = urlContent;
+                var vs = Regex.Match(html, @".?latest\sversion:\s*([\d|.]*)", RegexOptions.IgnoreCase);
                 if (vs.Success)
                 {
                     var tmp = vs.ToString().Trim();
                     var versionString = tmp.Substring(tmp.IndexOf("version:", StringComparison.OrdinalIgnoreCase) + "version:".Length + 1).Trim('!').Trim();
                     var releasedVersion = Version.FromString(versionString);
-                    if (ignoreVersion != null)
+                    if (ignoreVersion is not null)
                     {
                         if (releasedVersion <= ignoreVersion)
                         {
-                            return new Tuple<bool, string, string, bool>(false, "", url, false);
+                            return CheckUpdateResult.False();
                         }
                     }
-                    if (releasedVersion > _currentVersion)
-                        return new Tuple<bool, string, string, bool>(true, versionString, url, tmp.FirstOrDefault() == '!' || tmp.LastOrDefault() == '!');
+                    if (releasedVersion > currentVersion)
+                        return new CheckUpdateResult(true, versionString, publishUrl, tmp.FirstOrDefault() == '!' || tmp.LastOrDefault() == '!');
                 }
             }
             catch (Exception e)
             {
                 SimpleLogHelper.Warning(e);
             }
-            return new Tuple<bool, string, string, bool>(false, "", url, false);
+            return CheckUpdateResult.False();
+        }
+
+        private CheckUpdateResult CheckUpdateFromUrl(string checkUrl, string publishUrl)
+        {
+            try
+            {
+                var html = HttpHelper.Get(checkUrl).ToLower();
+                return _customCheckMethod?.Invoke(html, publishUrl, _currentVersion, IgnoreVersion) ?? _defaultCheckMethod.Invoke(html, publishUrl, _currentVersion, IgnoreVersion);
+            }
+            catch (Exception e)
+            {
+                SimpleLogHelper.Warning(e);
+            }
+            return CheckUpdateResult.False();
         }
 
 
@@ -244,36 +272,32 @@ namespace Shawn.Utils
         /// Check if new release, return true + url.
         /// </summary>
         /// <returns></returns>
-        public Tuple<bool, string, string, bool> CheckUpdate(string assignUrl = "", string assignUrlContent = "")
+        public CheckUpdateResult CheckUpdate()
         {
-            if (_urls?.Length > 0)
-                foreach (var url in _urls)
+            if (_checkUrls?.Length > 0)
+            {
+                for (var i = 0; i < _checkUrls.Length; i++)
                 {
-                    var tuple = CheckUpdateFromUrl(url);
-                    if (tuple.Item1)
+                    var tuple = CheckUpdateFromUrl(_checkUrls[i], _publishUrls[i]);
+                    if (tuple.NewerPublished)
                         return tuple;
                 }
-
-            if (string.IsNullOrEmpty(assignUrlContent) == false)
-            {
-                return CheckUpdateFromUrl(assignUrl, null, assignUrlContent);
             }
-
-            return new Tuple<bool, string, string, bool>(false, "", "", false);
+            return CheckUpdateResult.False();
         }
 
         /// <summary>
         /// Check if new release, invoke OnNewRelease with new version & url.
         /// </summary>
         /// <returns></returns>
-        public void CheckUpdateAsync(string assignUrl = "", string assignUrlContent = "")
+        public void CheckUpdateAsync()
         {
             var t = new Task(() =>
             {
-                var r = CheckUpdate(assignUrl, assignUrlContent);
-                if (r.Item1)
+                var r = CheckUpdate();
+                if (r.NewerPublished)
                 {
-                    OnNewVersionRelease?.Invoke(r.Item2, r.Item3, r.Item4);
+                    OnNewVersionRelease?.Invoke(r);
                 }
             });
             t.Start();

@@ -37,7 +37,7 @@ namespace Shawn.Utils.Wpf
                 }
                 current = GetParent(current);
             }
-            return default(T);
+            return null;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Shawn.Utils.Wpf
                 return null;
             }
             var obj = r.VisualHit;
-            while (!(obj is ListView) && (obj != null))
+            while (obj is not ListView && obj != null)
             {
                 obj = System.Windows.Media.VisualTreeHelper.GetParent(obj);
                 if (obj is ListViewItem item)

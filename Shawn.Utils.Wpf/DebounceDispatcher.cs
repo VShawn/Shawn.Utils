@@ -30,8 +30,7 @@ namespace Shawn.Utils.Wpf
             _timer?.Stop();
             _timer = null;
 
-            if (dispatcher == null)
-                dispatcher = Dispatcher.CurrentDispatcher;
+            dispatcher ??= Dispatcher.CurrentDispatcher;
 
             // timer is recreated for each event and effectively
             // resets the timeout. Action only fires after timeout has fully

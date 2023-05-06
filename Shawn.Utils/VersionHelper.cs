@@ -10,7 +10,7 @@ namespace Shawn.Utils
     {
         public class Version
         {
-            protected bool Equals(Version other)
+            protected bool Equals(Version? other)
             {
                 if (other is null)
                     return false;
@@ -89,19 +89,13 @@ namespace Shawn.Utils
                 return new Version(major, minor, patch, build, preRelease);
             }
 
-            public static bool operator >(Version? a, Version? b)
+            public static bool operator >(Version a, Version b)
             {
-                if (a is null && b is null) return true;
-                if (a is null || b is null) return false;
-                if (a == b)
-                    return false;
                 return Compare(b, a);
             }
 
             public static bool operator <(Version a, Version b)
             {
-                if (a == b)
-                    return false;
                 return Compare(a, b);
             }
 
@@ -115,18 +109,18 @@ namespace Shawn.Utils
                 return a.Equals(b) || Compare(a, b);
             }
 
-            public static bool operator ==(Version a, Version b)
+            public static bool operator ==(Version? a, Version? b)
             {
                 if (a is null && b is null)
                     return true;
+                if (a is null || b is null)
+                    return false;
                 return a.Equals(b);
             }
 
-            public static bool operator !=(Version a, Version b)
+            public static bool operator !=(Version? a, Version? b)
             {
-                if (a is null && b is null)
-                    return false;
-                return !a.Equals(b);
+                return !(a == b);
             }
 
             /// <summary>
@@ -135,9 +129,9 @@ namespace Shawn.Utils
             /// <param name="v1"></param>
             /// <param name="v2"></param>
             /// <returns></returns>
-            public static bool Compare(Version v1, Version v2)
+            public static bool Compare(Version? v1, Version? v2)
             {
-                if (v1 == null || v2 == null)
+                if (v1 is null || v2 is null)
                     return false;
 
                 if (v2.Major > v1.Major)
@@ -188,8 +182,8 @@ namespace Shawn.Utils
         private readonly Version _currentVersion;
         public Version? IgnoreVersion;
         private readonly CheckMethod? _customCheckMethod = null;
-        private readonly CheckMethod _defaultCheckMethod = null;
-        public VersionHelper(Version version, string[] checkUrls, string[]? publishUrls = null, 
+        private readonly CheckMethod _defaultCheckMethod;
+        public VersionHelper(Version version, string[] checkUrls, string[]? publishUrls = null,
             Version? ignoreVersion = null,
             CheckMethod? customCheckMethod = null)
         {

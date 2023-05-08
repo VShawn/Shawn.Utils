@@ -366,7 +366,7 @@ namespace Shawn.Utils.WpfResources.Converter
         }
     }
 
-
+    /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Null}}" */
     public class ConverterEqual2Visible : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -374,6 +374,27 @@ namespace Shawn.Utils.WpfResources.Converter
             try
             {
                 return value == parameter ? Visibility.Visible : Visibility.Collapsed;
+            }
+            catch (Exception)
+            {
+                return Visibility.Collapsed;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return parameter;
+        }
+    }
+
+    /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterNotEqual2Visible}, ConverterParameter={x:Null}}" */
+    public class ConverterNotEqual2Visible : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            try
+            {
+                return value != parameter ? Visibility.Visible : Visibility.Collapsed;
             }
             catch (Exception)
             {

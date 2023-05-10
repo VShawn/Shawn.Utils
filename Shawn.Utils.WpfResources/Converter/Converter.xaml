@@ -22,5 +22,7 @@
     <converter:IntAdd x:Key="IntAdd2" AddValue="2"></converter:IntAdd>
     <converter:IntAdd x:Key="IntAdd_1" AddValue="-1"></converter:IntAdd>
     <converter:IntAdd x:Key="IntAdd_2" AddValue="-2"></converter:IntAdd>
+    <converter:ConverterIsEqual2Static x:Key="ConverterIsEqual2Static"></converter:ConverterIsEqual2Static>
     <converter:ConverterIsEqual x:Key="ConverterIsEqual"></converter:ConverterIsEqual>
+    <converter:ConverterIsNotEqual x:Key="ConverterIsNotEqual"></converter:ConverterIsNotEqual>
 </ResourceDictionary>

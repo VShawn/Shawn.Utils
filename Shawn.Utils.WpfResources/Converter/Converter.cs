@@ -373,7 +373,7 @@ namespace Shawn.Utils.WpfResources.Converter
         {
             try
             {
-                return value == parameter ? Visibility.Visible : Visibility.Collapsed;
+                return (value == parameter || object.Equals(value, parameter)) ? Visibility.Visible : Visibility.Collapsed;
             }
             catch (Exception)
             {
@@ -394,12 +394,34 @@ namespace Shawn.Utils.WpfResources.Converter
         {
             try
             {
-                return value != parameter ? Visibility.Visible : Visibility.Collapsed;
+                return (value == parameter || object.Equals(value, parameter)) ? Visibility.Collapsed : Visibility.Visible;
             }
             catch (Exception)
             {
                 return Visibility.Collapsed;
             }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return parameter;
+        }
+    }
+
+    /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterNotEqual2Visible}, ConverterParameter={x:Null}}" */
+    public class ConverterIsEqual2Static : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            try
+            {
+                if (value == parameter || object.Equals(value, parameter))
+                    return true;
+            }
+            catch (Exception)
+            {
+            }
+            return false;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -464,6 +486,69 @@ namespace Shawn.Utils.WpfResources.Converter
                 }
             }
             return false;
+        }
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
+
+    public class ConverterIsNotEqual : IMultiValueConverter
+    {
+        /*****
+            <DataTrigger.Binding>
+                <MultiBinding Converter="{StaticResource ConverterIsEqual}" >
+                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=view:ServerListPageView}" Path="DataContext.SelectedTabName" Mode="OneWay"></Binding>
+                    <Binding Path="Name" Mode="OneWay"></Binding>
+                </MultiBinding>
+            </DataTrigger.Binding>
+         */
+        public object Convert(object[] value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value.Length == 2)
+            {
+                if (value[0] is string s1
+                    && value[1] is string s2)
+                {
+                    return s1 != s2;
+                }
+                else if (value[0] is int i1
+                         && value[1] is int i2)
+                {
+                    return i1 != i2;
+                }
+                else if (value[0] is bool b1
+                         && value[1] is bool b2)
+                {
+                    return b1 != b2;
+                }
+                else if (value[0] is byte byte1
+                         && value[1] is int byte2)
+                {
+                    return byte1 != byte2;
+                }
+                else if (value[0] is short short1
+                         && value[1] is short short2)
+                {
+                    return short1 != short2;
+                }
+                else if (value[0] is double d1
+                         && value[1] is double d2)
+                {
+                    return Math.Abs(d1 - d2) > 1e-10;
+                }
+                else if (value[0] is float f1
+                         && value[1] is double f2)
+                {
+                    return Math.Abs(f1 - f2) > 1e-10;
+                }
+                else
+                {
+                    return !object.Equals(value[0], value[1]);
+                }
+            }
+            return true;
         }
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {

@@ -104,6 +104,25 @@ namespace Shawn.Utils
             _simpleLogHelper.Debug(o);
         }
 
+        public static void DebugInfo(params object[] o)
+        {
+#if DEBUG
+            _simpleLogHelper.Info(o);
+#endif
+        }
+        public static void DebugWarning(params object[] o)
+        {
+#if DEBUG
+            _simpleLogHelper.Warning(o);
+#endif
+        }
+        public static void DebugError(params object[] o)
+        {
+#if DEBUG
+            _simpleLogHelper.Error(o);
+#endif
+        }
+
         public static void Info(params object[] o)
         {
             _simpleLogHelper.Info(o);

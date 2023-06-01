@@ -21,6 +21,11 @@
 
     <Color x:Key="FilledColor" A="255" B="255" R="255" G="255"/>
     <Color x:Key="UnfilledColor" A="0"/>
+
+
+    <!--
+    一个转圈圈的 view，这样使用：
+    <Control Style="{StaticResource BusyAnimationStyle}" Background="Transparent"/>-->
     <Style x:Key="BusyAnimationStyle" TargetType="Control">
         <Setter Property="Template">
             <Setter.Value>

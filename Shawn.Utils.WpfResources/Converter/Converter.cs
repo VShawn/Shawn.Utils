@@ -373,6 +373,22 @@ namespace Shawn.Utils.WpfResources.Converter
         {
             try
             {
+                if (value is int i1 && int.TryParse(parameter.ToString(), out var i2))
+                {
+                    return (i1 != i2) ? Visibility.Collapsed : Visibility.Visible;
+                }
+                if (value is double d1 && double.TryParse(parameter.ToString(), out var d2))
+                {
+                    return Math.Abs(d1 - d2) > 0.0000001 ? Visibility.Collapsed : Visibility.Visible;
+                }
+                if (value is byte b1 && byte.TryParse(parameter.ToString(), out var b2))
+                {
+                    return (b1 != b2) ? Visibility.Collapsed : Visibility.Visible;
+                }
+                if (value is string s1)
+                {
+                    return (s1 != parameter.ToString()) ? Visibility.Collapsed : Visibility.Visible;
+                }
                 return (value == parameter || object.Equals(value, parameter)) ? Visibility.Visible : Visibility.Collapsed;
             }
             catch (Exception)
@@ -394,6 +410,22 @@ namespace Shawn.Utils.WpfResources.Converter
         {
             try
             {
+                if (value is int i1 && int.TryParse(parameter.ToString(), out var i2))
+                {
+                    return (i1 == i2) ? Visibility.Collapsed : Visibility.Visible;
+                }
+                if (value is double d1 && double.TryParse(parameter.ToString(), out var d2))
+                {
+                    return Math.Abs(d1 - d2) < 0.0000001 ? Visibility.Collapsed : Visibility.Visible;
+                }
+                if (value is byte b1 && byte.TryParse(parameter.ToString(), out var b2))
+                {
+                    return (b1 == b2) ? Visibility.Collapsed : Visibility.Visible;
+                }
+                if (value is string s1)
+                {
+                    return (s1 == parameter.ToString()) ? Visibility.Collapsed : Visibility.Visible;
+                }
                 return (value == parameter || object.Equals(value, parameter)) ? Visibility.Collapsed : Visibility.Visible;
             }
             catch (Exception)

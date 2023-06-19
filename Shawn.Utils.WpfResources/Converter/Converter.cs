@@ -369,10 +369,18 @@ namespace Shawn.Utils.WpfResources.Converter
     /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterEqual2Visible}, ConverterParameter={x:Null}}" */
     public class ConverterEqual2Visible : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             try
             {
+                if (value == null && parameter == null)
+                {
+                    return Visibility.Visible;
+                }
+                else if (value == null || parameter == null)
+                {
+                    return Visibility.Collapsed;
+                }
                 if (value is int i1 && int.TryParse(parameter.ToString(), out var i2))
                 {
                     return (i1 != i2) ? Visibility.Collapsed : Visibility.Visible;
@@ -406,10 +414,18 @@ namespace Shawn.Utils.WpfResources.Converter
     /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterNotEqual2Visible}, ConverterParameter={x:Null}}" */
     public class ConverterNotEqual2Visible : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             try
             {
+                if (value == null && parameter == null)
+                {
+                    return Visibility.Collapsed;
+                }
+                else if (value == null || parameter == null)
+                {
+                    return Visibility.Visible;
+                }
                 if (value is int i1 && int.TryParse(parameter.ToString(), out var i2))
                 {
                     return (i1 == i2) ? Visibility.Collapsed : Visibility.Visible;

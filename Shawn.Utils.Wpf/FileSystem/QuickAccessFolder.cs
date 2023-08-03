@@ -73,7 +73,7 @@ namespace Shawn.Utils.Wpf.FileSystem
         public static extern HRESULT SHCreateItemFromIDList(IntPtr pidl, [In, MarshalAs(UnmanagedType.LPStruct)] Guid riid, out IShellItem ppv);
         #endregion
 
-        public static bool IsOSWindows8OrNewer => Environment.OSVersion.Version >= new Version(6, 2);
+        private static bool IsOsWindows8OrNewer => Environment.OSVersion.Version >= new Version(6, 2);
 
 
         public class  SubFolder
@@ -117,7 +117,7 @@ namespace Shawn.Utils.Wpf.FileSystem
             //const string shellPath = "shell:::{3936E9E4-D92C-4EEE-A85A-BC16D5EA0819}"; // frequent folder win10
             uint rgflnOut = 0;
             // get top name "quick access" or "frequent folder" in local language
-            if (IsOSWindows8OrNewer
+            if (IsOsWindows8OrNewer
             && HRESULT.S_OK == SHILCreateFromPath(shellPath, out var pidlFull, ref rgflnOut))
             {
                 if (HRESULT.S_OK == SHCreateItemFromIDList(pidlFull, typeof(IShellItem).GUID, out var pShellItem)

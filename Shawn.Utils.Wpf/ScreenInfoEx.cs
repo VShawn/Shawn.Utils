@@ -41,6 +41,12 @@ namespace Shawn.Utils.Wpf
             return new ScreenInfoEx(screen);
         }
 
+        public static ScreenInfoEx GetCurrentScreenByMousePosition()
+        {
+            return GetCurrentScreenBySystemPosition(GetMouseSystemPosition());
+        }
+
+
         public static ScreenInfoEx GetCurrentScreenBySystemPosition(System.Drawing.Point systemPosition)
         {
             var screen = System.Windows.Forms.Screen.FromPoint(systemPosition);

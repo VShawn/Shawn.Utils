@@ -182,10 +182,10 @@
                                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 
                     <TextBox Margin="6 4 0 4" MinWidth="100"
-                                             Grid.Column="0" Name="PART_EditableTextBox" 
-                                             Foreground="{TemplateBinding Foreground}"
-                                             CaretBrush="{TemplateBinding Foreground}"
-                                             Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center" Focusable="True" >
+                             Grid.Column="0" Name="PART_EditableTextBox" 
+                             Foreground="{TemplateBinding Foreground}"
+                             CaretBrush="{TemplateBinding Foreground}"
+                             Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center" Focusable="True" >
                         <TextBox.Style>
                             <Style TargetType="TextBox">
                                 <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -205,6 +205,21 @@
                             </Style>
                         </TextBox.Style>
                     </TextBox>
+
+
+                    <TextBlock Grid.Column="0"
+                               x:Name="PART_Tag" 
+                               Cursor="IBeam"
+                               Margin="6 4 0 4"
+                               Text="{TemplateBinding Tag}">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Opacity" Value="0.4"/>
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Grid>
             </Border>
 
@@ -277,6 +292,9 @@
                 <Setter Property="IsEnabled" TargetName="ToggleButton" Value="False"/>
                 <Setter Property="Visibility" TargetName="ToggleButton" Value="Collapsed"/>
                 <Setter Property="Visibility" TargetName="Popup" Value="Collapsed"/>
+            </Trigger>
+            <Trigger Property="Text" Value="">
+                <Setter Property="Visibility" TargetName="PART_Tag" Value="Visible"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

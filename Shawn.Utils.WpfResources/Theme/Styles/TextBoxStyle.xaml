@@ -71,9 +71,9 @@
                         </TextBlock>
 
                         <ScrollViewer Padding="{TemplateBinding Padding}" Margin="-2,0,-1,0" 
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                          Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" 
-                                          x:Name="PART_ContentHost" />
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                      Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" 
+                                      x:Name="PART_ContentHost" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>

@@ -8,6 +8,18 @@
 
     <Thickness x:Key="DefaultInputPadding">8,4</Thickness>
 
+    <ControlTemplate x:Key="ErrorTemplate">
+        <Border BorderBrush="Red" BorderThickness="2" CornerRadius="{DynamicResource DefaultCornerRadius}">
+            <Grid>
+                <AdornedElementPlaceholder x:Name="_el" />
+                <TextBlock Margin="0,0,6,0"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           Foreground="Red"
+                           Text="{Binding [0].ErrorContent}" />
+            </Grid>
+        </Border>
+    </ControlTemplate>
 
     <Style x:Key="TextBoxBaseStyle" TargetType="TextBox" BasedOn="{StaticResource ControlBase}">
         <Setter Property="HorizontalContentAlignment" Value="Left" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Automation;
 
 namespace Shawn.Utils.Wpf
 {
@@ -74,9 +75,9 @@ namespace Shawn.Utils.Wpf
         /// return ExitCode
         /// </summary>
         /// <returns></returns>
-        public static int RunFile(string filePath, 
-            string arguments = "", 
-            bool isAsync = false, 
+        public static int RunFile(string filePath,
+            string arguments = "",
+            bool isAsync = false,
             bool isHideWindow = false,
             DirectoryInfo? workingDirectory = null,
             Dictionary<string, string>? envVariables = null)
@@ -137,9 +138,9 @@ namespace Shawn.Utils.Wpf
             {
                 var i = cmd.IndexOf('"', 1);
                 file = cmd.Substring(1, i - 1).Trim();
-                parameters  = cmd.Substring(i + 1).Trim();
+                parameters = cmd.Substring(i + 1).Trim();
             }
-            else if(cmd.IndexOf(" ", StringComparison.Ordinal) > 0)
+            else if (cmd.IndexOf(" ", StringComparison.Ordinal) > 0)
             {
                 var s = cmd.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 var st = new Queue<string>(s);
@@ -186,19 +187,7 @@ namespace Shawn.Utils.Wpf
         public static Tuple<bool, string> CheckFileExistsAndFullName(string fileName)
         {
             // 判断是否有环境变量
-            var splitByPercent = $"_{fileName}_".Split(new[] { '%' }, StringSplitOptions.RemoveEmptyEntries);
-            if (splitByPercent.Length > 2)
-            {
-                for (int i = 1; i < splitByPercent.Length - 1; i++)
-                {
-                    var tmp = Environment.GetEnvironmentVariable(splitByPercent[i]);
-                    if (string.IsNullOrEmpty(tmp) == false)
-                    {
-                        fileName = fileName.Replace($"%{splitByPercent[i]}%", tmp);
-                    }
-                }
-            }
-
+            fileName = Environment.ExpandEnvironmentVariables(fileName);
 
             if (Path.IsPathRooted(fileName))
             {
@@ -210,9 +199,10 @@ namespace Shawn.Utils.Wpf
                 return new Tuple<bool, string>(true, Path.GetFullPath(fileName));
             }
 
-            var file = Environment.ExpandEnvironmentVariables(fileName);
-            if (Path.GetDirectoryName(file) == string.Empty)
+
+            if (Path.GetDirectoryName(fileName) == string.Empty)
             {
+                var file = fileName.EndsWith(".exe", StringComparison.OrdinalIgnoreCase) ? fileName : fileName + ".exe";
                 var paths = (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';');
                 foreach (string test in paths)
                 {

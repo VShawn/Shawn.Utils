@@ -22,6 +22,7 @@
     </ControlTemplate>
 
     <Style x:Key="TextBoxBaseStyle" TargetType="TextBox" BasedOn="{StaticResource ControlBase}">
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
         <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />

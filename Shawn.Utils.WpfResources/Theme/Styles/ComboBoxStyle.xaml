@@ -7,6 +7,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="ComboBoxItemBaseStyle" TargetType="ComboBoxItem" BasedOn="{StaticResource ControlBase}">
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Padding" Value="8 4" />
         <Setter Property="Background" Value="Transparent" />

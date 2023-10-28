@@ -8,19 +8,6 @@
 
     <Thickness x:Key="DefaultInputPadding">8,4</Thickness>
 
-    <ControlTemplate x:Key="ErrorTemplate">
-        <Border BorderBrush="Red" BorderThickness="2" CornerRadius="{DynamicResource DefaultCornerRadius}">
-            <Grid>
-                <AdornedElementPlaceholder x:Name="_el" />
-                <TextBlock Margin="0,0,6,0"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Center"
-                           Foreground="Red"
-                           Text="{Binding [0].ErrorContent}" />
-            </Grid>
-        </Border>
-    </ControlTemplate>
-
     <Style x:Key="TextBoxBaseStyle" TargetType="TextBox" BasedOn="{StaticResource ControlBase}">
         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ErrorTemplate}" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -56,7 +43,8 @@
                                 CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}"/>
 
                         <TextBlock Text="{TemplateBinding Tag}" 
-                                   Background="{TemplateBinding Background}" Margin="{TemplateBinding Padding}">
+                                   FontSize="10"
+                                   Margin="{TemplateBinding Padding}">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
@@ -192,6 +180,7 @@
                                 <TextBlock Grid.Column="0" Grid.ColumnSpan="2" 
                                            x:Name="PART_Tag" 
                                            Cursor="IBeam"
+                                           FontSize="10"
                                            Margin="{TemplateBinding Padding}"
                                            Text="{TemplateBinding Tag}">
                                     <TextBlock.Style>
@@ -318,6 +307,7 @@
                                 <TextBlock Grid.Column="0" Grid.ColumnSpan="2" 
                                            x:Name="PART_Tag" 
                                            Cursor="IBeam"
+                                           FontSize="10"
                                            Margin="{TemplateBinding Padding}"
                                            Text="{TemplateBinding Tag}">
                                     <TextBlock.Style>

@@ -411,8 +411,8 @@ namespace Shawn.Utils.WpfResources.Converter
         }
     }
 
-    /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterNotEqual2Visible}, ConverterParameter={x:Null}}" */
-    public class ConverterNotEqual2Visible : IValueConverter
+    /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterEqual2Collapsed}, ConverterParameter={x:Null}}" */
+    public class ConverterEqual2Collapsed : IValueConverter
     {
         public object Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
@@ -456,7 +456,7 @@ namespace Shawn.Utils.WpfResources.Converter
         }
     }
 
-    /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterNotEqual2Visible}, ConverterParameter={x:Null}}" */
+    /* USAGE: Visibility="{Binding AudioRedirectionMode, Converter={StaticResource ConverterEqual2Collapsed}, ConverterParameter={x:Null}}" */
     public class ConverterIsEqual2Static : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

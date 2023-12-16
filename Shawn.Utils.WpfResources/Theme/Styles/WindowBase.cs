@@ -52,22 +52,21 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
         {
             _isDragging = false;
             _doubleClickEnd = false;
-            if (e.LeftButton != MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                SimpleLogHelper.Debug("e.LeftButton != MouseButtonState.Pressed");
-                return;
-            }
-
-            if (e.ClickCount == 2)
-            {
-                _doubleClickEnd = true;
-                _isDragging = false;
-                this.WindowState = (this.WindowState == WindowState.Normal) ? WindowState.Maximized : WindowState.Normal;
-                _mousePosition = new Point(-1, -1);
-            }
-            else
-            {
-                _mousePosition = e.GetPosition(this);
+                if (e.ClickCount == 2)
+                {
+                    _doubleClickEnd = true;
+                    _isDragging = false;
+                    this.WindowState = (this.WindowState == WindowState.Normal)
+                        ? WindowState.Maximized
+                        : WindowState.Normal;
+                    _mousePosition = new Point(-1, -1);
+                }
+                else
+                {
+                    _mousePosition = e.GetPosition(this);
+                }
             }
         }
 
@@ -81,40 +80,44 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
                 if (_isDragging)
                 {
                     _isDragging = false;
+                    _mousePosition = new Point(-1, -1);
                     OnDragEnd?.Invoke();
                     SimpleLogHelper.Debug("OnDragEnd?.Invoke();");
                 }
-                return;
             }
-
-            var cmp = e.GetPosition(this);
-            if (Math.Abs(cmp.X - _mousePosition.X) > 2 || Math.Abs(cmp.Y - _mousePosition.Y) > 2)
+            else
             {
-                _isDragging = true;
-            }
-
-
-            if (_isDragging)
-            {
-                if (this.WindowState == WindowState.Maximized)
+                var position = e.GetPosition(this);
+                if (!_isDragging
+                    && _mousePosition.X > 0
+                    && (Math.Abs(position.X - _mousePosition.X) > 2 || Math.Abs(position.Y - _mousePosition.Y) > 2))
                 {
-                    var p = ScreenInfoEx.GetMouseVirtualPosition();
-                    var top = p.Y;
-                    var left = p.X;
-                    this.Top = top - 15;
-                    this.Left = left - this.Width / 2;
-                    this.WindowState = WindowState.Normal;
-                    this.Top = top - 15;
-                    this.Left = left - this.Width / 2;
+                    _isDragging = true;
                 }
 
-                try
+
+                if (_isDragging)
                 {
-                    this.DragMove();
-                }
-                catch
-                {
-                    // ignored
+                    if (this.WindowState == WindowState.Maximized)
+                    {
+                        var p = ScreenInfoEx.GetMouseVirtualPosition();
+                        var top = p.Y;
+                        var left = p.X;
+                        this.Top = top - 15;
+                        this.Left = left - this.Width / 2;
+                        this.WindowState = WindowState.Normal;
+                        this.Top = top - 15;
+                        this.Left = left - this.Width / 2;
+                    }
+
+                    try
+                    {
+                        this.DragMove();
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
             }
         }

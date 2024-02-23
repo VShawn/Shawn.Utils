@@ -35,12 +35,11 @@ namespace Shawn.Utils.Wpf.Controls
 
         #endregion Window Flashing API Stuff
 
-        public static void Flash(this Window win, UInt32 count = UInt32.MaxValue, UInt32 interval = 500)
+        public static void Flash(IntPtr hwnd, UInt32 count = UInt32.MaxValue, UInt32 interval = 500)
         {
-            WindowInteropHelper h = new WindowInteropHelper(win);
             FLASHWINFO info = new FLASHWINFO
             {
-                hwnd = h.Handle,
+                hwnd = hwnd,
                 dwFlags = FLASHW_TRAY | FLASHW_TIMER,
                 uCount = count,
                 dwTimeout = interval
@@ -48,6 +47,12 @@ namespace Shawn.Utils.Wpf.Controls
 
             info.cbSize = Convert.ToUInt32(Marshal.SizeOf(info));
             FlashWindowEx(ref info);
+        }
+
+        public static void Flash(this Window win, UInt32 count = UInt32.MaxValue, UInt32 interval = 500)
+        {
+            WindowInteropHelper h = new WindowInteropHelper(win);
+            Flash(h.Handle, count, interval);
         }
 
         public static void FlashIfNotActive(this Window win, UInt32 count = UInt32.MaxValue, UInt32 interval = 500)
@@ -61,13 +66,13 @@ namespace Shawn.Utils.Wpf.Controls
                 });
         }
 
-        public static void StopFlashingWindow(this Window win)
-        {
-            WindowInteropHelper h = new WindowInteropHelper(win);
 
+
+        public static void StopFlash(IntPtr hwnd)
+        {
             FLASHWINFO info = new FLASHWINFO
             {
-                hwnd = h.Handle,
+                hwnd = hwnd,
                 dwFlags = FLASHW_STOP,
                 uCount = UInt32.MaxValue,
                 dwTimeout = 0
@@ -75,6 +80,12 @@ namespace Shawn.Utils.Wpf.Controls
 
             info.cbSize = Convert.ToUInt32(Marshal.SizeOf(info));
             FlashWindowEx(ref info);
+        }
+
+        public static void StopFlashingWindow(this Window win)
+        {
+            WindowInteropHelper h = new WindowInteropHelper(win);
+            StopFlash(h.Handle);
         }
     }
 }

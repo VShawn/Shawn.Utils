@@ -40,6 +40,11 @@ namespace Shawn.Utils.Wpf
             var screen = System.Windows.Forms.Screen.FromHandle(new WindowInteropHelper(win).Handle);
             return new ScreenInfoEx(screen);
         }
+        public static ScreenInfoEx GetCurrentScreen(IntPtr hwnd)
+        {
+            var screen = System.Windows.Forms.Screen.FromHandle(hwnd);
+            return new ScreenInfoEx(screen);
+        }
 
         public static ScreenInfoEx GetCurrentScreenByMousePosition()
         {

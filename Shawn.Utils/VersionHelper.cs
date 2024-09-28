@@ -143,22 +143,24 @@ namespace Shawn.Utils
                     && v2.Minor == v1.Minor
                     && v2.Patch > v1.Patch)
                     return true;
-                if (v2.Major == v1.Major
-                    && v2.Minor == v1.Minor
-                    && v2.Patch == v1.Patch
-                    && v2.Build > v1.Build)
-                    return true;
+				if (v2.Major == v1.Major
+					&& v2.Minor == v1.Minor
+					&& v2.Patch == v1.Patch
+					&& v2.Build > v1.Build)
+					return true;
 
-                if (v2.Major == v1.Major
-                    && v2.Minor == v1.Minor
-                    && v2.Patch == v1.Patch
-                    && v2.Build == v1.Build
-                    && (string.IsNullOrEmpty(v2.PreRelease) && string.IsNullOrEmpty(v1.PreRelease) == false)
-                        || string.CompareOrdinal(v2.PreRelease.ToLower(), v1.PreRelease.ToLower()) > 0)
-                    return true;
-
-                return false;
-            }
+				if (v2.Major == v1.Major
+					&& v2.Minor == v1.Minor
+					&& v2.Patch == v1.Patch
+					&& v2.Build == v1.Build
+				   )
+				{
+					if ((string.IsNullOrEmpty(v2.PreRelease) && string.IsNullOrEmpty(v1.PreRelease) == false)
+						|| string.CompareOrdinal(v2.PreRelease.ToLower(), v1.PreRelease.ToLower()) > 0)
+						return true;
+				}
+				return false;
+			}
         }
 
 

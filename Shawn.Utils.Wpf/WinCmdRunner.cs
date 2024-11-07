@@ -79,16 +79,19 @@ namespace Shawn.Utils.Wpf
             string arguments = "",
             bool isAsync = false,
             bool isHideWindow = false,
+            bool useShellExcute = true,
             DirectoryInfo? workingDirectory = null,
             Dictionary<string, string>? envVariables = null)
         {
+            useShellExcute = useShellExcute && !(envVariables?.Count > 0);
+            isHideWindow = isHideWindow && !useShellExcute;
             var psi = new ProcessStartInfo()
             {
                 FileName = filePath,
                 Arguments = arguments,
                 WindowStyle = isHideWindow ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal,
-                UseShellExecute = !isHideWindow && envVariables == null,
-                CreateNoWindow = isHideWindow,
+                UseShellExecute = useShellExcute,
+                CreateNoWindow =  isHideWindow,
             };
 
             if (workingDirectory != null)
@@ -126,9 +129,10 @@ namespace Shawn.Utils.Wpf
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
-        public static Tuple<string, string, DirectoryInfo?> DisassembleOneLineScriptCmd(string cmd)
+        public static Tuple<string, string, DirectoryInfo?, bool> DisassembleOneLineScriptCmd(string cmd)
         {
             var parameters = "";
+            var useShellExcute = true;
             cmd = cmd.Trim();
             var file = cmd;
             if (File.Exists(file))
@@ -164,24 +168,33 @@ namespace Shawn.Utils.Wpf
             }
 
             DirectoryInfo? workDirectory = null;
-            ;
             if (File.Exists(file))
             {
                 workDirectory = new FileInfo(file).Directory;
                 var ext = Path.GetExtension(file).ToLower();
+                useShellExcute = false;
                 if (ext == ".py")
                 {
                     parameters = file + " " + parameters;
                     file = "python";
                 }
-                if (ext == ".ps1")
+                //else if (ext == ".bat" || ext == ".cmd")
+                //{
+                //    parameters = $" /c {file} {parameters}";
+                //    file = "cmd";
+                //}
+                else if (ext == ".ps1")
                 {
                     parameters = file + " " + parameters;
                     file = "powershell.exe";
                 }
+                else
+                {
+                    useShellExcute = true;
+                }
             }
 
-            return new Tuple<string, string, DirectoryInfo?>(file, parameters, workDirectory);
+            return new Tuple<string, string, DirectoryInfo?, bool>(file, parameters, workDirectory, useShellExcute);
         }
 
         public static Tuple<bool, string> CheckFileExistsAndFullName(string fileName)

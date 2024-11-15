@@ -4,16 +4,15 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Basic/Const.xaml"></ResourceDictionary>
-        <ResourceDictionary Source="../Basic/Font.xaml"></ResourceDictionary>
         <ResourceDictionary Source="../Basic/Effects.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 
     <Thickness x:Key="DefaultInputPadding">8,4</Thickness>
 
     <Style TargetType="Control" x:Key="ControlBase">
+        <Setter Property="FontFamily" Value="{DynamicResource GlobalFontFamily}"/>
+        <Setter Property="FontSize" Value="{DynamicResource GlobalFontSizeBody}"></Setter>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="FontSize" Value="{DynamicResource TextFontSize}"></Setter>
-        <Setter Property="FontFamily" Value="{DynamicResource YaHei}"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}" />
         <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
@@ -26,19 +25,19 @@
     <Style TargetType="Control" BasedOn="{StaticResource ControlBase}" />
 
     <Style TargetType="TextElement" x:Key="TextElementBase">
-        <Setter Property="FontSize" Value="{DynamicResource TextFontSize}"></Setter>
-        <Setter Property="FontFamily" Value="{DynamicResource YaHei}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource GlobalFontFamily}"/>
+        <Setter Property="FontSize" Value="{DynamicResource GlobalFontSizeBody}"></Setter>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
     </Style>
     <Style TargetType="TextBlock" x:Key="TextBlockBase">
-        <Setter Property="FontSize" Value="{DynamicResource TextFontSize}"></Setter>
-        <Setter Property="FontFamily" Value="{DynamicResource YaHei}"/>
+        <Setter Property="FontSize" Value="{DynamicResource GlobalFontSizeBody}"></Setter>
+        <Setter Property="FontFamily" Value="{DynamicResource GlobalFontFamily}"/>
         <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
     </Style>
-    <!--<Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}" />
-    <Style TargetType="TextElement" BasedOn="{StaticResource TextElementBase}" />-->
+    <!--<Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}" /> 不能加这个，加上后Button中的text将不会动态改变-->
+    <Style TargetType="TextElement" BasedOn="{StaticResource TextElementBase}" />
 
 
     <ControlTemplate x:Key="ErrorTemplate">
@@ -49,7 +48,7 @@
                            HorizontalAlignment="Right"
                            VerticalAlignment="Bottom"
                            IsHitTestVisible="False"
-                           FontSize="10"
+                           FontSize="{DynamicResource GlobalFontSizeSmall}"
                            Foreground="Red"
                            Text="{Binding [0].ErrorContent}" />
             </Grid>

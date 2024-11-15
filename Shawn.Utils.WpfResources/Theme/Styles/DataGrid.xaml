@@ -17,7 +17,7 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type DataGrid}" x:Key="DataGridBaseStyle">
+    <Style TargetType="{x:Type DataGrid}" x:Key="DataGridBaseStyle" BasedOn="{StaticResource ControlBase}">
         <!--网格线颜色-->
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
@@ -29,11 +29,11 @@
     <Style TargetType="{x:Type DataGrid}" BasedOn="{StaticResource DataGridBaseStyle}"/>
 
     <!--标题栏样式-->
-    <Style TargetType="DataGridColumnHeader" x:Key="DataGridColumnHeaderBaseStyle">
+    <Style TargetType="DataGridColumnHeader" x:Key="DataGridColumnHeaderBaseStyle" BasedOn="{StaticResource ControlBase}">
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="MinWidth" Value="0" />
         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}" />
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="{DynamicResource GlobalFontSizeTitle}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="Height" Value="35"/>
         <Setter Property="Margin" Value="0 0 0 10"/>
@@ -87,11 +87,11 @@
 
     <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderBaseStyle}"/>
 
-    <Style TargetType="{x:Type DataGridCell}" x:Key="DataGridCellBaseStyle">
+    <Style TargetType="{x:Type DataGridCell}" x:Key="DataGridCellBaseStyle" BasedOn="{StaticResource ControlBase}">
         <Setter Property="TextBlock.VerticalAlignment" Value="Center" />
         <Setter Property="BorderThickness" Value="0"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"/>
-        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontSize" Value="{DynamicResource GlobalFontSizeSubtitle}"/>
         <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
@@ -101,7 +101,7 @@
     </Style>
     <Style TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource DataGridCellBaseStyle}"/>
 
-    <Style TargetType="{x:Type DataGridRow}" x:Key="DataGridRowBaseStyle">
+    <Style TargetType="{x:Type DataGridRow}" x:Key="DataGridRowBaseStyle" BasedOn="{StaticResource ControlBase}">
         <Style.Triggers>
             <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                 <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"></Setter>

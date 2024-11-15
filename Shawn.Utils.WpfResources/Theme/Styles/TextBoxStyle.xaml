@@ -19,7 +19,6 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{DynamicResource DefaultBorderBrush}"/>
         <Setter Property="CaretBrush" Value="{DynamicResource BackgroundTextBrush}" />
-        <Setter Property="FontSize" Value="12" />
         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}" />
         <Setter Property="Background" Value="{DynamicResource BackgroundBrush}" />
         <Setter Property="attachProperty:VisionElement.BackgroundAccent" Value="{DynamicResource PrimaryMidBrush}"/>
@@ -43,10 +42,10 @@
                                 CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}"/>
 
                         <TextBlock Text="{TemplateBinding Tag}" 
-                                   FontSize="10"
+                                   FontSize="{DynamicResource GlobalFontSizeSmall}"
                                    Margin="{TemplateBinding Padding}">
                             <TextBlock.Style>
-                                <Style TargetType="{x:Type TextBlock}">
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">
                                     <Setter Property="VerticalAlignment" Value="Center"/>
                                     <Setter Property="Opacity" Value="0.4"/>
                                     <Setter Property="Foreground" Value="Transparent"/>
@@ -127,7 +126,7 @@
 
 
 
-    <Style x:Key="PasswordBoxBaseStyleWithoutEye" TargetType="{x:Type PasswordBox}">
+    <Style x:Key="PasswordBoxBaseStyleWithoutEye" TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource ControlBase}">
         <Setter Property="Height" Value="28" />
         <Setter Property="PasswordChar" Value="●" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -180,11 +179,11 @@
                                 <TextBlock Grid.Column="0" Grid.ColumnSpan="2" 
                                            x:Name="PART_Tag" 
                                            Cursor="IBeam"
-                                           FontSize="10"
+                                           FontSize="{DynamicResource GlobalFontSizeSmall}"
                                            Margin="{TemplateBinding Padding}"
                                            Text="{TemplateBinding Tag}">
                                     <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">
                                             <Setter Property="VerticalAlignment" Value="Center"/>
                                             <Setter Property="Opacity" Value="0.4"/>
                                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -201,7 +200,7 @@
                                            Visibility="Collapsed" Opacity="0.6"
                                            TextAlignment="Center"
                                            Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.PlaceHolder), RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"
-                                           FontSize="12" />
+                                           FontSize="{DynamicResource GlobalFontSizeBody}" />
                             </Grid>
                         </Border>
                     </Grid>
@@ -253,7 +252,7 @@
 
 
 
-    <Style x:Key="PasswordBoxBaseStyle" TargetType="{x:Type PasswordBox}">
+    <Style x:Key="PasswordBoxBaseStyle" TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource ControlBase}">
         <Setter Property="Height" Value="28" />
         <Setter Property="PasswordChar" Value="●" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -307,11 +306,11 @@
                                 <TextBlock Grid.Column="0" Grid.ColumnSpan="2" 
                                            x:Name="PART_Tag" 
                                            Cursor="IBeam"
-                                           FontSize="10"
+                                           FontSize="{DynamicResource GlobalFontSizeSmall}"
                                            Margin="{TemplateBinding Padding}"
                                            Text="{TemplateBinding Tag}">
                                     <TextBlock.Style>
-                                        <Style TargetType="{x:Type TextBlock}">
+                                        <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">
                                             <Setter Property="VerticalAlignment" Value="Center"/>
                                             <Setter Property="Opacity" Value="0.4"/>
                                             <Setter Property="Visibility" Value="Collapsed"/>
@@ -342,7 +341,7 @@
                                            Visibility="Collapsed" Opacity="0.6"
                                            TextAlignment="Center"
                                            Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.PlaceHolder), RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"
-                                           FontSize="12" />
+                                           FontSize="{DynamicResource GlobalFontSizeBody}" />
 
 
                                 <CheckBox x:Name="PART_DecryptButton" Grid.Column="1" Background="Transparent" VerticalAlignment="Center"

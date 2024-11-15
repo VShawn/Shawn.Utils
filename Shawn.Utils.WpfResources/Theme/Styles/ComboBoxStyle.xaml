@@ -188,7 +188,7 @@
                              CaretBrush="{TemplateBinding Foreground}"
                              Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center" Focusable="True" >
                         <TextBox.Style>
-                            <Style TargetType="TextBox">
+                            <Style TargetType="TextBox" BasedOn="{StaticResource ControlBase}">
                                 <Setter Property="OverridesDefaultStyle" Value="true" />
                                 <Setter Property="AllowDrop" Value="true" />
                                 <Setter Property="MinWidth" Value="0" />

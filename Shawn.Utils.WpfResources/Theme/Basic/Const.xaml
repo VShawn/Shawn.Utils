@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:system="clr-namespace:System;assembly=mscorlib">
-    <FontFamily x:Key="YaHei">Microsoft YaHei</FontFamily>
     <system:Double x:Key="DefaultControlHeight">30</system:Double>
     <Thickness x:Key="DefaultControlPadding">10,6</Thickness>
     <system:Double x:Key="DefaultCornerRadiusValue">4</system:Double>

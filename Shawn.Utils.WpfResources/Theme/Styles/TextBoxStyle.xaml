@@ -43,6 +43,7 @@
 
                         <TextBlock Text="{TemplateBinding Tag}" 
                                    FontSize="{DynamicResource GlobalFontSizeSmall}"
+                                   FontFamily="{TemplateBinding FontFamily}"
                                    Margin="{TemplateBinding Padding}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}">
@@ -199,6 +200,7 @@
                                            Cursor="IBeam"
                                            Visibility="Collapsed" Opacity="0.6"
                                            TextAlignment="Center"
+                                           FontFamily="{TemplateBinding FontFamily}"
                                            Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.PlaceHolder), RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"
                                            FontSize="{DynamicResource GlobalFontSizeBody}" />
                             </Grid>
@@ -307,6 +309,7 @@
                                            x:Name="PART_Tag" 
                                            Cursor="IBeam"
                                            FontSize="{DynamicResource GlobalFontSizeSmall}"
+                                           FontFamily="{TemplateBinding FontFamily}"
                                            Margin="{TemplateBinding Padding}"
                                            Text="{TemplateBinding Tag}">
                                     <TextBlock.Style>
@@ -341,6 +344,7 @@
                                            Visibility="Collapsed" Opacity="0.6"
                                            TextAlignment="Center"
                                            Text="{Binding Path=(attachProperty:PasswordBoxAttachProperty.PlaceHolder), RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"
+                                           FontFamily="{TemplateBinding FontFamily}"
                                            FontSize="{DynamicResource GlobalFontSizeBody}" />
 
 

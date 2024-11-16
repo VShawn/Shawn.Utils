@@ -59,6 +59,10 @@
                         </Grid>
 
                         <ContentPresenter x:Name="ContentPresenter"
+                                          TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                          TextElement.FontSize="{TemplateBinding FontSize}"
+                                          TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                                          TextBlock.FontSize="{TemplateBinding FontSize}"
                                           Visibility="Collapsed" Grid.Column="1" Focusable="False" 
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                           Margin="5 0" 

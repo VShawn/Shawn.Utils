@@ -36,7 +36,8 @@
         <Setter Property="FocusVisualStyle" Value="{x:Null}"></Setter>
         <Setter Property="Foreground" Value="{DynamicResource BackgroundTextBrush}"></Setter>
     </Style>
-    <!--<Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}" /> 不能加这个，加上后Button中的text将不会动态改变-->
+    <!-- ↓ 不能加这个，加上后Button中的text将不会动态改变-->
+    <!--<Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBase}" />--> 
     <Style TargetType="TextElement" BasedOn="{StaticResource TextElementBase}" />
 
 

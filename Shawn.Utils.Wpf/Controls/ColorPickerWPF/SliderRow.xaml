@@ -12,7 +12,7 @@
             <ColumnDefinition Width="60" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock x:Name="Label" Text=" " HorizontalAlignment="Left" VerticalAlignment="Center" Style="{DynamicResource TextBlockBase}"/>
+        <TextBlock x:Name="Label" Text=" " HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource TextBlockBase}"/>
         <Slider x:Name="Slider" Grid.Column="1" HorizontalAlignment="Stretch" Margin="5,0" VerticalAlignment="Center"
                 ValueChanged="Slider_OnValueChanged"/>
         <TextBox x:Name="TextBox" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Center" Width="57"

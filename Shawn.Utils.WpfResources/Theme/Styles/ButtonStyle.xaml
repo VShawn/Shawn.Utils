@@ -70,8 +70,10 @@
                                       SnapsToDevicePixels="True" Stretch="Uniform" 
                                       Data="{TemplateBinding attachProperty:VisionElement.ContentGeometry}"/>
                                 <ContentPresenter Margin="{TemplateBinding Padding}" 
-                                                  TextElement.Foreground="{TemplateBinding Foreground}"
-                                                  TextBlock.Foreground="{TemplateBinding Foreground}"
+                                                  TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                                  TextElement.FontSize="{TemplateBinding FontSize}"
+                                                  TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                                                  TextBlock.FontSize="{TemplateBinding FontSize}"
                                                   x:Name="ContentPresenter" 
                                                   RecognizesAccessKey="True" 
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 

@@ -30,7 +30,10 @@
                         <Border CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}"
                                 Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                             <ContentPresenter x:Name="ContentPresenter" 
-                                              TextElement.Foreground="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=ComboBox}, Path=Foreground}"
+                                              TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                              TextElement.FontSize="{TemplateBinding FontSize}"
+                                              TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                                              TextBlock.FontSize="{TemplateBinding FontSize}"
                                               HorizontalAlignment="{TemplateBinding HorizontalAlignment}" 
                                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
@@ -166,26 +169,34 @@
                     </Grid.ColumnDefinitions>
 
                     <ToggleButton Grid.ColumnSpan="2" Name="ToggleButton" 
-                                                  IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
-                                                  Background="{TemplateBinding Background}"
-                                                  Foreground="{TemplateBinding Foreground}"
-                                                  BorderThickness="{TemplateBinding BorderThickness}"
-                                                  Style="{StaticResource ComboBoxToggleButton}"/>
+                                  FontFamily="{TemplateBinding FontFamily}"
+                                  FontSize="{TemplateBinding FontSize}"
+                                  IsChecked="{Binding Path=IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
+                                  Background="{TemplateBinding Background}"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  Style="{StaticResource ComboBoxToggleButton}"/>
 
                     <ContentPresenter Grid.Column="0" Margin="8 4 0 4" 
-                                                      x:Name="ContentPresenter" 
-                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
-                                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
-                                                      Content="{TemplateBinding SelectionBoxItem}" 
-                                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
-                                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                                      IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                      x:Name="ContentPresenter" 
+                                      TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                      TextElement.FontSize="{TemplateBinding FontSize}"
+                                      TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                                      TextBlock.FontSize="{TemplateBinding FontSize}"
+                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
+                                      Content="{TemplateBinding SelectionBoxItem}" 
+                                      ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" 
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                      IsHitTestVisible="false" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
 
                     <TextBox Margin="6 4 0 4" MinWidth="100"
                              Grid.Column="0" Name="PART_EditableTextBox" 
                              Foreground="{TemplateBinding Foreground}"
                              CaretBrush="{TemplateBinding Foreground}"
+                             FontFamily="{TemplateBinding FontFamily}"
+                             FontSize="{TemplateBinding FontSize}"
                              Visibility="Collapsed" HorizontalAlignment="Left" VerticalAlignment="Center" Focusable="True" >
                         <TextBox.Style>
                             <Style TargetType="TextBox" BasedOn="{StaticResource ControlBase}">
@@ -212,6 +223,8 @@
                                x:Name="PART_Tag" 
                                Cursor="IBeam"
                                Margin="6 4 0 4"
+                               FontFamily="{TemplateBinding FontFamily}"
+                               FontSize="{TemplateBinding FontSize}"
                                Text="{TemplateBinding Tag}">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">
@@ -236,24 +249,29 @@
 
             <!-- Popup showing items -->
             <Popup Name="Popup" Placement="Bottom"
-                               Focusable="False" AllowsTransparency="True"
-                               IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
-                               PlacementTarget="{Binding ElementName=BorderForBackground}"
-                               PopupAnimation="Slide">
+                   Focusable="False" AllowsTransparency="True"
+                   IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"
+                   PlacementTarget="{Binding ElementName=BorderForBackground}"
+                   PopupAnimation="Slide">
                 <Border SnapsToDevicePixels="True"
-                                        Margin="8,0,8,8" Effect="{DynamicResource EffectShadow2}"
-                                        Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}">
+                        Margin="8,0,8,8" Effect="{DynamicResource EffectShadow2}"
+                        Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}">
                     <Grid Name="DropDown" SnapsToDevicePixels="True" 
-                                      MinWidth="{TemplateBinding FrameworkElement.ActualWidth}" MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
+                          MinWidth="{TemplateBinding FrameworkElement.ActualWidth}" MaxHeight="{TemplateBinding ComboBox.MaxDropDownHeight}">
                         <Border SnapsToDevicePixels="True"
-                                                Name="BorderForItemsPresenter"
-                                                BorderThickness="{TemplateBinding BorderThickness}" 
-                                                BorderBrush="{TemplateBinding BorderBrush}" 
-                                                CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}">
+                                Name="BorderForItemsPresenter"
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                CornerRadius="{Binding Path=(attachProperty:VisionElement.BorderCornerRadius),RelativeSource={RelativeSource TemplatedParent}}">
                             <ScrollViewer SnapsToDevicePixels="True">
-                                <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" 
+                                                TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                                TextElement.FontSize="{TemplateBinding FontSize}"
+                                                TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                                                TextBlock.FontSize="{TemplateBinding FontSize}"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </ScrollViewer>
                         </Border>
                     </Grid>

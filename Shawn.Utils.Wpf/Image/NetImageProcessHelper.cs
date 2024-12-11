@@ -285,7 +285,7 @@ namespace Shawn.Utils.Wpf.Image
             return Icon.FromHandle(src.GetHicon());
         }
 
-        public static Icon ToIcon<T>(this T source) where T : BitmapSource
+        public static Icon? ToIcon<T>(this T source) where T : BitmapSource
         {
             var src = source.ToBitmap();
             return src?.ToIcon();

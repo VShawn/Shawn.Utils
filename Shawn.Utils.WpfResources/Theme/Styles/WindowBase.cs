@@ -45,8 +45,8 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
         #region DragMove
 
         protected bool _isDragging = false;
-        private bool _doubleClickEnd = false;
-        private Point _mousePosition = new Point(-1, -1);
+        protected bool _doubleClickEnd = false;
+        protected Point _mousePosition = new Point(-1, -1);
         public virtual void WinTitleBar_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             _isDragging = false;

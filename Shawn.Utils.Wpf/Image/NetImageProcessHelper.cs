@@ -4,7 +4,9 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -401,13 +403,25 @@ namespace Shawn.Utils.Wpf.Image
             if (image == null)
                 return null;
             Bitmap dstBitmap = null;
-            using var mStream = new MemoryStream();
-            BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(mStream, image);
-            mStream.Seek(0, SeekOrigin.Begin);
-            dstBitmap = (Bitmap)bf.Deserialize(mStream);
-            mStream.Close();
-
+#if NET8_0_OR_GREATER
+            {
+                using var mStream = new MemoryStream();
+                var dc = new DataContractSerializer(image.GetType());
+                dc.WriteObject(mStream, image);
+                mStream.Seek(0, SeekOrigin.Begin);
+                dstBitmap = (Bitmap)dc.ReadObject(mStream);
+                mStream.Close();
+            }
+#else
+            {
+                using var mStream = new MemoryStream();
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(mStream, image);
+                mStream.Seek(0, SeekOrigin.Begin);
+                dstBitmap = (Bitmap)bf.Deserialize(mStream);
+                mStream.Close();
+            }
+#endif
             return dstBitmap;
         }
 

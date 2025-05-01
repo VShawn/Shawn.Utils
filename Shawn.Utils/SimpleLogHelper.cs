@@ -108,18 +108,24 @@ namespace Shawn.Utils
         {
 #if DEBUG
             _simpleLogHelper.Info(o);
+#else
+            _simpleLogHelper.Debug(o);
 #endif
         }
         public static void DebugWarning(params object[] o)
         {
 #if DEBUG
             _simpleLogHelper.Warning(o);
+#else
+            _simpleLogHelper.Debug(o);
 #endif
         }
         public static void DebugError(params object[] o)
         {
 #if DEBUG
             _simpleLogHelper.Error(o);
+#else
+            _simpleLogHelper.Debug(o);
 #endif
         }
 

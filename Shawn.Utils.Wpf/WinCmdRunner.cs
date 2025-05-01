@@ -197,6 +197,10 @@ namespace Shawn.Utils.Wpf
             return new Tuple<string, string, DirectoryInfo?, bool>(file, parameters, workDirectory, useShellExcute);
         }
 
+        /// <summary>
+        /// input file name, if environment variable exists, it will be expanded
+        /// return (isExists, fullName)
+        /// </summary>
         public static Tuple<bool, string> CheckFileExistsAndFullName(string fileName)
         {
             // 判断是否有环境变量

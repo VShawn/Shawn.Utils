@@ -225,6 +225,7 @@
                                Margin="6 4 0 4"
                                FontFamily="{TemplateBinding FontFamily}"
                                FontSize="{TemplateBinding FontSize}"
+                               IsHitTestVisible="False"
                                Text="{TemplateBinding Tag}">
                         <TextBlock.Style>
                             <Style TargetType="{x:Type TextBlock}">

@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace Shawn.Utils.Wpf
 {
-    public class MyVisualTreeHelper
+    public static class MyVisualTreeHelper
     {
         #region Static Func
         public static DependencyObject? GetParent(DependencyObject reference)
@@ -134,6 +134,51 @@ namespace Shawn.Utils.Wpf
             }
             return list;
         }
+
+        public static FrameworkElement? FindElementByName(this TreeViewItem treeViewItem, string name)
+        {
+            if (treeViewItem == null) return null;
+            // 尝试在当前 TreeViewItem 的模板中查找
+            FrameworkElement element = treeViewItem.Template?.FindName(name, treeViewItem) as FrameworkElement;
+            if (element != null)
+                return element;
+
+            // 遍历 TreeViewItem 的视觉子元素
+            int childCount = VisualTreeHelper.GetChildrenCount(treeViewItem);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(treeViewItem, i);
+                // 如果子元素是 FrameworkElement 并且名称匹配
+                if (child is FrameworkElement frameworkElement && frameworkElement.Name == name)
+                    return frameworkElement;
+                // 递归查找子元素中的目标元素
+                if (child != null)
+                {
+                    FrameworkElement result = FindElementInVisualTree(child, name);
+                    if (result != null)
+                        return result;
+                }
+            }
+            return null;
+        }
+
+        private static FrameworkElement? FindElementInVisualTree(DependencyObject parent, string name)
+        {
+            int childCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childCount; i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                if (child is FrameworkElement element && element.Name == name)
+                    return element;
+                var result = FindElementInVisualTree(child, name);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
+
+
         #endregion Static Func
     }
 }

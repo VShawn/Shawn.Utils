@@ -176,5 +176,21 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
             if (IsClosing == false)
                 base.Activate();
         }
+
+
+        /// <summary>
+        /// Ensures that a click anywhere on the window brings it to the foreground.
+        /// Precision trackpad taps may not trigger the standard WM_MOUSEACTIVATE path,
+        /// so we explicitly activate the window on the first PreviewMouseDown if it is
+        /// not already the active window.
+        /// </summary>
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseDown(e);
+            if (!IsActive)
+            {
+                Activate();
+            }
+        }
     }
 }

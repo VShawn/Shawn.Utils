@@ -85,6 +85,10 @@ namespace Shawn.Utils.Wpf
         {
             useShellExcute = useShellExcute && !(envVariables?.Count > 0);
             isHideWindow = isHideWindow && !useShellExcute;
+
+            // Remove surrounding quotes from filePath if present
+            filePath = filePath?.Trim('"', '\'') ?? string.Empty;
+
             var psi = new ProcessStartInfo()
             {
                 FileName = filePath,
@@ -175,7 +179,9 @@ namespace Shawn.Utils.Wpf
                 useShellExcute = false;
                 if (ext == ".py")
                 {
-                    parameters = file + " " + parameters;
+                    // Quote the file path if it contains spaces
+                    var quotedFile = file.Contains(" ") ? $"\"{file}\"" : file;
+                    parameters = quotedFile + (string.IsNullOrEmpty(parameters) ? "" : " " + parameters);
                     file = "python";
                 }
                 //else if (ext == ".bat" || ext == ".cmd")
@@ -185,7 +191,10 @@ namespace Shawn.Utils.Wpf
                 //}
                 else if (ext == ".ps1")
                 {
-                    parameters = file + " " + parameters;
+                    // For PowerShell, always quote the script path
+                    var quotedFile = $"\"{file}\"";
+                    // Use -File parameter for PowerShell scripts to properly handle arguments
+                    parameters = $"-File {quotedFile}" + (string.IsNullOrEmpty(parameters) ? "" : " " + parameters);
                     file = "powershell.exe";
                 }
                 else

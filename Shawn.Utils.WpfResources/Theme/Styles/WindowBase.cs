@@ -131,6 +131,15 @@ namespace Shawn.Utils.WpfResources.Theme.Styles
             if (e.Cancel != false) return;
             IsClosing = true;
             base.OnClosing(e);
+            if (e.Cancel)
+            {
+                // The close was cancelled (e.g. the user answered 'No' to the
+                // 'close the connection?' confirm). Restore the flag so the window
+                // stays fully usable — with IsClosing stuck at true, later connects
+                // routed to this window would silently do nothing, and Show/Hide/
+                // Activate would be permanent no-ops.
+                IsClosing = false;
+            }
         }
 
         protected override void OnClosed(EventArgs e)

@@ -6,6 +6,7 @@
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
         <LangVersion>latest</LangVersion>
+        <DebugType>embedded</DebugType>
 	</PropertyGroup>
 
 	<ItemGroup>
